@@ -9,7 +9,7 @@
 		<div class="ml-auto">
 			<a
         href="/login"
-				class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap">Log in</a
+				class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap">Sign in</a
 			>
 		</div>
 	</div>
