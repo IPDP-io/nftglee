@@ -24,7 +24,7 @@
   },
   "type": "module",
   "dependencies": {
-		"qrcode-generator-es6": "^1.1.4",
+    "qrcode-generator-es6": "^1.1.4",
     "wretch": "^1.7.4"
   }
 }

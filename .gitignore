@@ -3,3 +3,6 @@ node_modules
 /.svelte-kit
 /package
 build
+server/liquid
+server/data
+server/file

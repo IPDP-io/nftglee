@@ -15,7 +15,17 @@ const config = {
 		paths: {
 			base: '/marketing'
 		},
-		target: '#svelte'
+		target: '#svelte',
+		vite: {
+			server: {
+				proxy: {
+					'/file': {
+						target: 'http://localhost:8091/file',
+						rewrite: (path) => path.replace(/^\/file/, '')
+					}
+				}
+			}
+		}
 	}
 };
 
