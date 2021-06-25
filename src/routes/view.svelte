@@ -3,26 +3,20 @@
 
 	import qrcode from 'qrcode-generator-es6';
 
-	let img;
-	let vid;
-	let buying;
-	let selling;
+	const SATS = 100000000;
+
+  let asset, img, vid, buying, selling, txid, ws;
+	let received = 0;
 	// let address = 'M9rSM2qFg8o81tNKbtvpavBJMEhfYKY6oi';
 	let address = 'Qe8YqywBsx4QfD71dsPcF6kU3Jy6sc9hgP';
 	let amount = 0.01;
-	let received = 0;
-	let SATS = 100000000;
-	let ws;
-	let asset;
 	let to = 'AzpuQjLb2GbM37S6MiYM4CBVaLK7drpqqMqFUqwimGoStSrB5SgBGeD4JrTczVPmv4bUjcFmQdavUMh8';
-	let txid;
 
 	onMount(() => {
-    let { Hls } = window;
+		let { Hls } = window;
 		var video = document.getElementById('video');
-    var videoSrc = '/static/file/playlist.m3u8';
+		var videoSrc = '/file/playlist.m3u8';
 		if (Hls.isSupported()) {
-      console.log("bingo");
 			var hls = new Hls();
 			hls.loadSource(videoSrc);
 			hls.attachMedia(video);
@@ -30,7 +24,7 @@
 			video.src = videoSrc;
 		}
 
-    video.play();
+		video.play();
 
 		// ws = new WebSocket(`wss://ltc.coinos.io/ws`);
 		ws = new WebSocket(`ws://localhost:9090/ws`);
@@ -45,6 +39,7 @@
 				if (type === 'payment') {
 					buying = false;
 					received += value;
+
 					mint();
 				}
 
@@ -56,7 +51,7 @@
 					received = false;
 					txid = value;
 				}
-			} catch (e) {}
+			} catch (e) { console.log(e) }
 		};
 	});
 
@@ -65,7 +60,10 @@
 		selling = true;
 	};
 
-	let buy = () => {
+	let btc = () => {};
+	let lbtc = () => {};
+	let lnbtc = () => {};
+	let ltc = () => {
 		const qr = new qrcode(0, 'H');
 		selling = false;
 		buying = true;
@@ -90,16 +88,16 @@
 <main>
 	<div style="width: 600px; margin: 0 auto;">
 		<video
-      id="video"
+			id="video"
 			style="width: 100%; object-fit: cover"
 			muted
 			playsinline
-      autoplay
+			autoplay
 			loop
 			bind:this={vid}
 			type="application/x-mpegURL"
 		>
-			<source src={'https://storage.googleapis.com/silhouettes-movie-bucket/file/playlist.m3u8'} />
+			<source src={'file/playlist.m3u8'} />
 			Your browser does not support HTML5 video.
 		</video>
 	</div>
@@ -119,30 +117,47 @@
 		</div>
 		<button on:click={buy}>List it</button>
     -->
-	{#if buying}
-		<div>Send {amount} LTC to:</div>
-		<div class="qr">
-			{@html img}
-			<div>
-				{address}
-			</div>
-		</div>
-	{:else if received && asset}
+	{#if received}
 		<p>
 			Received {(received / SATS).toFixed(8)} LTC!
 		</p>
 
 		<h2>Your ticket</h2>
-
 		<div
+			color="mb-2"
 			style="border: 1px dashed black; width: 600px; margin: 0 auto; padding: 20px; text-align: left;"
 		>
 			<div><b>Type:</b> Early bird (57 / 1000)</div>
+      {#if asset}
 			<div>
 				<b>Asset ID:</b>
 				<a href={`http://localhost:5005/asset/${asset}`}>{asset.substr(0, 20)}....</a>
 			</div>
+    {/if}
 			<div><b>Date:</b> June 11, 2021</div>
+		</div>
+
+		<div style="width: 600px; margin: 0 auto;">
+			<video
+				style="width: 100%; object-fit: cover"
+				muted
+				playsinline
+				autoplay
+				loop
+				type="application/x-mpegURL"
+			>
+				<source src={'/static/ticket.mp4'} />
+				Your browser does not support HTML5 video.
+			</video>
+		</div>
+
+		<h2>Extra NFT goodies</h2>
+
+		<div style="width: 600px; margin: 0 auto;">
+			<video style="width: 100%; object-fit: cover" muted playsinline autoplay loop>
+				<source src={'/static/girl.mp4'} />
+				Your browser does not support HTML5 video.
+			</video>
 		</div>
 
 		<h2>Withdraw to Liquid Address</h2>
@@ -155,7 +170,20 @@
 		<p>Txid: {txid}</p>
 	{:else}
 		<h2>Payment Options</h2>
-		<button on:click={buy}>LTC</button>
+		<button on:click={btc}>Bitcoin</button>
+		<button on:click={ltc}>Litecoin</button>
+		<button on:click={lbtc}>Liquid</button>
+		<button on:click={lnbtc}>Lightning</button>
+
+		{#if buying}
+			<div>Send {amount} LTC to:</div>
+			<div class="qr">
+				{@html img}
+				<div>
+					{address}
+				</div>
+			</div>
+		{/if}
 	{/if}
 </main>
 
@@ -165,17 +193,8 @@
 		width: 100px;
 	}
 
-	.received {
-		margin-top: 10px;
-		font-size: 1.2em;
-	}
-
 	.qr {
 		margin: auto;
-		width: 300px;
-	}
-
-	img {
 		width: 300px;
 	}
 
