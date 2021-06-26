@@ -22,7 +22,11 @@ const config = {
 					'/file': {
 						target: 'http://localhost:8091/file',
 						rewrite: (path) => path.replace(/^\/file/, '')
-					}
+					},
+					'/api': {
+						target: 'http://localhost:8091',
+						rewrite: (path) => path.replace(/^\/api/, '')
+          }
 				}
 			}
 		}
