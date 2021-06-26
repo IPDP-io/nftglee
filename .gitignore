@@ -6,3 +6,4 @@ build
 server/liquid
 server/data
 server/file
+server/.env

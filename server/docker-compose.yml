@@ -10,9 +10,7 @@ services:
       HASURA_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
       COINOS_URL: '${COINOS_URL}'
       COINOS_TOKEN: '${COINOS_TOKEN}'
-      HASURA_URL: '${HASURA_URL}'
       HASURA_JWT: '${HASURA_GRAPHQL_JWT_SECRET}'
-      HBP_URL: '${HBP_URL}'
     volumes:
       - ./:/app
     network_mode: host
