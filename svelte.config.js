@@ -12,9 +12,6 @@ const config = {
 
 	kit: {
 		adapter: adapter(),
-		paths: {
-			base: '/marketing'
-		},
 		target: '#svelte',
 		vite: {
 			server: {
