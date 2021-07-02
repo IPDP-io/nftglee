@@ -17,7 +17,7 @@
     "jsonwebtoken": "^8.5.1",
     "litecoinjs-lib": "https://github.com/asoltys/litecoinjs-lib",
     "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.7",
+    "nodemon": "^2.0.9",
     "wretch": "^1.7.4",
     "ws": "^7.4.4",
     "zeromq": "^6.0.0-beta.6"
