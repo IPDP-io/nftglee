@@ -5,17 +5,12 @@
 
 	const SATS = 100000000;
 
-	let received;
-	let img;
-	let vid;
-	let buying;
-	let selling;
+  let asset, img, vid, buying, selling, txid, ws;
+	let received = 0;
 	// let address = 'M9rSM2qFg8o81tNKbtvpavBJMEhfYKY6oi';
 	let address = 'Qe8YqywBsx4QfD71dsPcF6kU3Jy6sc9hgP';
 	let amount = 0.01;
 	let to = 'AzpuQjLb2GbM37S6MiYM4CBVaLK7drpqqMqFUqwimGoStSrB5SgBGeD4JrTczVPmv4bUjcFmQdavUMh8';
-	let txid;
-	let ws;
 
 	onMount(() => {
 		let { Hls } = window;
@@ -45,6 +40,7 @@
 				if (type === 'payment') {
 					buying = false;
 					received += value;
+
 					mint();
 				}
 
@@ -56,7 +52,7 @@
 					received = false;
 					txid = value;
 				}
-			} catch (e) {}
+			} catch (e) { console.log(e) }
 		};
 	});
 
@@ -133,12 +129,14 @@
 			style="border: 1px dashed black; width: 600px; margin: 0 auto; padding: 20px; text-align: left;"
 		>
 			<div><b>Type:</b> Early bird (57 / 1000)</div>
+      {#if asset}
 			<div>
 				<b>Asset ID:</b>
 				<!--
 				<a href={`http://localhost:5005/asset/${asset}`}>{asset.substr(0, 20)}....</a>
         -->
 			</div>
+    {/if}
 			<div><b>Date:</b> June 11, 2021</div>
 		</div>
 

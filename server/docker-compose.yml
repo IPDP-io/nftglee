@@ -9,7 +9,7 @@ services:
   app:
     depends_on:
       - hbp
-    container_name: app
+    container_name: silapp
     image: asoltys/silhouettes-server
     restart: on-failure
     environment:
@@ -23,7 +23,7 @@ services:
       - ./:/app
     network_mode: host
   postgres:
-    container_name: postgres
+    container_name: silpostgres
     image: postgres:12
     restart: always
     environment:
@@ -33,7 +33,7 @@ services:
     ports:
       - '5433:5432'
   hasura:
-    container_name: hasura
+    container_name: silhasura
     image: hasura/graphql-engine:v1.3.3
     ports:
       - '8080:8080'
@@ -50,7 +50,7 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
   hbp:
-    container_name: hbp
+    container_name: silhbp
     image: nhost/hasura-backend-plus:v2.2.3
     depends_on:
       - hasura
@@ -77,7 +77,7 @@ services:
       - ./custom:/app/custom
   liquid:
     image: asoltys/liquid:latest
-    container_name: liquid
+    container_name: silliquid
     ports:
       - ${LIQUID_NODE_PORT}:18884
       - ${LIQUID_PEER_PORT}:18886
@@ -88,7 +88,7 @@ services:
     restart: unless-stopped
   electrs-liquid:
     image: vulpemventures/electrs-liquid:latest
-    container_name: electrs-liquid
+    container_name: silelectrs-liquid
     entrypoint:
       - /build/electrs
     command:
@@ -115,11 +115,11 @@ services:
       - ${LIQUID_ELECTRS_RPC_PORT}:60401
       - ${LIQUID_ELECTRS_PORT}:3002
     volumes:
-      - ./liquidregtest/liquid-config/:/config
+      - ./liquid:/config
     restart: unless-stopped
   esplora-liquid:
     image: vulpemventures/esplora:latest
-    container_name: esplora-liquid
+    container_name: silesplora-liquid
     environment:
       API_URL: ${LIQUID_ELECTRS_URL}
       NATIVE_ASSET_ID: 5ac9f65c0efcc4775e0baec4ec03abdde22473cd3cf33c0419ca290e0751b225

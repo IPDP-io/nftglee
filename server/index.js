@@ -33,6 +33,34 @@ app = require('fastify')({
 	logger: true
 });
 
+app.post("/bitcoin", auth, async (req, res) => {
+  let network = "bitcoin";
+  let { liquidAddress, amount } = req.body;
+
+  let { address } = await coinos
+    .url("/address")
+    .query({ network, type: "bech32" })
+    .get()
+    .json();
+
+  amount += fee;
+
+  await coinos
+    .url("/invoice")
+    .post({
+      liquidAddress,
+      invoice: {
+        address,
+        network,
+        text: address,
+        amount,
+      },
+    })
+    .json();
+  
+    return { address, fee };
+});
+
 let paused = false;
 app.get('/file/:name', function (request, reply) {
 	const { name } = request.params;
@@ -82,7 +110,7 @@ async function run() {
 					ws.send(JSON.stringify({ type: 'asset', value: asset }));
 				}
 			} catch (e) {
-				console.log(e);
+				console.log(e.message);
 			}
 		});
 	});
@@ -93,7 +121,6 @@ async function run() {
 	sock.subscribe('rawtx');
 
 	for await (const [topic, msg] of sock) {
-		console.log(topic, msg);
 		try {
 			let hex = msg.toString('hex');
 
@@ -102,7 +129,6 @@ async function run() {
 				let { script, value } = tx.outs[i];
 				if (!script) continue;
 				let address = Address.fromOutputScript(script, network);
-				console.log(subscribers, address);
 
 				if (subscribers[address]) {
 					subscribers[address].send(JSON.stringify({ type: 'payment', value }));

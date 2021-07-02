@@ -30,7 +30,6 @@ const path = "m/84'/0'/0'/0/0";
 const fund = async (p, out, asset, amount, sighashType = 1) => {
   let { address, redeem, output } = out;
 
-  console.log(address);
   let utxos = await electrs.url(`/address/${address}/utxo`).get().json();
   for (let i = 0; i < utxos.length; i++) {
     if (utxos[i].asset) continue;
