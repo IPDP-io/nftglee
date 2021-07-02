@@ -1,5 +1,6 @@
 const { mnemonicToSeedSync } = require("bip39");
 const { fromSeed } = require("bip32");
+/*
 const {
   address: Address,
   confidential,
@@ -9,6 +10,7 @@ const {
   payments,
   networks,
 } = require("@asoltys/liquidjs-lib");
+*/
 const wretch = require("wretch");
 const fetch = require("node-fetch");
 wretch().polyfills({ fetch });
@@ -23,7 +25,7 @@ const MNEMONIC =
   "garbage acid outside pave steel plastic car business keep vocal connect include";
 
 // const network = networks.liquid;
-const network = networks.regtest;
+// const network = networks.regtest;
 
 const path = "m/84'/0'/0'/0/0";
 

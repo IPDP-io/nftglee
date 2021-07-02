@@ -48,8 +48,4 @@
 	.mottled {
 		border-radius: 0 0 0 300px;
 	}
-
-	.list-disc li {
-		@apply my-2 px-2;
-	}
 </style>

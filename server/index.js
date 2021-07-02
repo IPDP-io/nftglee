@@ -4,6 +4,11 @@ const zmq = require('zeromq');
 const WebSocket = require('ws');
 const wretch = require('wretch');
 const electrs = wretch().url('http://localhost:3012');
+const coinos = wretch()
+	.url('http://192.168.1.5:3119')
+	.auth(
+		`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhdG9zaGktZWRhZTM4ODYiLCJpYXQiOjE2MjQ2NTk4NTl9.kwemnNm5eobGmRa0I0F-OSiLkslDcRymPpRP7u6z0L8`
+	);
 const { address: Address, networks, Transaction } = require('litecoinjs-lib');
 const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
@@ -33,32 +38,25 @@ app = require('fastify')({
 	logger: true
 });
 
-app.post("/bitcoin", auth, async (req, res) => {
-  let network = "bitcoin";
-  let { liquidAddress, amount } = req.body;
+app.post('/bitcoin', async (req, res) => {
+	let network = 'bitcoin';
+	let { amount } = req.body;
 
-  let { address } = await coinos
-    .url("/address")
-    .query({ network, type: "bech32" })
-    .get()
-    .json();
+	let { address } = await coinos.url('/address').query({ network, type: 'bech32' }).get().json();
 
-  amount += fee;
+	await coinos
+		.url('/invoice')
+		.post({
+			invoice: {
+				address,
+				network,
+				text: address,
+				amount
+			}
+		})
+		.json();
 
-  await coinos
-    .url("/invoice")
-    .post({
-      liquidAddress,
-      invoice: {
-        address,
-        network,
-        text: address,
-        amount,
-      },
-    })
-    .json();
-  
-    return { address, fee };
+	return { address };
 });
 
 let paused = false;

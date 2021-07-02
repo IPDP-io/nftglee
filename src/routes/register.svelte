@@ -1,8 +1,24 @@
 <script>
 	import Eye from '../icons/eye.svelte';
 	import Loading from '../components/loading.svelte';
-	let email, password, emailInput, show, loading, registered;
-  let submit;
+  import { api } from "$lib/api";
+  import { validateEmail } from "$lib/utils";
+
+	let email;
+	let password;
+	let emailInput, show, loading, registered;
+	let submit = async () => {
+		if (!validateEmail(email)) throw new Error('Invalid email');
+		if (password.length < 8) throw new Error('Password must be 8 characters');
+
+    await api
+        .url('/register')
+      .post({
+        email,
+        password
+      })
+      .json()
+	};
 </script>
 
 <div class="form-container bg-lightblue px-4">
@@ -20,7 +36,13 @@
 			<h2 class="mb-8 text-xl">Sign up</h2>
 			<div class="flex flex-col mb-4">
 				<label class="mb-2 font-medium text-gray-600" for="first_name">Email</label>
-				<input id="email" name="email" placeholder="Email" bind:value={email} bind:this={emailInput} />
+				<input
+					id="email"
+					name="email"
+					placeholder="Email"
+					bind:value={email}
+					bind:this={emailInput}
+				/>
 			</div>
 			<div class="flex flex-col mb-4">
 				<label class="mb-2 font-medium text-gray-600" for="last_name">Password</label>
@@ -50,7 +72,7 @@
 						type="button"
 						on:click|preventDefault|stopPropagation={() => (show = !show)}
 					>
-            <Eye />
+						<Eye />
 					</button>
 				</div>
 			</div>
@@ -61,7 +83,10 @@
 				<a href="/privacy-policy" class="text-midblue">Privacy Policy</a></span
 			>
 			<div class="flex my-5 justify-end">
-        <button class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap" type="submit">Register</button>
+				<button
+					class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap"
+					type="submit">Register</button
+				>
 			</div>
 
 			<a href="/login" class="text-midblue"> Already have an account? Sign in</a>
@@ -70,7 +95,6 @@
 </div>
 
 <style>
-
 	.form-container {
 		width: 100%;
 		height: 100vh;

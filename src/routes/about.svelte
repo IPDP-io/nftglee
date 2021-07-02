@@ -19,22 +19,3 @@
 		</div>
 	</div>
 </div>
-
-<style>
-	p,
-	h1,
-	h2,
-	hr {
-		@apply mb-4;
-	}
-
-	h1 {
-		@apply text-4xl;
-	}
-	h2 {
-		@apply text-2xl;
-	}
-	li {
-		@apply mb-2;
-	}
-</style>

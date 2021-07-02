@@ -1,10 +1,36 @@
 <script>
 	import Eye from '../icons/eye.svelte';
-  let email, password, emailInput, show;
+	import { api } from '$lib/api';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+
+	let email = 'test12@coinos.io';
+	let password = 'liquidart';
+	let emailInput, show;
+
+	let err = console.log;
+
+	const login = async () => {
+		try {
+			let { jwt_token: t } = await api
+				.url('/login')
+				.post({
+					email,
+					password
+				})
+				.unauthorized(err)
+				.badRequest(err)
+				.json();
+
+      goto('/view');
+		} catch (e) {
+			console.log(e);
+		}
+	};
 </script>
 
 <div class="form-container bg-lightblue px-4">
-	<form class="mb-6" on:submit|preventDefault={() => login(email, password)} autocomplete="off">
+	<form class="mb-6" on:submit|preventDefault={login} autocomplete="off">
 		<h2 class="text-xl mb-8">Sign in</h2>
 		<div class="flex flex-col mb-4">
 			<label class="mb-2 font-medium text-gray-600" for="first_name">Email</label>
@@ -29,7 +55,10 @@
 		</div>
 		<a href="/forgot-password" class="block w-full text-midblue">Forgot password?</a>
 		<div class="flex my-5 justify-end">
-			<button class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap" type="submit">Sign in</button>
+			<button
+				class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap"
+				type="submit">Sign in</button
+			>
 		</div>
 		<a href="/register" class="text-midblue">Don't have an account? Sign up</a>
 	</form>
@@ -58,10 +87,6 @@
 		@apply appearance-none border rounded text-gray-700 leading-tight;
 		padding: 0;
 		padding: 10px;
-	}
-
-	span {
-		cursor: pointer;
 	}
 
 	@media only screen and (max-width: 640px) {
