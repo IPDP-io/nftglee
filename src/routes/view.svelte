@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from 'svelte';
-	import { token } from '$lib/store';
 
 	import qrcode from 'qrcode-generator-es6';
 
@@ -16,24 +15,26 @@
 	onMount(() => {
 		let { Hls, p2pml } = window;
 
-		var video = document.getElementById('video');
-		var videoSrc = '/file/playlist.m3u8';
-
-		if (Hls.isSupported() && p2pml.hlsjs.Engine.isSupported()) {
+		if (p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine();
 
-			var hls = new Hls({
-				liveSyncDurationCount: 7, // To have at least 7 segments in queue
-				loader: engine.createLoaderClass()
+			var player = new Clappr.Player({
+				parentId: '#player',
+				source:
+        '/file/playlist.m3u8',
+				mute: true,
+				autoPlay: true,
+				playback: {
+					hlsjsConfig: {
+						liveSyncDurationCount: 7,
+						loader: engine.createLoaderClass()
+					}
+				}
 			});
 
-			p2pml.hlsjs.initHlsJsPlayer(hls);
-      console.log("skook");
-
-			hls.loadSource(videoSrc);
-			hls.attachMedia(video);
-		} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-			video.src = videoSrc;
+			p2pml.hlsjs.initClapprPlayer(player);
+		} else {
+			document.write('Not supported :(');
 		}
 
 		// ws = new WebSocket(`wss://ltc.coinos.io/ws`);
@@ -94,16 +95,15 @@
 </script>
 
 <svelte:head>
-	<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 	<script
-		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-core@0.6.2/build/p2p-media-loader-core.min.js"></script>
+		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-core@latest/build/p2p-media-loader-core.min.js"></script>
 	<script
-		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@0.6.2/build/p2p-media-loader-hlsjs.min.js"></script>
+		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@latest/build/p2p-media-loader-hlsjs.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/clappr@latest"></script>
 </svelte:head>
 
 <main>
-	<div style="width: 600px; margin: 0 auto;">
-		Token: {$token}
+	<div id="player" style="width: 600px; margin: 0 auto;">
 		<video
 			id="video"
 			style="width: 100%; object-fit: cover"

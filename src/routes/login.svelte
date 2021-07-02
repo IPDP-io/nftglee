@@ -1,37 +1,36 @@
 <script>
 	import Eye from '../icons/eye.svelte';
-  import { api } from "$lib/api";
-  import { goto } from "$app/navigation";
-  import { token } from "$lib/store";
+	import { api } from '$lib/api';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
-  let email = 'test12@coinos.io';
-  let password = 'liquidart';
-  let emailInput, show;
+	let email = 'test12@coinos.io';
+	let password = 'liquidart';
+	let emailInput, show;
 
-  let err = console.log;
-	const login = (email, password) => {
-		api
-			.url('/login')
-			.post({
-				email,
-				password
-			})
-			.unauthorized(err)
-			.badRequest(err)
-			.json(({ jwt_token: t }) => {
-				window.sessionStorage.setItem('token', t);
-        $token = t;
-        console.log("OK!", t);
-        goto("/view");
-			})
-			.catch(() => {
-				err('Login failed');
-			});
+	let err = console.log;
+
+	const login = async () => {
+		try {
+			let { jwt_token: t } = await api
+				.url('/login')
+				.post({
+					email,
+					password
+				})
+				.unauthorized(err)
+				.badRequest(err)
+				.json();
+
+      goto('/view');
+		} catch (e) {
+			console.log(e);
+		}
 	};
 </script>
 
 <div class="form-container bg-lightblue px-4">
-	<form class="mb-6" on:submit|preventDefault={() => login(email, password)} autocomplete="off">
+	<form class="mb-6" on:submit|preventDefault={login} autocomplete="off">
 		<h2 class="text-xl mb-8">Sign in</h2>
 		<div class="flex flex-col mb-4">
 			<label class="mb-2 font-medium text-gray-600" for="first_name">Email</label>
@@ -88,10 +87,6 @@
 		@apply appearance-none border rounded text-gray-700 leading-tight;
 		padding: 0;
 		padding: 10px;
-	}
-
-	span {
-		cursor: pointer;
 	}
 
 	@media only screen and (max-width: 640px) {
