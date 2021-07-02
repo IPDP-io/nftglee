@@ -1,6 +1,33 @@
 <script>
 	import Eye from '../icons/eye.svelte';
-  let email, password, emailInput, show;
+  import { api } from "$lib/api";
+  import { goto } from "$app/navigation";
+  import { token } from "$lib/store";
+
+  let email = 'test12@coinos.io';
+  let password = 'liquidart';
+  let emailInput, show;
+
+  let err = console.log;
+	const login = (email, password) => {
+		api
+			.url('/login')
+			.post({
+				email,
+				password
+			})
+			.unauthorized(err)
+			.badRequest(err)
+			.json(({ jwt_token: t }) => {
+				window.sessionStorage.setItem('token', t);
+        $token = t;
+        console.log("OK!", t);
+        goto("/view");
+			})
+			.catch(() => {
+				err('Login failed');
+			});
+	};
 </script>
 
 <div class="form-container bg-lightblue px-4">
@@ -29,7 +56,10 @@
 		</div>
 		<a href="/forgot-password" class="block w-full text-midblue">Forgot password?</a>
 		<div class="flex my-5 justify-end">
-			<button class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap" type="submit">Sign in</button>
+			<button
+				class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap"
+				type="submit">Sign in</button
+			>
 		</div>
 		<a href="/register" class="text-midblue">Don't have an account? Sign up</a>
 	</form>

@@ -23,6 +23,9 @@ const config = {
 						target: 'http://localhost:8091/file',
 						rewrite: (path) => path.replace(/^\/file/, '')
 					},
+					'/auth': {
+						target: 'http://localhost:3400',
+          },
 					'/api': {
 						target: 'http://localhost:8091',
 						rewrite: (path) => path.replace(/^\/api/, '')

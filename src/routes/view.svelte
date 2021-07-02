@@ -1,11 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
+	import { token } from '$lib/store';
 
 	import qrcode from 'qrcode-generator-es6';
 
 	const SATS = 100000000;
 
-  let asset, img, vid, buying, selling, txid, ws;
+	let asset, img, vid, buying, selling, txid, ws;
 	let received = 0;
 	// let address = 'M9rSM2qFg8o81tNKbtvpavBJMEhfYKY6oi';
 	let address = 'Qe8YqywBsx4QfD71dsPcF6kU3Jy6sc9hgP';
@@ -13,18 +14,27 @@
 	let to = 'AzpuQjLb2GbM37S6MiYM4CBVaLK7drpqqMqFUqwimGoStSrB5SgBGeD4JrTczVPmv4bUjcFmQdavUMh8';
 
 	onMount(() => {
-		let { Hls } = window;
+		let { Hls, p2pml } = window;
+
 		var video = document.getElementById('video');
 		var videoSrc = '/file/playlist.m3u8';
-		if (Hls.isSupported()) {
-			var hls = new Hls();
+
+		if (Hls.isSupported() && p2pml.hlsjs.Engine.isSupported()) {
+			var engine = new p2pml.hlsjs.Engine();
+
+			var hls = new Hls({
+				liveSyncDurationCount: 7, // To have at least 7 segments in queue
+				loader: engine.createLoaderClass()
+			});
+
+			p2pml.hlsjs.initHlsJsPlayer(hls);
+      console.log("skook");
+
 			hls.loadSource(videoSrc);
 			hls.attachMedia(video);
 		} else if (video.canPlayType('application/vnd.apple.mpegurl')) {
 			video.src = videoSrc;
 		}
-
-		video.play();
 
 		// ws = new WebSocket(`wss://ltc.coinos.io/ws`);
 		ws = new WebSocket(`ws://localhost:9090/ws`);
@@ -51,7 +61,9 @@
 					received = false;
 					txid = value;
 				}
-			} catch (e) { console.log(e) }
+			} catch (e) {
+				console.log(e);
+			}
 		};
 	});
 
@@ -83,10 +95,15 @@
 
 <svelte:head>
 	<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-core@0.6.2/build/p2p-media-loader-core.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@0.6.2/build/p2p-media-loader-hlsjs.min.js"></script>
 </svelte:head>
 
 <main>
 	<div style="width: 600px; margin: 0 auto;">
+		Token: {$token}
 		<video
 			id="video"
 			style="width: 100%; object-fit: cover"
@@ -128,12 +145,12 @@
 			style="border: 1px dashed black; width: 600px; margin: 0 auto; padding: 20px; text-align: left;"
 		>
 			<div><b>Type:</b> Early bird (57 / 1000)</div>
-      {#if asset}
-			<div>
-				<b>Asset ID:</b>
-				<a href={`http://localhost:5005/asset/${asset}`}>{asset.substr(0, 20)}....</a>
-			</div>
-    {/if}
+			{#if asset}
+				<div>
+					<b>Asset ID:</b>
+					<a href={`http://localhost:5005/asset/${asset}`}>{asset.substr(0, 20)}....</a>
+				</div>
+			{/if}
 			<div><b>Date:</b> June 11, 2021</div>
 		</div>
 

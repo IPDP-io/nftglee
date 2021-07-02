@@ -43,30 +43,32 @@ services:
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
   hbp:
     container_name: silhbp
-    image: nhost/hasura-backend-plus:v2.2.3
+    image: asoltys/hbp:latest
     depends_on:
-      - hasura
+      - 'hasura'
     ports:
       - '3400:3000'
     environment:
-      SERVER_URL: '${SERVER_URL}'
-      HASURA_ENDPOINT: '${HASURA_URL}/v1/graphql'
+      HASURA_ENDPOINT: '${HASURA_ENDPOINT}'
       HASURA_GRAPHQL_ADMIN_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
       JWT_ALGORITHM: '${JWT_ALGORITHM}'
       JWT_KEY: '${JWT_KEY}'
       AUTO_MIGRATE: "true"
-      AUTO_ACTIVATE_NEW_USERS: "true"
-      STORAGE_ENABLE: "false"
-      MAX_REQUESTS: 10000
-      LOST_PASSWORD_ENABLE: "true"
-      EMAILS_ENABLE: "true"
+      STORAGE_ENABLED: "false"
+      SERVER_URL: http://localhost:3000
+      DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      REDIRECT_URL_ERROR: http://localhost:3000
+      REDIRECT_URL_SUCCESS: http://localhost:3000
+      AUTO_ACTIVATE_NEW_USERS: "false"
+      EMAILS_ENABLED: "true"
+      VERIFY_EMAILS: "true"
+      LOST_PASSWORD_ENABLED: "true"
       SMTP_HOST: '${SMTP_HOST}'
       SMTP_PORT: '${SMTP_PORT}'
       SMTP_USER: '${SMTP_USER}'
       SMTP_PASS: '${SMTP_PASS}'
       SMTP_SENDER: '${SMTP_SENDER}'
-    volumes:
-      - ./custom:/app/custom
+      SMTP_SECURE: "true"
   liquid:
     image: asoltys/liquid:latest
     container_name: silliquid
