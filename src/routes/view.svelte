@@ -12,16 +12,15 @@
 	let amount = 0.01;
 	let to = 'AzpuQjLb2GbM37S6MiYM4CBVaLK7drpqqMqFUqwimGoStSrB5SgBGeD4JrTczVPmv4bUjcFmQdavUMh8';
 
-	onMount(() => {
-		let { Hls, p2pml } = window;
+	let loadVideo = () => {
+		let { p2pml } = window;
 
-		if (p2pml.hlsjs.Engine.isSupported()) {
+		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine();
 
 			var player = new Clappr.Player({
 				parentId: '#player',
-				source:
-        '/file/playlist.m3u8',
+				source: '/file/playlist.m3u8',
 				mute: true,
 				autoPlay: true,
 				playback: {
@@ -33,10 +32,13 @@
 			});
 
 			p2pml.hlsjs.initClapprPlayer(player);
-		} else {
-			document.write('Not supported :(');
-		}
+    } else {
+      setTimeout(loadVideo, 100);
+    } 
+	};
 
+	onMount(() => {
+    loadVideo();
 		// ws = new WebSocket(`wss://ltc.coinos.io/ws`);
 		ws = new WebSocket(`ws://localhost:9090/ws`);
 		ws.onopen = () => {
@@ -103,107 +105,105 @@
 	<script src="https://cdn.jsdelivr.net/npm/clappr@latest"></script>
 </svelte:head>
 
-<main>
-	<div id="player" style="width: 600px; margin: 0 auto;">
+<div id="player" style="width: 600px; margin: 0 auto;">
+	<video
+		id="video"
+		style="width: 100%; object-fit: cover"
+		muted
+		playsinline
+		autoplay
+		loop
+		bind:this={vid}
+		type="application/x-mpegURL"
+	>
+		<source src={'file/playlist.m3u8'} />
+		Your browser does not support HTML5 video.
+	</video>
+</div>
+<h1>Watch Silhouettes</h1>
+<!--
+{#if asset}
+<div>Asset created!</div>
+
+<div>Id: {asset}</div>
+
+<div style="margin-top: 10px">Ready to sell it?</div>
+<button on:click={sell}>Yes let's go</button>
+{:else if selling}
+<p>How much do you want for it?</p>
+<div>
+  <input bind:value={amount} /> LTC
+</div>
+<button on:click={buy}>List it</button>
+-->
+{#if received}
+	<p>
+		Received {(received / SATS).toFixed(8)} LTC!
+	</p>
+
+	<h2>Your ticket</h2>
+	<div
+		color="mb-2"
+		style="border: 1px dashed black; width: 600px; margin: 0 auto; padding: 20px; text-align: left;"
+	>
+		<div><b>Type:</b> Early bird (57 / 1000)</div>
+		{#if asset}
+			<div>
+				<b>Asset ID:</b>
+				<a href={`http://localhost:5005/asset/${asset}`}>{asset.substr(0, 20)}....</a>
+			</div>
+		{/if}
+		<div><b>Date:</b> June 11, 2021</div>
+	</div>
+
+	<div style="width: 600px; margin: 0 auto;">
 		<video
-			id="video"
 			style="width: 100%; object-fit: cover"
 			muted
 			playsinline
 			autoplay
 			loop
-			bind:this={vid}
 			type="application/x-mpegURL"
 		>
-			<source src={'file/playlist.m3u8'} />
+			<source src={'/static/ticket.mp4'} />
 			Your browser does not support HTML5 video.
 		</video>
 	</div>
-	<h1>Watch Silhouettes</h1>
-	<!--
-	{#if asset}
-		<div>Asset created!</div>
 
-		<div>Id: {asset}</div>
+	<h2>Extra NFT goodies</h2>
 
-		<div style="margin-top: 10px">Ready to sell it?</div>
-		<button on:click={sell}>Yes let's go</button>
-	{:else if selling}
-		<p>How much do you want for it?</p>
-		<div>
-			<input bind:value={amount} /> LTC
-		</div>
-		<button on:click={buy}>List it</button>
-    -->
-	{#if received}
-		<p>
-			Received {(received / SATS).toFixed(8)} LTC!
-		</p>
+	<div style="width: 600px; margin: 0 auto;">
+		<video style="width: 100%; object-fit: cover" muted playsinline autoplay loop>
+			<source src={'/static/girl.mp4'} />
+			Your browser does not support HTML5 video.
+		</video>
+	</div>
 
-		<h2>Your ticket</h2>
-		<div
-			color="mb-2"
-			style="border: 1px dashed black; width: 600px; margin: 0 auto; padding: 20px; text-align: left;"
-		>
-			<div><b>Type:</b> Early bird (57 / 1000)</div>
-			{#if asset}
-				<div>
-					<b>Asset ID:</b>
-					<a href={`http://localhost:5005/asset/${asset}`}>{asset.substr(0, 20)}....</a>
-				</div>
-			{/if}
-			<div><b>Date:</b> June 11, 2021</div>
-		</div>
+	<h2>Withdraw to Liquid Address</h2>
+	<div>
+		<input bind:value={to} style="width: 500px" />
+	</div>
+	<button on:click={send}>Withdraw</button>
+{:else if txid}
+	<p>Token has been sent!</p>
+	<p>Txid: {txid}</p>
+{:else}
+	<h2>Payment Options</h2>
+	<button on:click={btc}>Bitcoin</button>
+	<button on:click={ltc}>Litecoin</button>
+	<button on:click={lbtc}>Liquid</button>
+	<button on:click={lnbtc}>Lightning</button>
 
-		<div style="width: 600px; margin: 0 auto;">
-			<video
-				style="width: 100%; object-fit: cover"
-				muted
-				playsinline
-				autoplay
-				loop
-				type="application/x-mpegURL"
-			>
-				<source src={'/static/ticket.mp4'} />
-				Your browser does not support HTML5 video.
-			</video>
-		</div>
-
-		<h2>Extra NFT goodies</h2>
-
-		<div style="width: 600px; margin: 0 auto;">
-			<video style="width: 100%; object-fit: cover" muted playsinline autoplay loop>
-				<source src={'/static/girl.mp4'} />
-				Your browser does not support HTML5 video.
-			</video>
-		</div>
-
-		<h2>Withdraw to Liquid Address</h2>
-		<div>
-			<input bind:value={to} style="width: 500px" />
-		</div>
-		<button on:click={send}>Withdraw</button>
-	{:else if txid}
-		<p>Token has been sent!</p>
-		<p>Txid: {txid}</p>
-	{:else}
-		<h2>Payment Options</h2>
-		<button on:click={btc}>Bitcoin</button>
-		<button on:click={ltc}>Litecoin</button>
-		<button on:click={lbtc}>Liquid</button>
-		<button on:click={lnbtc}>Lightning</button>
-
-		{#if buying}
-			<div>Send {amount} LTC to:</div>
-			<div class="qr">
-				{@html img}
-				<div>
-					{address}
-				</div>
+	{#if buying}
+		<div>Send {amount} LTC to:</div>
+		<div class="qr">
+			{@html img}
+			<div>
+				{address}
 			</div>
-		{/if}
+		</div>
 	{/if}
-</main>
+{/if}
 
 <style>
 	b {
@@ -214,12 +214,6 @@
 	.qr {
 		margin: auto;
 		width: 300px;
-	}
-
-	main {
-		text-align: center;
-		padding: 1em;
-		margin: 0 auto;
 	}
 
 	input {

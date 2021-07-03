@@ -2,7 +2,7 @@
 	import Eye from '../icons/eye.svelte';
 	import { api } from '$lib/api';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { session } from '$app/stores';
 
 	let email = 'test12@coinos.io';
 	let password = 'liquidart';
@@ -12,7 +12,7 @@
 
 	const login = async () => {
 		try {
-			let { jwt_token: t } = await api
+			let { jwt_token: token } = await api
 				.url('/login')
 				.post({
 					email,
@@ -22,7 +22,14 @@
 				.badRequest(err)
 				.json();
 
-      goto('/view');
+      console.log(token);
+
+			$session.user = {
+				email,
+				token
+			};
+
+			goto('/view');
 		} catch (e) {
 			console.log(e);
 		}
