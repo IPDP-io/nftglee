@@ -30,12 +30,12 @@
 		</div>
 		<div>
 			<div>
-				<input id="email" type="email" placeholder="email" bind:value={email} />
+				<input id="email" type="email" placeholder="Email" bind:value={email} />
 			</div>
 		</div>
 		<div>
 			<div>
-				<input id="suject" type="text" placeholder="subject" bind:value={email} />
+				<input id="suject" type="text" placeholder="Subject" bind:value={email} />
 			</div>
 		</div>
 		<div>
@@ -56,6 +56,7 @@
 <style>
 	form {
 		width: 75%;
+		font-family: Helvetica;
 	}
 	input, #submit {
 		height: 40px;
