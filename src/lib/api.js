@@ -1,3 +1,3 @@
-	import wretch from 'wretch';
-	export const api = wretch().url('/auth');
-
+import wretch from 'wretch';
+export const api = wretch().url('/api');
+export const auth = wretch().url('/auth');

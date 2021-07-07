@@ -1,23 +1,24 @@
 <script>
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import wretch from 'wretch';
-
-
-  const api = wretch().url('/auth');
+	import { auth } from '$lib/api';
 
 	const activate = (ticket) => {
-		return api.url('/activate').query({ ticket }).get().res();
+		return auth.url('/activate').query({ ticket }).get().res();
 	};
 
 	let loading = true;
-	let success;
+	let error, success;
 	onMount(async () => {
 		try {
 			await activate($page.params.ticket);
 			success = true;
 		} catch (e) {
-			console.log(e);
+			try {
+				error = JSON.parse(e.message).message;
+			} catch (e) {
+				console.log(e);
+			}
 		}
 		loading = false;
 	});
@@ -38,6 +39,7 @@
 			</div>
 		{:else}
 			<h2 class="mb-8">Something went wrong</h2>
+			<div>{error}</div>
 			<div class="flex">
 				<div class="ml-auto mt-8">
 					<a href="/login" class="primary-btn">Continue to Raretoshi</a>

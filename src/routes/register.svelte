@@ -1,25 +1,38 @@
 <script>
 	import Eye from '../icons/eye.svelte';
 	import Loading from '../components/loading.svelte';
-  import { api } from "$lib/api";
-  import { validateEmail } from "$lib/utils";
+	import { api } from '$lib/api';
+	import { validateEmail } from '$lib/utils';
+	import { setup, createWallet } from '$lib/wallet';
+	import { onMount } from 'svelte';
 
-	let email;
-	let password;
+	onMount(setup);
+
+	let email = 'test14@coinos.io';
+	let password = 'liquidart';
 	let emailInput, show, loading, registered;
 	let submit = async () => {
 		if (!validateEmail(email)) throw new Error('Invalid email');
 		if (password.length < 8) throw new Error('Password must be 8 characters');
 
-    await api
-        .url('/register')
-      .post({
-        email,
-        password
-      })
-      .json()
+		await api
+			.url('/register')
+			.post({
+				email,
+				password,
+				...createWallet(window.bip39.generateMnemonic(), password)
+			})
+			.json();
+
+    registered = true;
 	};
 </script>
+
+<svelte:head>
+	<script src="/static/bip32.js"></script>
+	<script src="/static/bip39.js"></script>
+	<script src="/static/liquidjs.js"></script>
+</svelte:head>
 
 <div class="form-container bg-lightblue px-4">
 	<form class="mb-6" on:submit|preventDefault={submit} autocomplete="off">

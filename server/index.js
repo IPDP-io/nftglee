@@ -3,19 +3,23 @@ const jwt = require('jsonwebtoken');
 const zmq = require('zeromq');
 const WebSocket = require('ws');
 const wretch = require('wretch');
-const electrs = wretch().url('http://localhost:3012');
-const coinos = wretch()
-	.url('http://192.168.1.5:3119')
-	.auth(
-		`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhdG9zaGktZWRhZTM4ODYiLCJpYXQiOjE2MjQ2NTk4NTl9.kwemnNm5eobGmRa0I0F-OSiLkslDcRymPpRP7u6z0L8`
-	);
 const { address: Address, networks, Transaction } = require('litecoinjs-lib');
 const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
 const fs = require('fs');
 
+const { HASURA_JWT, HASURA_SECRET } = process.env;
+
+const electrs = wretch().url('http://localhost:3012');
+const hbp = wretch().url('http://localhost:3400');
+const coinos = wretch()
+	.url('http://localhost:3119')
+	.auth(
+		`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhdG9zaGktZWRhZTM4ODYiLCJpYXQiOjE2MjQ2NTk4NTl9.kwemnNm5eobGmRa0I0F-OSiLkslDcRymPpRP7u6z0L8`
+	);
+const hasura = wretch().url('http://localhost:8080/v1/graphql').headers({ 'x-hasura-admin-secret': HASURA_SECRET });
+
 const network = networks.litereg;
-const { HASURA_JWT } = process.env;
 
 auth = {
 	preValidation(req, res, done) {
@@ -36,6 +40,53 @@ auth = {
 
 app = require('fastify')({
 	logger: true
+});
+
+app.post('/register', async (req, res) => {
+	let { address, mnemonic, email, password, username } = req.body;
+
+	try {
+		let response = await hbp.url('/auth/register').post({ email, password }).res();
+
+		let query = `mutation ($user: users_set_input!, $email: String!) {
+      update_users(where: {display_name: {_eq: $email}}, _set: $user) {
+        affected_rows 
+      }
+    }`;
+
+		response = await hasura
+			.post({
+				query,
+				variables: {
+					email,
+					user: {
+						username,
+						address,
+						mnemonic
+					}
+				}
+			})
+			.json();
+
+		if (response.errors) {
+			let deleteQuery = `mutation { 
+        delete_users(where: { account: { email: { _eq: "${email}" } } }) 
+        { 
+          affected_rows 
+        } 
+      }`;
+
+			await hasura.post({ query: deleteQuery }).json();
+			if (response.errors.find((e) => e.message.includes('Unique')))
+				throw new Error('Username taken');
+			throw new Error('There was an error during registration');
+		}
+
+		res.send({ success: true });
+	} catch (e) {
+		console.log(e);
+		res.code(500).send(e.message);
+	}
 });
 
 app.post('/bitcoin', async (req, res) => {

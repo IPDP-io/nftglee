@@ -1,13 +1,13 @@
 <script>
 	import { session } from '$app/stores';
-	import { api } from '$lib/api';
+	import { auth } from '$lib/api';
 	import { goto } from '$app/navigation';
 
 	const logout = async () => {
 		try {
       let refresh_token = $session.user.token;
 
-			await api
+			await auth
 				.url('/logout')
         .query({ refresh_token })
       //				.auth('Bearer ' + $session.user.token)

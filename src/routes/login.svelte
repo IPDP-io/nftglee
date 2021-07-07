@@ -1,6 +1,6 @@
 <script>
 	import Eye from '../icons/eye.svelte';
-	import { api } from '$lib/api';
+	import { auth } from '$lib/api';
 	import { goto } from '$app/navigation';
 	import { session } from '$app/stores';
 
@@ -8,21 +8,21 @@
 	let password = 'liquidart';
 	let emailInput, show;
 
-	let err = console.log;
+  let error;
+  let err = (e) => (error = e);
 
 	const login = async () => {
 		try {
-			let { jwt_token: token } = await api
+      error = false;
+			let { jwt_token: token } = await auth 
 				.url('/login')
 				.post({
 					email,
-					password
+          password,
 				})
 				.unauthorized(err)
 				.badRequest(err)
 				.json();
-
-      console.log(token);
 
 			$session.user = {
 				email,
@@ -31,12 +31,16 @@
 
 			goto('/view');
 		} catch (e) {
-			console.log(e);
+      err(e.message);
 		}
 	};
 </script>
 
 <div class="form-container bg-lightblue px-4">
+  {#if error}
+    <div>{error}</div>
+  {/if}
+
 	<form class="mb-6" on:submit|preventDefault={login} autocomplete="off">
 		<h2 class="text-xl mb-8">Sign in</h2>
 		<div class="flex flex-col mb-4">
