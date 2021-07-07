@@ -1,11 +1,11 @@
 version: '3.6'
 services:
-  ui:
-    container_name: ui
-    image: asoltys/silhouettes
-    restart: on-failure
-    ports:
-      - '3000:3000'
+  # ui:
+  #   container_name: ui
+  #   image: asoltys/silhouettes
+  #   restart: on-failure
+  #   ports:
+  #     - '3000:3000'
   app:
     depends_on:
       - hbp

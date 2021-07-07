@@ -1,0 +1,80 @@
+@import '../node_modules/normalize.css/normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Jockey+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+
+:root {
+    --main-blue: #1f4e6c;
+  }
+
+body {
+    font-family: "Jockey One", sans-serif;
+}
+h1,h2,h3,h4,h5,h6 {
+    text-transform: uppercase;
+    font-weight: 400;
+}
+h1 {
+    font-size: 72px;
+    font-size: 5vw;
+}
+h2 {
+    font-size: 40px;
+    font-size: 3vw;
+}
+h3 {
+    font-size: 28px;
+    font-size: 2vw;
+}
+@media screen and (max-width: 1025px) {
+    h1 {
+        font-size: 60px;
+        font-size: 5.5vw;
+    }
+    h2 {
+        font-size: 28px;
+        font-size: 3.5vw;
+    }
+    h3 {
+        font-size: 22px;
+        font-size: 2.5vw;
+    }
+}
+@media screen and (max-width: 769px) {
+    h1 {
+        font-size: 40px;
+        font-size: 6vw;
+    }
+    h2 {
+        font-size: 22px;
+        font-size: 4vw;
+    }
+    h3 {
+        font-size: 18px;
+        font-size: 3vw;
+    }
+}
+@media screen and (max-width: 481px) {
+    h1 {
+        font-size: 24px;
+        font-size: 7vw;
+    }
+    h2 {
+        font-size: 22px;
+        font-size: 6vw;
+    }
+    h3 {
+        font-size: 20px;
+        font-size: 4vw;
+    }
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+.column {
+    flex-direction: column;
+}
+.space-around {
+    justify-content: space-around;
+}
