@@ -76,9 +76,12 @@
 	}
 	#sound-toggle {
 		font-size: .8rem;
+		font-size: 1vw;
 		position: absolute;
 		left: 15px;
+		left: 1.5vh;
 		top: 15px;
+		top: 1.5vh;
 	}
 	#video-overlay {
 		display: inline-block;
@@ -118,6 +121,9 @@
 		border: 5px solid var(--main-blue);
 		width: 40%;
 		height: 40px;
+		height: 5vh;
+		font-size: 18px;
+		font-size: 2vh;
 		color: var(--mainblue);
 		transition: .6s;
 	}
@@ -130,17 +136,38 @@
 	@media screen and (max-width: 1025px) {
     #sound-toggle {
         font-size: .7rem;
+		font-size: 1.5vw;
     }
 }
 	@media screen and (max-width: 769px) {
 		#sound-toggle {
 			font-size: .6rem;
+			font-size: 2vw;
+		}
+		button {
+			font-size: 15px;
+			font-size: 2.5vw;
 		}
 	}
 	@media screen and (max-width: 481px) {
 		#sound-toggle {
 			font-size: .5rem;
+			font-size: 3vw;
+		}
+		button {
+			font-size: 12px;
+			font-size: 1.5vh;
 		}
 	}
+	@media (orientation: landscape) {
+		button {
+			height: 4vw;
+			font-size: 2vw;
+		}
+		#sound-toggle {
+			font-size: 1.5vw;
+    	}
+	}
+	
 </style>
 

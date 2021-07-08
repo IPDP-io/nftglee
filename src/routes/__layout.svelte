@@ -25,9 +25,13 @@
 <style>
 	footer {
 		font-family: Helvetica;
+		font-size: 15px;
+		font-size: 2vh;
 		padding: 50px;
 	}
 	.social-icons {
 		margin: 15px;
+		font-size: 15px;
+		font-size: 2vh;
 	}
 </style>
