@@ -142,7 +142,7 @@
 	@media screen and (max-width: 769px) {
 		#sound-toggle {
 			font-size: .6rem;
-			font-size: 2vw;
+			font-size: 1.5vw;
 		}
 		button {
 			font-size: 15px;
@@ -152,7 +152,7 @@
 	@media screen and (max-width: 481px) {
 		#sound-toggle {
 			font-size: .5rem;
-			font-size: 2.35vw;
+			font-size: 1.75vw;
 		}
 		button {
 			font-size: 12px;
