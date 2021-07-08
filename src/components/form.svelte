@@ -122,19 +122,4 @@
 			font-size: 1.3vw;
 		}
 	}
-	@media (orientation: landscape) and (min-aspect-ratio: 4/3) {
-		input, textarea {
-			/* font-size: 1.2vw; */
-		}
-	}
-	@media (orientation: landscape) and (min-aspect-ratio: 16/9) {
-		input, textarea {
-			/* font-size: 1.1vw; */
-		}
-	}
-	@media (orientation: landscape) and (min-aspect-ratio: 239/100) {
-		input, textarea {
-			/* font-size: 1vw; */
-		}
-	}
 </style>

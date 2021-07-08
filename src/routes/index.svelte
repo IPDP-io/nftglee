@@ -170,7 +170,7 @@
 			font-size: 2vw;
 		}
 		#sound-toggle {
-			font-size: 1.3vw;
+			font-size: 1vw;
     	}
 	}
 	@media (orientation: landscape) and ( max-width: 769px) {
