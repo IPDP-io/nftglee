@@ -21,27 +21,3 @@
 	</div>
 	
 </footer>
-
-<style>
-	footer {
-		font-family: Helvetica;
-		font-size: 15px;
-		font-size: 2vh;
-		padding: 50px;
-	}
-	.social-icons {
-		margin: 15px;
-		font-size: 15px;
-		font-size: 2vh;
-	}
-	@media (orientation: landscape) {
-		footer {
-			font-size: 1.5vw;
-			padding: 1vw;
-		}
-		.social-icons {
-			margin: 1vw;
-			font-size: 1.5vw;
-		}
-	}
-</style>
