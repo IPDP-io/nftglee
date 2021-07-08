@@ -26,6 +26,9 @@ h3 {
     font-size: 2vw;
 }
 @media screen and (max-width: 1025px) {
+    #sound-toggle {
+        font-size: .7rem;
+    }
     h1 {
         font-size: 60px;
         font-size: 5.5vw;
@@ -40,6 +43,9 @@ h3 {
     }
 }
 @media screen and (max-width: 769px) {
+    #sound-toggle {
+        font-size: .6rem;
+    }
     h1 {
         font-size: 40px;
         font-size: 6vw;
@@ -54,6 +60,9 @@ h3 {
     }
 }
 @media screen and (max-width: 481px) {
+    #sound-toggle {
+        font-size: .4rem;
+    }
     h1 {
         font-size: 24px;
         font-size: 7vw;
@@ -77,4 +86,7 @@ h3 {
 }
 .space-around {
     justify-content: space-around;
+}
+.hidden {
+    display: none;
 }

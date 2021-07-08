@@ -1,5 +1,15 @@
 <script>
+	import { onMount } from 'svelte';
 	import Form from '../components/form.svelte';
+
+	onMount(() => {
+		const introVideo = document.getElementById('intro-video');
+		introVideo.addEventListener('click', () => {
+			introVideo.muted = !introVideo.muted;
+			document.querySelectorAll('.sound-icon').forEach(icon => icon.classList.toggle('hidden'));
+		});	
+	});
+	
 </script>
 
 <svelte:head>
@@ -8,6 +18,10 @@
 
 <section>
 	<div id="movie-banner" class="container">
+		<div id="sound-toggle">
+			<i class="fas fa-volume-mute fa-2x sound-icon"></i>
+			<i class="fas fa-volume-up fa-2x sound-icon hidden"></i>	
+		</div>
 		<div id="video-overlay">
 			<svg id="scroll-down-arrow" preserveAspectRatio="none" viewBox="20 20 160 160" xmlns="http://www.w3.org/2000/svg" data-type="shape" role="presentation" aria-hidden="true">
 				<g>
@@ -17,7 +31,7 @@
 			<p>Scroll to begin</p>
 		</div>
 		<!-- svelte-ignore a11y-media-has-caption -->
-		<video id="intro-video"autoplay muted>
+		<video id="intro-video" autoplay muted>
 			<source src="/silhouettes.mp4" type="video/mp4" />
 		</video> 
 	</div>
@@ -57,6 +71,12 @@
 	#movie-banner {
 		align-items: flex-end;
 		position: relative;
+	}
+	#sound-toggle {
+		font-size: .8rem;
+		position: absolute;
+		left: 15px;
+		top: 15px;
 	}
 	#video-overlay {
 		display: inline-block;
@@ -103,6 +123,22 @@
 		background-color: var(--main-blue);
 		color: white;
 		transition: .6s;
+	}
+	
+	@media screen and (max-width: 1025px) {
+    #sound-toggle {
+        font-size: .7rem;
+    }
+}
+	@media screen and (max-width: 769px) {
+		#sound-toggle {
+			font-size: .6rem;
+		}
+	}
+	@media screen and (max-width: 481px) {
+		#sound-toggle {
+			font-size: .5rem;
+		}
 	}
 </style>
 
