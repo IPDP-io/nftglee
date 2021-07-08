@@ -3,11 +3,13 @@
 	import Form from '../components/form.svelte';
 
 	onMount(() => {
+		const movieBanner = document.getElementById('movie-banner');
 		const introVideo = document.getElementById('intro-video');
-		introVideo.addEventListener('click', () => {
+		movieBanner.addEventListener('click', () => {
 			introVideo.muted = !introVideo.muted;
 			document.querySelectorAll('.sound-icon').forEach(icon => icon.classList.toggle('hidden'));
-		});	
+		});
+		const volumeButton = document.getElementById('sound-toggle');
 	});
 	
 </script>
