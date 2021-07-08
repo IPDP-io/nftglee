@@ -34,4 +34,14 @@
 		font-size: 15px;
 		font-size: 2vh;
 	}
+	@media (orientation: landscape) {
+		footer {
+			font-size: 1.5vw;
+			padding: 1vw;
+		}
+		.social-icons {
+			margin: 1vw;
+			font-size: 1.5vw;
+		}
+	}
 </style>

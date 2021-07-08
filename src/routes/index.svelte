@@ -146,17 +146,22 @@
 		}
 		button {
 			font-size: 15px;
-			font-size: 2.5vw;
+			font-size: 2.25vw;
 		}
 	}
 	@media screen and (max-width: 481px) {
 		#sound-toggle {
 			font-size: .5rem;
-			font-size: 3vw;
+			font-size: 2.35vw;
 		}
 		button {
 			font-size: 12px;
 			font-size: 1.5vh;
+		}
+	}
+	@media screen and (max-width: 320px) {
+		#sound-toggle {
+			font-size: 3vw;
 		}
 	}
 	@media (orientation: landscape) {
@@ -165,9 +170,13 @@
 			font-size: 2vw;
 		}
 		#sound-toggle {
+			font-size: 1.3vw;
+    	}
+	}
+	@media (orientation: landscape) and ( max-width: 769px) {
+		#sound-toggle {
 			font-size: 1.5vw;
     	}
 	}
-	
 </style>
 
