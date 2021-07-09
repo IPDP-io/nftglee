@@ -1,0 +1,49 @@
+Arguments: 
+  /home/adam/.nvm/versions/node/v14.15.0/bin/node /usr/share/yarn/bin/yarn.js
+
+PATH: 
+  /home/adam/.cargo/bin:/home/adam/.local/bin:/home/adam/bin:/home/adam/.local/bin:/home/adam/.npm-packages/bin:/home/adam/.sdkman/candidates/java/current/bin:/home/adam/.nvm/versions/node/v14.15.0/bin:/home/adam/.local/bin:/home/adam/.npm-packages/bin:/home/adam/.cargo/bin:/home/adam/.local/bin:/home/adam/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/adam/.rvm/bin:/usr/sbin:/usr/local/bin:/usr/lib/jvm/jdk-13.0.2/bin:/home/adam/.dat/releases/dat-14.0.2-linux-x64:/home/adam/.yarn/bin:/home/adam/bin:/home/adam/.rvm/bin:/usr/local/go/bin:/home/adam/go/bin:/home/adam/.fzf/bin:/usr/sbin:/usr/local/bin:/usr/lib/jvm/jdk-13.0.2/bin:/home/adam/.dat/releases/dat-14.0.2-linux-x64:/home/adam/.yarn/bin:/home/adam/bin:/home/adam/.rvm/bin:/usr/local/go/bin:/home/adam/go/bin:/home/adam/.rvm/bin:/home/adam/bin
+
+Yarn version: 
+  1.21.1
+
+Node version: 
+  14.15.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/home/adam/.cache/yarn/v6/npm-supports-color-6.1.0-0764abc69c63d5ac842dd4867e8d025e880df8f3-integrity/node_modules/supports-color/browser.js' -> '/home/adam/coinos-marketing/node_modules/postcss-preset-env/node_modules/supports-color/browser.js'
+
+npm manifest: 
+  {
+    "name": "~TODO~",
+    "version": "0.0.1",
+    "scripts": {
+      "dev": "svelte-kit dev",
+      "build": "svelte-kit build",
+      "preview": "svelte-kit preview",
+      "lint": "prettier --check --plugin-search-dir=. .",
+      "format": "prettier --write --plugin-search-dir=. ."
+    },
+    "devDependencies": {
+      "@sveltejs/kit": "next",
+      "prettier": "~2.2.1",
+      "prettier-plugin-svelte": "^2.2.0",
+      "svelte": "^3.34.0",
+      "@tailwindcss/jit": "^0.1.18",
+      "autoprefixer": "^10.2.6",
+      "postcss": "^8.3.4",
+      "postcss-preset-env": "^6.7.0",
+      "svelte-preprocess": "^4.7.3",
+      "tailwindcss": "^2.1.4"
+    },
+    "type": "module"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
