@@ -9,7 +9,6 @@
 			introVideo.muted = !introVideo.muted;
 			document.querySelectorAll('.sound-icon').forEach(icon => icon.classList.toggle('hidden'));
 		});
-		const volumeButton = document.getElementById('sound-toggle');
 	});
 	
 </script>

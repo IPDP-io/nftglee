@@ -92,7 +92,7 @@
 		width: 100%;
 		padding: 0;
 		font-size: 14px;
-		font-size: 1.5vw;
+		font-size: 2vh;
 		border: 0;
 		transition: .6s;
 	}
@@ -120,6 +120,9 @@
 	@media (orientation: landscape) {
 		input, textarea {
 			font-size: 1.3vw;
+		}
+		button#submit {
+			font-size: 1.75vw;
 		}
 	}
 </style>

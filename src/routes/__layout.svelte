@@ -1,6 +1,8 @@
 <script>
 	import '../app.css';
 	import '@fortawesome/fontawesome-free/js/all.min';
+
+	const year = new Date().getFullYear();
 </script>
 
 <main>
@@ -16,7 +18,7 @@
 
 		</div>
 		<div class="container">
-			<p>©2021 Silhouettes</p>
+			<p>©{year} Silhouettes</p>
 		</div>
 	</div>
 	
