@@ -1,7 +1,6 @@
 <script>
 	import Eye from '../icons/eye.svelte';
 	import { auth } from '$lib/api';
-	import { goto } from '$app/navigation';
 	import { session } from '$app/stores';
 
 	let email = 'test12@coinos.io';
@@ -28,8 +27,6 @@
 				email,
 				token
 			};
-
-			goto('/view');
 		} catch (e) {
       err(e.message);
 		}
@@ -42,7 +39,6 @@
   {/if}
 
 	<form class="mb-6" on:submit|preventDefault={login} autocomplete="off">
-		<h2 class="text-xl mb-8">Sign in</h2>
 		<div class="flex flex-col mb-4">
 			<label class="mb-2 font-medium text-gray-600" for="first_name">Email</label>
 			<input bind:value={email} bind:this={emailInput} autocapitalize="off" />
@@ -68,7 +64,7 @@
 		<div class="flex my-5 justify-end">
 			<button
 				class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap"
-				type="submit">Sign in</button
+        type="submit">Sign in / Register</button
 			>
 		</div>
 		<a href="/register" class="text-midblue">Don't have an account? Sign up</a>
@@ -78,7 +74,6 @@
 <style>
 	.form-container {
 		width: 100%;
-		height: 100vh;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -90,7 +85,6 @@
 		max-width: 450px;
 		background-color: white;
 		padding: 40px;
-		box-shadow: 0 1px 5px rgb(0 0 0 / 18%);
 		border-radius: 10px;
 	}
 
