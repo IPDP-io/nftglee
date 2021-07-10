@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { auth } from '$lib/api';
+	import { api, auth } from '$lib/api';
 	import Form from '../components/form.svelte';
 	import Login from '../components/login.svelte';
 	import { session } from '$app/stores';
@@ -13,12 +13,7 @@
 		try {
 			let refresh_token = $session.user.token;
 
-			await auth
-				.url('/logout')
-				.query({ refresh_token })
-				//				.auth('Bearer ' + $session.user.token)
-				.post()
-				.res();
+			await auth.url('/logout').query({ refresh_token }).post().res();
 
 			$session.user = undefined;
 		} catch (e) {
@@ -28,7 +23,6 @@
 
 	let asset, img, vid, buying, selling, txid, ws;
 	let received = 0;
-	// let address = 'M9rSM2qFg8o81tNKbtvpavBJMEhfYKY6oi';
 	let address = 'Qe8YqywBsx4QfD71dsPcF6kU3Jy6sc9hgP';
 	let amount = 0.01;
 	let to = 'AzpuQjLb2GbM37S6MiYM4CBVaLK7drpqqMqFUqwimGoStSrB5SgBGeD4JrTczVPmv4bUjcFmQdavUMh8';
@@ -63,7 +57,7 @@
 		const introVideo = document.getElementById('intro-video');
 		movieBanner.addEventListener('click', () => {
 			introVideo.muted = !introVideo.muted;
-			document.querySelectorAll('.sound-icon').forEach(icon => icon.classList.toggle('hidden'));
+			document.querySelectorAll('.sound-icon').forEach((icon) => icon.classList.toggle('hidden'));
 		});
 
 		loadVideo();
@@ -104,16 +98,36 @@
 		selling = true;
 	};
 
-	let btc = () => {};
+	let btc = async () => {
+		selling = false;
+		buying = true;
+
+
+		({ address } = await api
+			.url('/bitcoin')
+			.post({
+				amount: 10000
+			})
+			.json());
+
+    console.log(ws.readyState);
+    ws.send(JSON.stringify({ type: 'subscribe', value: address }));
+    qr(`bitcoin:${address}`);
+	};
+
+	let qr = (text) => {
+		const qr = new qrcode(0, 'H');
+		qr.addData(text);
+		qr.make();
+		img = qr.createSvgTag({});
+	};
+
 	let lbtc = () => {};
 	let lnbtc = () => {};
 	let ltc = () => {
-		const qr = new qrcode(0, 'H');
 		selling = false;
 		buying = true;
-		qr.addData(`litecoin:${address}`);
-		qr.make();
-		img = qr.createSvgTag({});
+		qr(`litecoin:${address}`);
 	};
 
 	let mint = () => {
@@ -167,6 +181,7 @@
 		<div class="container">
 			<h1>Watch Silhouettes</h1>
 		</div>
+		<!--
 		<div class="container">
 			{#if $session.user}
 				<div>
@@ -177,6 +192,7 @@
 				<Login />
 			{/if}
 		</div>
+    -->
 		<div id="payment-options" class="container">
 			<div class="container column">
 				<h3>Choose preferred payment option:</h3>

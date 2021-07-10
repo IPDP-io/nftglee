@@ -3,21 +3,29 @@ const jwt = require('jsonwebtoken');
 const zmq = require('zeromq');
 const WebSocket = require('ws');
 const wretch = require('wretch');
+
+const logMiddleware = () => (next) => (url, opts) => {
+	return next(url, opts);
+};
+
 const { address: Address, networks, Transaction } = require('litecoinjs-lib');
 const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
 const fs = require('fs');
 
-const { HASURA_JWT, HASURA_SECRET } = process.env;
+const { COINOS_URL, COINOS_TOKEN, HASURA_JWT, HASURA_SECRET } = process.env;
+
+const coinos = wretch()
+	.middlewares([logMiddleware()])
+	.url(COINOS_URL)
+	.auth(`Bearer ${COINOS_TOKEN}`);
 
 const electrs = wretch().url('http://localhost:3012');
 const hbp = wretch().url('http://localhost:3400');
-const coinos = wretch()
-	.url('http://localhost:3119')
-	.auth(
-		`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNhdG9zaGktZWRhZTM4ODYiLCJpYXQiOjE2MjQ2NTk4NTl9.kwemnNm5eobGmRa0I0F-OSiLkslDcRymPpRP7u6z0L8`
-	);
-const hasura = wretch().url('http://localhost:8080/v1/graphql').headers({ 'x-hasura-admin-secret': HASURA_SECRET });
+
+const hasura = wretch()
+	.url('http://localhost:8080/v1/graphql')
+	.headers({ 'x-hasura-admin-secret': HASURA_SECRET });
 
 const network = networks.litereg;
 
@@ -89,6 +97,13 @@ app.post('/register', async (req, res) => {
 	}
 });
 
+app.post('/boom', async (req, res) => {
+  console.log(req.body);
+
+  subscribers[req.body.address].send(JSON.stringify({ type: 'payment', value: req.body }));
+  res.send(req.body);
+});
+
 app.post('/bitcoin', async (req, res) => {
 	let network = 'bitcoin';
 	let { amount } = req.body;
@@ -102,7 +117,8 @@ app.post('/bitcoin', async (req, res) => {
 				address,
 				network,
 				text: address,
-				amount
+				amount,
+        webhook: 'http://172.17.0.1:8091/boom'
 			}
 		})
 		.json();
