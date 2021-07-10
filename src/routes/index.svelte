@@ -24,7 +24,6 @@
 	let asset, img, vid, buying, selling, txid, ws;
 	let received = 0;
 	let address = 'Qe8YqywBsx4QfD71dsPcF6kU3Jy6sc9hgP';
-	let amount = 0.01;
 	let to = 'AzpuQjLb2GbM37S6MiYM4CBVaLK7drpqqMqFUqwimGoStSrB5SgBGeD4JrTczVPmv4bUjcFmQdavUMh8';
 
 	let loadVideo = () => {
@@ -52,13 +51,17 @@
 		}
 	};
 
-	onMount(() => {
+	let amount = 20;
+	onMount(async () => {
 		const movieBanner = document.getElementById('movie-banner');
 		const introVideo = document.getElementById('intro-video');
 		movieBanner.addEventListener('click', () => {
 			introVideo.muted = !introVideo.muted;
 			document.querySelectorAll('.sound-icon').forEach((icon) => icon.classList.toggle('hidden'));
 		});
+
+		let { rate } = await api.url('/rate').get().json();
+    amount = (amount / rate).toFixed(8);
 
 		loadVideo();
 		// ws = new WebSocket(`wss://ltc.coinos.io/ws`);
@@ -98,10 +101,11 @@
 		selling = true;
 	};
 
+  let unit;
 	let btc = async () => {
+    unit = 'BTC';
 		selling = false;
 		buying = true;
-
 
 		({ address } = await api
 			.url('/bitcoin')
@@ -110,9 +114,9 @@
 			})
 			.json());
 
-    console.log(ws.readyState);
-    ws.send(JSON.stringify({ type: 'subscribe', value: address }));
-    qr(`bitcoin:${address}`);
+		console.log(ws.readyState);
+		ws.send(JSON.stringify({ type: 'subscribe', value: address }));
+		qr(`bitcoin:${address}`);
 	};
 
 	let qr = (text) => {
@@ -125,6 +129,7 @@
 	let lbtc = () => {};
 	let lnbtc = () => {};
 	let ltc = () => {
+    unit = 'LTC';
 		selling = false;
 		buying = true;
 		qr(`litecoin:${address}`);
@@ -206,7 +211,7 @@
 		<div class="container">
 			{#if received}
 				<p>
-					Received {(received / SATS).toFixed(8)} LTC!
+					Received {(received / SATS).toFixed(8)} {unit}!
 				</p>
 
 				<h2>Your ticket</h2>
@@ -256,7 +261,7 @@
 				<p>Token has been sent!</p>
 				<p>Txid: {txid}</p>
 			{:else if buying}
-				<div>Send {amount} LTC to:</div>
+				<div>Send {amount} {unit} to:</div>
 				<div class="qr">
 					{@html img}
 					<div>

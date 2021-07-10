@@ -98,10 +98,10 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/boom', async (req, res) => {
-  console.log(req.body);
+	console.log(req.body);
 
-  subscribers[req.body.address].send(JSON.stringify({ type: 'payment', value: req.body }));
-  res.send(req.body);
+	subscribers[req.body.address].send(JSON.stringify({ type: 'payment', value: req.body }));
+	res.send(req.body);
 });
 
 app.post('/bitcoin', async (req, res) => {
@@ -118,7 +118,7 @@ app.post('/bitcoin', async (req, res) => {
 				network,
 				text: address,
 				amount,
-        webhook: 'http://172.17.0.1:8091/boom'
+				webhook: 'http://172.17.0.1:8091/boom'
 			}
 		})
 		.json();
@@ -127,6 +127,11 @@ app.post('/bitcoin', async (req, res) => {
 });
 
 let paused = false;
+app.get('/rate', async function (request, reply) {
+	let { USD: rate } = await coinos.url('/rates').get().json();
+	reply.send({ rate });
+});
+
 app.get('/file/:name', function (request, reply) {
 	const { name } = request.params;
 	const stream = fs.createReadStream(`file/${name}`);
