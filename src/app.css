@@ -24,6 +24,31 @@ h3 {
     font-size: 28px;
     font-size: 2vw;
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+.column {
+    flex-direction: column;
+}
+.space-around {
+    justify-content: space-around;
+}
+.hidden {
+    display: none;
+}
+footer {
+    font-family: Helvetica;
+    font-size: 15px;
+    font-size: 2vh;
+    padding: 2vw;
+}
+.social-icons {
+    margin: 15px;
+    font-size: 15px;
+    font-size: 2vh;
+}
 @media screen and (max-width: 1025px) {
     h1 {
         font-size: 60px;
@@ -66,14 +91,15 @@ h3 {
         font-size: 4vw;
     }
 }
+@media (orientation: landscape) {
+    footer {
+        font-size: 1.5vw;
+        padding: 1vw;
+    }
+    .social-icons {
+        margin: 1vw;
+        font-size: 1.5vw;
+    }
+}
 
-.container {
-    display: flex;
-    justify-content: center;
-}
-.column {
-    flex-direction: column;
-}
-.space-around {
-    justify-content: space-around;
-}
+

@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+<<<<<<< HEAD
 	import { auth } from '$lib/api';
 	import Form from '../components/form.svelte';
 	import Login from '../components/login.svelte';
@@ -116,6 +117,19 @@
 	let send = () => {
 		ws.send(JSON.stringify({ type: 'send', value: to, asset }));
 	};
+=======
+	import Form from '../components/form.svelte';
+
+	onMount(() => {
+		const movieBanner = document.getElementById('movie-banner');
+		const introVideo = document.getElementById('intro-video');
+		movieBanner.addEventListener('click', () => {
+			introVideo.muted = !introVideo.muted;
+			document.querySelectorAll('.sound-icon').forEach(icon => icon.classList.toggle('hidden'));
+		});
+	});
+	
+>>>>>>> origin/dev
 </script>
 
 <svelte:head>
@@ -129,6 +143,10 @@
 
 <section>
 	<div id="movie-banner" class="container">
+		<div id="sound-toggle">
+			<i class="fas fa-volume-mute fa-2x sound-icon"></i>
+			<i class="fas fa-volume-up fa-2x sound-icon hidden"></i>	
+		</div>
 		<div id="video-overlay">
 			<svg
 				id="scroll-down-arrow"
@@ -258,6 +276,15 @@
 		align-items: flex-end;
 		position: relative;
 	}
+	#sound-toggle {
+		font-size: .8rem;
+		font-size: 1vw;
+		position: absolute;
+		left: 15px;
+		left: 1.5vh;
+		top: 15px;
+		top: 1.5vh;
+	}
 	#video-overlay {
 		display: inline-block;
 		text-align: center;
@@ -306,6 +333,52 @@
 		background-color: var(--main-blue);
 		color: white;
 		transition: 0.6s;
+	}
+	
+	@media screen and (max-width: 1025px) {
+    #sound-toggle {
+        font-size: .7rem;
+		font-size: 1.5vw;
+    }
+}
+	@media screen and (max-width: 769px) {
+		#sound-toggle {
+			font-size: .6rem;
+			font-size: 1.5vw;
+		}
+		button {
+			font-size: 15px;
+			font-size: 2.25vw;
+		}
+	}
+	@media screen and (max-width: 481px) {
+		#sound-toggle {
+			font-size: .5rem;
+			font-size: 1.75vw;
+		}
+		button {
+			font-size: 12px;
+			font-size: 1.5vh;
+		}
+	}
+	@media screen and (max-width: 320px) {
+		#sound-toggle {
+			font-size: 3vw;
+		}
+	}
+	@media (orientation: landscape) {
+		button {
+			height: 4vw;
+			font-size: 2vw;
+		}
+		#sound-toggle {
+			font-size: 1vw;
+    	}
+	}
+	@media (orientation: landscape) and ( max-width: 769px) {
+		#sound-toggle {
+			font-size: 1.5vw;
+    	}
 	}
 
 	.qr {

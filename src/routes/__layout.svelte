@@ -2,6 +2,7 @@
 	import '../app.css';
 	import '@fortawesome/fontawesome-free/js/all.min';
 	import { session } from '$app/stores';
+	const year = new Date().getFullYear();
 </script>
 
 <main>
@@ -16,17 +17,7 @@
 			<i class="fab fa-linkedin-in social-icons" />
 		</div>
 		<div class="container">
-			<p>©2021 Silhouettes</p>
+			<p>©{year} Silhouettes</p>
 		</div>
 	</div>
 </footer>
-
-<style>
-	footer {
-		font-family: Helvetica;
-		padding: 50px;
-	}
-	.social-icons {
-		margin: 15px;
-	}
-</style>
