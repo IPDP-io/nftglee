@@ -52,6 +52,8 @@
 	};
 
 	let amount = 20;
+  let btcAmount, ltcAmount;
+
 	onMount(async () => {
 		const movieBanner = document.getElementById('movie-banner');
 		const introVideo = document.getElementById('intro-video');
@@ -60,8 +62,9 @@
 			document.querySelectorAll('.sound-icon').forEach((icon) => icon.classList.toggle('hidden'));
 		});
 
-		let { rate } = await api.url('/rate').get().json();
-    amount = (amount / rate).toFixed(8);
+		let rates = await api.url('/rates').get().json();
+		btcAmount = (amount / rates.btc).toFixed(8);
+		ltcAmount = (amount / rates.ltc).toFixed(8);
 
 		loadVideo();
 		// ws = new WebSocket(`wss://ltc.coinos.io/ws`);
@@ -101,20 +104,19 @@
 		selling = true;
 	};
 
-  let unit;
-	let btc = async () => {
-    unit = 'BTC';
+	let unit;
+	let getInvoice = async (u) => {
+		unit = u;
 		selling = false;
 		buying = true;
 
 		({ address } = await api
-			.url('/bitcoin')
+			.url('/' + u)
 			.post({
 				amount: 10000
 			})
 			.json());
 
-		console.log(ws.readyState);
 		ws.send(JSON.stringify({ type: 'subscribe', value: address }));
 		qr(`bitcoin:${address}`);
 	};
@@ -124,15 +126,6 @@
 		qr.addData(text);
 		qr.make();
 		img = qr.createSvgTag({});
-	};
-
-	let lbtc = () => {};
-	let lnbtc = () => {};
-	let ltc = () => {
-    unit = 'LTC';
-		selling = false;
-		buying = true;
-		qr(`litecoin:${address}`);
 	};
 
 	let mint = () => {
@@ -201,17 +194,25 @@
 		<div id="payment-options" class="container">
 			<div class="container column">
 				<h3>Choose preferred payment option:</h3>
-				<div id="payment-buttons" class="container space-around">
-					<button on:click={btc}>Bitcoin</button>
-					<button on:click={ltc}>Litecoin</button>
+				<div class="container space-around mb">
+          <button on:click={() => getInvoice('BTC')} class:active={unit === 'BTC'}>Bitcoin</button>
+					<button on:click={() => getInvoice('LTC')} class:active={unit === 'LTC'}>Litecoin</button>
 				</div>
+				{#if unit && unit.includes('BTC')}
+					<div class="container space-around">
+						<button on:click={() => getInvoice('BTC')} class:active={unit === 'BTC'}>On-chain</button>
+						<button on:click={() => getInvoice('LBTC')} class:active={unit === 'LBTC'}>Liquid</button>
+						<button on:click={() => getInvoice('LNBTC')} class:active={unit === 'LNBTC'}>Lightning</button>
+					</div>
+				{/if}
 			</div>
 		</div>
 
 		<div class="container">
 			{#if received}
 				<p>
-					Received {(received / SATS).toFixed(8)} {unit}!
+					Received {(received / SATS).toFixed(8)}
+					{unit}!
 				</p>
 
 				<h2>Your ticket</h2>
@@ -261,7 +262,7 @@
 				<p>Token has been sent!</p>
 				<p>Txid: {txid}</p>
 			{:else if buying}
-				<div>Send {amount} {unit} to:</div>
+				<div>Send {unit === 'LTC' ? ltcAmount : btcAmount} {unit} to:</div>
 				<div class="qr">
 					{@html img}
 					<div>
@@ -343,7 +344,8 @@
 		color: var(--mainblue);
 		transition: 0.6s;
 	}
-	button:hover {
+	button:hover,
+	button.active {
 		background-color: var(--main-blue);
 		color: white;
 		transition: 0.6s;
@@ -398,5 +400,9 @@
 	.qr {
 		margin: auto;
 		width: 300px;
+	}
+
+	.mb {
+		margin-bottom: 10px;
 	}
 </style>

@@ -104,7 +104,7 @@ app.post('/boom', async (req, res) => {
 	res.send(req.body);
 });
 
-app.post('/bitcoin', async (req, res) => {
+app.post('/BTC', async (req, res) => {
 	let network = 'bitcoin';
 	let { amount } = req.body;
 
@@ -126,10 +126,22 @@ app.post('/bitcoin', async (req, res) => {
 	return { address };
 });
 
-let paused = false;
-app.get('/rate', async function (request, reply) {
-	let { USD: rate } = await coinos.url('/rates').get().json();
-	reply.send({ rate });
+app.get('/rates', async function (request, reply) {
+	let { price: btc } = await wretch()
+		.url('https://api.binance.com/api/v3/ticker/price')
+		.query({ symbol: 'BTCUSDT' })
+		.get()
+		.json()
+		.catch(console.log);
+
+	let { price: ltc } = await wretch()
+		.url('https://api.binance.com/api/v3/ticker/price')
+		.query({ symbol: 'LTCUSDT' })
+		.get()
+		.json()
+		.catch(console.log);
+
+	reply.send({ btc, ltc });
 });
 
 app.get('/file/:name', function (request, reply) {
