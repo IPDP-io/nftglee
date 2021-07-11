@@ -118,7 +118,7 @@
 			.json());
 
 		ws.send(JSON.stringify({ type: 'subscribe', value: address }));
-		qr(`bitcoin:${address}`);
+		qr(address);
 	};
 
 	let qr = (text) => {

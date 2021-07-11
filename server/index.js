@@ -98,9 +98,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/boom', async (req, res) => {
-	console.log(req.body);
-
-	subscribers[req.body.address].send(JSON.stringify({ type: 'payment', value: req.body }));
+	subscribers[req.body.text].send(JSON.stringify({ type: 'payment', value: req.body.amount }));
 	res.send(req.body);
 });
 
@@ -124,6 +122,54 @@ app.post('/BTC', async (req, res) => {
 		.json();
 
 	return { address };
+});
+
+app.post('/LBTC', async (req, res) => {
+	let network = 'liquid';
+	let { amount } = req.body;
+
+	let { address, confidentialAddress } = await coinos
+		.url('/address')
+		.query({ network })
+		.get()
+		.json();
+
+	await coinos
+		.url('/invoice')
+		.post({
+			invoice: {
+				address: confidentialAddress,
+				unconfidential: address,
+				network,
+				text: address,
+				amount,
+				webhook: 'http://172.17.0.1:8091/boom'
+			}
+		})
+		.json();
+
+	return { address };
+});
+
+app.post('/LNBTC', async (req, res) => {
+	let network = 'lightning';
+	let { amount } = req.body;
+
+	let text = await coinos.url('/lightning/invoice').post({ amount }).text().catch(console.log);
+  
+	await coinos
+		.url('/invoice')
+		.post({
+			invoice: {
+				network,
+				text,
+				amount,
+				webhook: 'http://172.17.0.1:8091/boom'
+			}
+		})
+		.json();
+
+	return { address: text };
 });
 
 app.get('/rates', async function (request, reply) {
