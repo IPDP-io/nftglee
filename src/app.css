@@ -48,8 +48,8 @@ a:active {
 .column {
     flex-direction: column;
 }
-.space-around {
-    justify-content: space-around;
+.space-evenly {
+    justify-content: space-evenly;
 }
 .hidden {
     display: none;

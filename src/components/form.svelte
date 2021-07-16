@@ -102,6 +102,7 @@
 		transition: .4s;
 		
 	}
+
 	@media screen and (max-width: 1025px) {
 		button#submit {
 			height:7vh;
@@ -119,10 +120,10 @@
 	}
 	@media (orientation: landscape) {
 		input, textarea {
-			font-size: 2vw;
+			font-size: 1.5vw;
 		}
 		button#submit {
-			font-size: 2vw;
+			font-size: 1.5vw;
 		}
 	}
 </style>

@@ -128,6 +128,9 @@
 		color: white;
 		transition: 0.6s;
 	}
+	.secondary-btn {
+		transform: scale(.75);
+	}
 
 	@media screen and (max-width: 1025px) {
 		
