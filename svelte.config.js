@@ -2,6 +2,7 @@ import adapter from '@sveltejs/adapter-node';
 import preprocess from 'svelte-preprocess';
 import tailwind from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
+import path from 'path';
 
 const config = {
 	preprocess: preprocess({
@@ -14,6 +15,12 @@ const config = {
 		adapter: adapter(),
 		target: '#svelte',
 		vite: {
+			resolve: {
+				alias: {
+					$components: path.resolve('src/components'),
+					$icons: path.resolve('src/icons')
+				}
+			},
 			server: {
 				proxy: {
 					'/file': {
@@ -21,12 +28,12 @@ const config = {
 						rewrite: (path) => path.replace(/^\/file/, '')
 					},
 					'/auth': {
-						target: 'http://localhost:3400',
-          },
+						target: 'http://localhost:3400'
+					},
 					'/api': {
 						target: 'http://localhost:8091',
 						rewrite: (path) => path.replace(/^\/api/, '')
-          }
+					}
 				}
 			}
 		}
