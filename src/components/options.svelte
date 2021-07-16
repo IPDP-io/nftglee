@@ -39,3 +39,9 @@
 		{/if}
 	</div>
 </div>
+
+<style>
+	#payment-options h3 {
+		text-align: center;
+	}
+</style>

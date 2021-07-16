@@ -1,20 +1,25 @@
 <script>
 	import '../app.css';
-	import '@fortawesome/fontawesome-free/js/all.min';
 	import { session } from '$app/stores';
 	import Down from '$icons/down.svelte';
+	import VolumeIconUp from '$icons/volume-up.svelte';
+	import VolumeIconMute from '$icons/volume-mute.svelte';
+	import FacebookIcon from '$icons/facebook.svelte';
+	import TwitterIcon from '$icons/twitter.svelte';
+	import LinkedInIcon from '$icons/linkedin.svelte';
 	import Form from '$components/form.svelte';
 	import { goto } from '$app/navigation';
 
 	const year = new Date().getFullYear();
+
 </script>
 
 <main>
 	<section>
 		<div id="movie-banner" class="container">
 			<div id="sound-toggle">
-				<i class="fas fa-volume-mute fa-2x sound-icon" />
-				<i class="fas fa-volume-up fa-2x sound-icon hidden" />
+				<VolumeIconUp />
+				<VolumeIconMute />
 			</div>
 			<div id="video-overlay">
 				<p>Scroll to begin</p>
@@ -49,9 +54,9 @@
 <footer>
 	<div class="container column">
 		<div id="social-media" class="container">
-			<i class="fab fa-facebook-f social-icons" />
-			<i class="fab fa-twitter social-icons" />
-			<i class="fab fa-linkedin-in social-icons" />
+			<FacebookIcon />
+			<TwitterIcon />
+			<LinkedInIcon />
 		</div>
 		<div class="container">
 			<p>©{year} Silhouettes</p>
@@ -93,13 +98,14 @@
 		position: relative;
 	}
 	#sound-toggle {
-		font-size: 0.8rem;
-		font-size: 1vw;
 		position: absolute;
 		left: 15px;
 		left: 1.5vh;
 		top: 15px;
 		top: 1.5vh;
+	}
+	.sound-icon {
+		width: 1rem;
 	}
 	#payment-options {
 		margin-bottom: 2rem;
@@ -111,7 +117,7 @@
 		border: 5px solid var(--main-blue);
 		height: 40px;
 		margin: 0 10px;
-		font-size: 24px;
+		font-size: 1rem;
 		padding: 0 10px;
 		color: var(--mainblue);
 		transition: 0.6s;
@@ -124,48 +130,40 @@
 	}
 
 	@media screen and (max-width: 1025px) {
-		#sound-toggle {
-			font-size: 0.7rem;
-			font-size: 1.5vw;
-		}
+		
 	}
 	@media screen and (max-width: 769px) {
-		#sound-toggle {
-			font-size: 0.6rem;
-			font-size: 1.5vw;
-		}
 		button {
 			font-size: 15px;
 			font-size: 2.25vw;
 		}
 	}
 	@media screen and (max-width: 481px) {
-		#sound-toggle {
-			font-size: 0.5rem;
-			font-size: 1.75vw;
+		.sound-icon {
+			width: 1rem;
 		}
 		button {
 			font-size: 12px;
-			font-size: 1.5vh;
+			font-size: 3.5vw;
+
 		}
 	}
 	@media screen and (max-width: 320px) {
-		#sound-toggle {
-			font-size: 3vw;
+		.sound-icon {
+	
 		}
 	}
 	@media (orientation: landscape) {
 		button {
-			height: 4vw;
 			font-size: 2vw;
 		}
-		#sound-toggle {
-			font-size: 1vw;
+		.sound-icon {
+	
 		}
 	}
 	@media (orientation: landscape) and (max-width: 769px) {
-		#sound-toggle {
-			font-size: 1.5vw;
+		.sound-icon {
+		
 		}
 	}
 

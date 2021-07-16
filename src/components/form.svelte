@@ -119,10 +119,10 @@
 	}
 	@media (orientation: landscape) {
 		input, textarea {
-			font-size: 1.3vw;
+			font-size: 2vw;
 		}
 		button#submit {
-			font-size: 1.75vw;
+			font-size: 2vw;
 		}
 	}
 </style>

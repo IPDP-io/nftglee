@@ -33,77 +33,128 @@
 	};
 </script>
 
-<div class="form-container bg-lightblue px-4">
+<div class="container">
   {#if error}
     <div>{error}</div>
   {/if}
 
-	<form class="mb-6" on:submit|preventDefault={login} autocomplete="off">
-		<div class="flex flex-col mb-4">
-			<label class="mb-2 font-medium text-gray-600" for="first_name">Email</label>
-			<input bind:value={email} bind:this={emailInput} autocapitalize="off" />
-		</div>
-		<div class="flex flex-col mb-4">
-			<label class="mb-2 font-medium text-gray-600" for="last_name">Password</label>
-			<div class="relative">
-				{#if show}
-					<input class="w-full" bind:value={password} autocapitalize="off" />
-				{:else}
-					<input class="w-full" type="password" bind:value={password} autocapitalize="off" />
-				{/if}
-				<button
-					class="absolute h-full px-3 right-0 top-0 w-auto"
-					type="button"
-					on:click|preventDefault|stopPropagation={() => (show = !show)}
-				>
-					<Eye />
-				</button>
+	<form on:submit|preventDefault={login} autocomplete="off">
+		<div class="form-field">
+			<div>
+				<label for="first_name">Email</label>
+				<input bind:value={email} bind:this={emailInput} autocapitalize="off" />
 			</div>
 		</div>
-		<a href="/forgot-password" class="block w-full text-midblue">Forgot password?</a>
-		<div class="flex my-5 justify-end">
-			<button
-				class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap"
-        type="submit">Sign in / Register</button
-			>
+		<div class="form-field">
+			<div>
+				<label for="last_name">Password</label>
+				<div id="password">
+					{#if show}
+						<input bind:value={password} autocapitalize="off" />
+					{:else}
+						<input type="password" bind:value={password} autocapitalize="off" />
+					{/if}
+					<span id="show-password"
+						on:click|preventDefault|stopPropagation={() => (show = !show)}
+					>
+						<Eye />
+					</span>
+				</div>
+			</div>
 		</div>
-		<a href="/register" class="text-midblue">Don't have an account? Sign up</a>
+		<div id="form-submit-controls" class="container">
+			<div class="container column">
+				<button type="submit">Sign in / Register</button>
+				<a href="/forgot-password">Forgot password?</a>
+				<!-- <a href="/register">Don't have an account? Sign up</a> -->
+			</div>
+		</div>
+		
 	</form>
 </div>
 
 <style>
-	.form-container {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+	#show-password {
+		width: 2rem;
 	}
-
-	.form-container form {
-		width: 100%;
-		max-width: 450px;
-		background-color: white;
-		padding: 40px;
-		border-radius: 10px;
+	form {
+		width: 75%;
+		font-family: Helvetica;
 	}
-
+	#form-submit-controls {
+		text-align: center;
+	}
+	#password {
+		position: relative;
+	}
+	.form-field {
+		margin: 10px 0;
+	}
 	input {
-		@apply appearance-none border rounded text-gray-700 leading-tight;
-		padding: 0;
-		padding: 10px;
+		height: 2rem;
+		height: 5vh;
 	}
-
-	@media only screen and (max-width: 640px) {
-		.form-container {
-			background: none;
-			height: auto;
+	textarea {
+		height: 4rem;
+		height: 15vh;
+		resize : vertical;
+	}
+	input, textarea {
+		background-color: transparent;
+		border: 0;
+		border-bottom: 1px solid var(--main-blue);
+		width: 100%;
+		padding: 0;
+		font-size: 12px;
+		font-size: 2vh;
+		color: var(--main-blue);
+	}
+	input::placeholder, textarea::placeholder {
+		color: var(--main-blue);
+	}
+	input:hover, textarea:hover {
+		border: 1px solid var(--main-blue);
+	}
+	button#submit {
+		height: 2.5rem;
+		height: 8vh;
+		width: 100%;
+		padding: 0;
+		font-size: 14px;
+		font-size: 3vh;
+		border: 0;
+		transition: .6s;
+	}
+	button#submit:hover {
+		background-color: #ffffffaa;
+		color: var(--main-blue);
+		transition: .4s;
+		
+	}
+	@media screen and (max-width: 1025px) {
+		button#submit {
+			height:7vh;
 		}
-
-		.form-container form {
-			box-shadow: none;
-			padding: 0.2rem;
-			margin-top: 50px;
+	}
+	@media screen and (max-width: 769px) {
+		button#submit {
+			height:6vh;
+			font-size: 2rem;
+			font-size: 3vh;
+		}
+	}
+	@media screen and (max-width: 481px) {
+		button#submit {
+			height:5vh;
+			font-size: 3vh;
+		}
+	}
+	@media (orientation: landscape) {
+		input, textarea {
+			font-size: 2vw;
+		}
+		button#submit {
+			font-size: 2vw;
 		}
 	}
 </style>

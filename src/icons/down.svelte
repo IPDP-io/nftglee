@@ -6,6 +6,7 @@
 	data-type="shape"
 	role="presentation"
 	aria-hidden="true"
+	class="icon"
 >
 	<g>
 		<path
@@ -19,8 +20,5 @@
 	#scroll-down-arrow {
 		width: 25%;
 		height: auto;
-	}
-	#scroll-down-arrow path {
-		fill: var(--main-blue);
 	}
   </style>
