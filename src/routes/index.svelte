@@ -21,7 +21,10 @@
 		}
 	};
 
+  const btc = (n) => (n / SATS).toFixed(8);
+
 	let asset, img, vid, buying, selling, txid, ws;
+	let pending = 0;
 	let received = 0;
 	let address = 'Qe8YqywBsx4QfD71dsPcF6kU3Jy6sc9hgP';
 	let to = 'AzpuQjLb2GbM37S6MiYM4CBVaLK7drpqqMqFUqwimGoStSrB5SgBGeD4JrTczVPmv4bUjcFmQdavUMh8';
@@ -77,6 +80,11 @@
 			console.log(data);
 			try {
 				let { type, value } = JSON.parse(data);
+
+				if (type === 'pending') {
+					buying = false;
+					pending += value;
+				}
 
 				if (type === 'payment') {
 					buying = false;
@@ -209,9 +217,15 @@
 		</div>
 
 		<div class="container">
+      {#if pending}
+      Payment detected 
+
+      {btc(pending)} {unit} Pending
+      {/if}
+
 			{#if received}
 				<p>
-					Received {(received / SATS).toFixed(8)}
+					Received {btc(received)}
 					{unit}!
 				</p>
 

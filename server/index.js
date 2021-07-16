@@ -2,32 +2,18 @@ const path = require('path');
 const jwt = require('jsonwebtoken');
 const zmq = require('zeromq');
 const WebSocket = require('ws');
-const wretch = require('wretch');
-
-const logMiddleware = () => (next) => (url, opts) => {
-	return next(url, opts);
-};
 
 const { address: Address, networks, Transaction } = require('litecoinjs-lib');
 const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
 const fs = require('fs');
 
-const { COINOS_URL, COINOS_TOKEN, HASURA_JWT, HASURA_SECRET } = process.env;
-
-const coinos = wretch()
-	.middlewares([logMiddleware()])
-	.url(COINOS_URL)
-	.auth(`Bearer ${COINOS_TOKEN}`);
-
-const electrs = wretch().url('http://localhost:3012');
-const hbp = wretch().url('http://localhost:3400');
-
-const hasura = wretch()
-	.url('http://localhost:8080/v1/graphql')
-	.headers({ 'x-hasura-admin-secret': HASURA_SECRET });
+const { binance, coinos, electrs, hbp, hasura } = require('./api');
 
 const network = networks.litereg;
+const subscribers = {};
+const invoices = {};
+let asset;
 
 auth = {
 	preValidation(req, res, done) {
@@ -98,28 +84,30 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/boom', async (req, res) => {
-	subscribers[req.body.text].send(JSON.stringify({ type: 'payment', value: req.body.amount }));
+	let { amount: value, confirmed, text } = req.body;
+
+	if (confirmed && value >= invoices[text])
+		subscribers[text].send(JSON.stringify({ type: 'payment', value }));
+	else subscribers[text].send(JSON.stringify({ type: 'pending', value }));
+
 	res.send(req.body);
 });
 
 app.post('/BTC', async (req, res) => {
 	let network = 'bitcoin';
 	let { amount } = req.body;
-
 	let { address } = await coinos.url('/address').query({ network, type: 'bech32' }).get().json();
+	invoices[address] = amount;
 
-	await coinos
-		.url('/invoice')
-		.post({
-			invoice: {
-				address,
-				network,
-				text: address,
-				amount,
-				webhook: 'http://172.17.0.1:8091/boom'
-			}
-		})
-		.json();
+	let invoice = {
+		address,
+		network,
+		text: address,
+		amount,
+		webhook: 'http://172.17.0.1:8091/boom'
+	};
+
+	await coinos.url('/invoice').post({ invoice }).json();
 
 	return { address };
 });
@@ -127,12 +115,13 @@ app.post('/BTC', async (req, res) => {
 app.post('/LBTC', async (req, res) => {
 	let network = 'liquid';
 	let { amount } = req.body;
-
 	let { address, confidentialAddress } = await coinos
 		.url('/address')
 		.query({ network })
 		.get()
 		.json();
+
+	invoices[address] = amount;
 
 	await coinos
 		.url('/invoice')
@@ -156,7 +145,9 @@ app.post('/LNBTC', async (req, res) => {
 	let { amount } = req.body;
 
 	let text = await coinos.url('/lightning/invoice').post({ amount }).text().catch(console.log);
-  
+
+	invoices[text] = amount;
+
 	await coinos
 		.url('/invoice')
 		.post({
@@ -173,19 +164,8 @@ app.post('/LNBTC', async (req, res) => {
 });
 
 app.get('/rates', async function (request, reply) {
-	let { price: btc } = await wretch()
-		.url('https://api.binance.com/api/v3/ticker/price')
-		.query({ symbol: 'BTCUSDT' })
-		.get()
-		.json()
-		.catch(console.log);
-
-	let { price: ltc } = await wretch()
-		.url('https://api.binance.com/api/v3/ticker/price')
-		.query({ symbol: 'LTCUSDT' })
-		.get()
-		.json()
-		.catch(console.log);
+	let { price: btc } = await binance.query({ symbol: 'BTCUSDT' }).get().json().catch(console.log);
+	let { price: ltc } = await binance.query({ symbol: 'LTCUSDT' }).get().json().catch(console.log);
 
 	reply.send({ btc, ltc });
 });
@@ -209,8 +189,6 @@ app.listen(8091, '0.0.0.0', function (err, address) {
 	app.log.info(`server listening on ${address}`);
 });
 
-let subscribers = {};
-let asset;
 async function run() {
 	wss = new WebSocket.Server({ port: 9090 });
 

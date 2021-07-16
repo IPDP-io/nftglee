@@ -169,8 +169,6 @@ export const issue = async ({ address, domain, editions, file, name, ticker }, c
 
 	let utxo = (await utxos()).find((o) => o.asset === BTC);
 
-	console.log(utxo.txid);
-
 	let hex = await getHex(utxo.txid);
 	let prevOut = await Transaction.fromHex(hex);
 	let tx, txid;
@@ -193,7 +191,6 @@ export const issue = async ({ address, domain, editions, file, name, ticker }, c
 	for (let i = 0; i < count; i++) {
 		let p = new Psbt();
 
-		console.log('i', i);
 		if (i > 0) {
 			let index = tx.outs.findIndex(
 				(o) =>
