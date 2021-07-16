@@ -36,3 +36,5 @@
 		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@latest/build/p2p-media-loader-hlsjs.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/clappr@latest"></script>
 </svelte:head>
+
+  <div id="player"></div>

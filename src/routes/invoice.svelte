@@ -5,16 +5,19 @@
 	import qrcode from 'qrcode-generator-es6';
 
 	let amount = 20;
-	let btcAmount, ltcAmount, img;
+  let btcAmount;
+
+  let ltcAmount, img;
 
 	onMount(async () => {
+    $address = "bcasd098kjahsdkjya98s7d1234";
 		const qr = new qrcode(0, 'H');
 		qr.addData($address);
 		qr.make();
 		img = qr.createSvgTag({});
 
 		let rates = await api.url('/rates').get().json();
-		btcAmount = (amount / rates.btc).toFixed(8);
+    // btcAmount = (amount / rates.btc).toFixed(8);
 		ltcAmount = (amount / rates.ltc).toFixed(8);
 	});
 </script>
