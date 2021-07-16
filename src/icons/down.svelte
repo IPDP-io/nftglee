@@ -14,8 +14,7 @@
 	</g>
 </svg>
 
-  <style>
-
+<style>
 	#scroll-down-arrow {
 		width: 25%;
 		height: auto;
@@ -23,4 +22,4 @@
 	#scroll-down-arrow path {
 		fill: var(--main-blue);
 	}
-  </style>
+</style>
