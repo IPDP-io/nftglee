@@ -1,3 +1,9 @@
+<script>
+  let to;
+  let send;
+  let btc = () => {};
+  let received, unit, asset;
+</script>
 
 	<p>
 		Received {btc(received)}
