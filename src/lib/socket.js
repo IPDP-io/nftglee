@@ -25,7 +25,7 @@ export default (address) => {
 			}
 
 			if (type === 'txid') {
-				received = false;
+				received.set(false);
 				txid = value;
 			}
 		} catch (e) {

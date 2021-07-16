@@ -35,9 +35,6 @@ h3 {
 .space-around {
     justify-content: space-around;
 }
-.hidden {
-    display: none;
-}
 footer {
     font-family: Helvetica;
     font-size: 15px;

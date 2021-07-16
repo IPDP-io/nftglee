@@ -34,9 +34,3 @@
 {:else}
   <div class="container">-----------------------------</div>
 {/if}
-
-<style>
-	.hidden {
-		background: red;
-	}
-</style>

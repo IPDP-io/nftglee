@@ -8,3 +8,4 @@ server/data
 server/file
 server/.env
 server/trailer
+deploy.sh

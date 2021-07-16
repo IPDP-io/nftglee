@@ -10,4 +10,4 @@ FROM node:alpine
 COPY --from=builder /silhouettes /silhouettes
 WORKDIR /silhouettes
 
-CMD ["node", "build"]
+CMD ["node", "."]
