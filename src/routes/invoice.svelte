@@ -19,11 +19,21 @@
 	});
 </script>
 
-<div class="container">Send {$unit === 'LTC' ? ltcAmount : btcAmount} {$unit} to:</div>
+{#if btcAmount}
+	<div class="container">Send {$unit === 'LTC' ? ltcAmount : btcAmount} {$unit} to:</div>
 
-<div class="qr">
-	{@html img}
-	<div class="mb">
-		{$address}
+	<div class="qr">
+		{@html img}
+		<div class="mb">
+			{$address}
+		</div>
 	</div>
-</div>
+{:else}
+  <div class="container">-----------------------------</div>
+{/if}
+
+<style>
+	.hidden {
+		background: red;
+	}
+</style>

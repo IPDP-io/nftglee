@@ -4,6 +4,7 @@
 	import { session } from '$app/stores';
 	import Down from '$icons/down.svelte';
 	import Form from '$components/form.svelte';
+	import { goto } from '$app/navigation';
 
 	const year = new Date().getFullYear();
 </script>
@@ -26,10 +27,12 @@
 		</div>
 		<div id="watch-silhouettes" class="container column">
 			<div class="container">
-				<h1>Watch Silhouettes</h1>
+        <h1 on:click={() => goto('/', { noscroll: true })}>Watch Silhouettes</h1>
 			</div>
 
+      <div style="min-height: 400px">
 			<slot />
+    </div>
 
 			<div id="lets-chat" class="container column">
 				<div class="container">
