@@ -16,6 +16,7 @@ export default (address) => {
 
 			if (type === 'payment') {
         received.set(get(received) + value);
+        goto('/received', { noscroll: true })
 
 				// mint();
 			}

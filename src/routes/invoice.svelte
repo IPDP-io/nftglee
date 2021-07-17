@@ -2,22 +2,19 @@
 	import { onMount } from 'svelte';
 	import { api } from '$lib/api';
 	import { address, unit } from '$lib/stores';
-	import qrcode from 'qrcode-generator-es6';
+	import QRCode from 'qrcode';
 
 	let amount = 20;
-  let btcAmount;
+	let btcAmount;
 
-  let ltcAmount, img;
+	let ltcAmount, img;
+	let qr;
 
 	onMount(async () => {
-    $address = "bcasd098kjahsdkjya98s7d1234";
-		const qr = new qrcode(0, 'H');
-		qr.addData($address);
-		qr.make();
-		img = qr.createSvgTag({});
+		qr = await QRCode.toDataURL($address);
 
 		let rates = await api.url('/rates').get().json();
-    // btcAmount = (amount / rates.btc).toFixed(8);
+		btcAmount = (amount / rates.btc).toFixed(8);
 		ltcAmount = (amount / rates.ltc).toFixed(8);
 	});
 </script>
@@ -25,12 +22,15 @@
 {#if btcAmount}
 	<div class="container">Send {$unit === 'LTC' ? ltcAmount : btcAmount} {$unit} to:</div>
 
-	<div class="qr">
-		{@html img}
+	<div class="container">
+		<img src={qr} style="width: 400px" />
+	</div>
+
+	<div class="container">
 		<div class="mb">
 			{$address}
 		</div>
 	</div>
 {:else}
-  <div class="container">-----------------------------</div>
+	<div class="container">-----------------------------</div>
 {/if}

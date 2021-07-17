@@ -1,33 +1,37 @@
 <script>
+  import { received, unit } from "$lib/stores";
   let to;
   let send;
   let btc = () => {};
-  let received, unit, asset;
+  let asset;
 </script>
 
 	<p>
-		Received {btc(received)}
-		{unit}!
+		Received {btc($received)}
+		{$unit}!
 	</p>
 
-	<div class="container">
+  <div class="container">
 		<h2>Your ticket</h2>
+  </div>
+
+	<div class="container">
 		<div
 			color="mb"
 			style="border: 1px dashed black; width: 600px; margin: 0 auto; padding: 20px; text-align: left;"
 		>
-			<div><b>Type:</b> Early bird (57 / 1000)</div>
+			<div><b>Type:</b> Tier 1 (#57 of 100)</div>
 			{#if asset}
 				<div>
 					<b>Asset ID:</b>
 					<a href={`http://localhost:5005/asset/${asset}`}>{asset.substr(0, 20)}....</a>
 				</div>
 			{/if}
-			<div><b>Date:</b> June 11, 2021</div>
+			<div><b>Time purchased:</b> 2:03pm July 16, 2021</div>
 		</div>
 	</div>
 
-	<div style="width: 600px; margin: 0 auto;" class="container">
+	<div style="width: 600px; margin: 0 auto;" class="container mb">
 		<video
 			style="width: 100%; object-fit: cover"
 			muted

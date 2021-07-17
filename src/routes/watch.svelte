@@ -8,8 +8,8 @@
 			var engine = new p2pml.hlsjs.Engine();
 
 			var player = new Clappr.Player({
-				parentId: '#player',
-				source: '/file/playlist.m3u8',
+				parentId: '#movie-banner',
+        source: '/static/girl.mp4',
 				mute: true,
 				autoPlay: true,
 				playback: {
