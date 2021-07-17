@@ -1,20 +1,25 @@
 Arguments: 
-  /home/adam/.nvm/versions/node/v14.15.0/bin/node /usr/share/yarn/bin/yarn.js
+  C:\Program Files\nodejs\node.exe C:\Users\Jordan - Regular\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
 
 PATH: 
-  /home/adam/.cargo/bin:/home/adam/.local/bin:/home/adam/bin:/home/adam/.local/bin:/home/adam/.npm-packages/bin:/home/adam/.sdkman/candidates/java/current/bin:/home/adam/.nvm/versions/node/v14.15.0/bin:/home/adam/.local/bin:/home/adam/.npm-packages/bin:/home/adam/.cargo/bin:/home/adam/.local/bin:/home/adam/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/adam/.rvm/bin:/usr/sbin:/usr/local/bin:/usr/lib/jvm/jdk-13.0.2/bin:/home/adam/.dat/releases/dat-14.0.2-linux-x64:/home/adam/.yarn/bin:/home/adam/bin:/home/adam/.rvm/bin:/usr/local/go/bin:/home/adam/go/bin:/home/adam/.fzf/bin:/usr/sbin:/usr/local/bin:/usr/lib/jvm/jdk-13.0.2/bin:/home/adam/.dat/releases/dat-14.0.2-linux-x64:/home/adam/.yarn/bin:/home/adam/bin:/home/adam/.rvm/bin:/usr/local/go/bin:/home/adam/go/bin:/home/adam/.rvm/bin:/home/adam/bin
+  C:\Python39\Scripts\;C:\Python39\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\ProgramData\chocolatey\bin;C:\Program Files\Sublime Text 3;;C:\Program Files (x86)\Gpg4win\..\GnuPG\bin;C:\Program Files\nodejs\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\Jordan - Regular\AppData\Local\Microsoft\WindowsApps;C:\Users\Jordan - Regular\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Jordan - Regular\AppData\Local\GitHubDesktop\bin;C:\Users\Jordan - Regular\AppData\Local\Programs\Git\cmd;C:\Users\Jordan - Regular\AppData\Roaming\npm
 
 Yarn version: 
-  1.21.1
+  1.22.10
 
 Node version: 
-  14.15.0
+  14.16.1
 
 Platform: 
-  linux x64
+  win32 x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, copyfile '/home/adam/.cache/yarn/v6/npm-supports-color-6.1.0-0764abc69c63d5ac842dd4867e8d025e880df8f3-integrity/node_modules/supports-color/browser.js' -> '/home/adam/coinos-marketing/node_modules/postcss-preset-env/node_modules/supports-color/browser.js'
+  SyntaxError: C:\Users\Jordan - Regular\files\web\pixelmatic\projects\silhouettes\package.json: Unexpected token } in JSON at position 715
+      at JSON.parse (<anonymous>)
+      at C:\Users\Jordan - Regular\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\Jordan - Regular\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\Jordan - Regular\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
 
 npm manifest: 
   {
@@ -28,18 +33,28 @@ npm manifest:
       "format": "prettier --write --plugin-search-dir=. ."
     },
     "devDependencies": {
+      "@sveltejs/adapter-node": "^1.0.0-next.26",
+      "@sveltejs/adapter-static": "^1.0.0-next.13",
       "@sveltejs/kit": "next",
-      "prettier": "~2.2.1",
-      "prettier-plugin-svelte": "^2.2.0",
-      "svelte": "^3.34.0",
       "@tailwindcss/jit": "^0.1.18",
       "autoprefixer": "^10.2.6",
       "postcss": "^8.3.4",
       "postcss-preset-env": "^6.7.0",
+      "prettier": "~2.2.1",
+      "prettier-plugin-svelte": "^2.2.0",
+      "svelte": "^3.34.0",
       "svelte-preprocess": "^4.7.3",
-      "tailwindcss": "^2.1.4"
+      "tailwindcss": "^2.1.4",
+      
     },
-    "type": "module"
+    "type": "module",
+    "dependencies": {
+      "buffer": "^6.0.3",
+      "crypto-js": "^4.0.0",
+      "normalize.css": "^8.0.1",
+      "wretch": "^1.7.4",
+      "qrcode-generator-es6": "^1.1.4"
+    }
   }
 
 yarn manifest: 

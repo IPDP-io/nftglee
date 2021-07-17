@@ -68,6 +68,11 @@ footer {
     margin: 1rem;
 
 }
+#payment-qr-code svg {
+    width: 35vh;
+    height: auto;
+}
+
 @media screen and (max-width: 1025px) {
     h1 {
         font-size: 2.5rem;
@@ -141,6 +146,8 @@ footer {
         font-size: 1rem;
         font-size: 2vw;
     }
+    #payment-qr-code svg {
+        width: 25vw;
+        height: auto;
+    }
 } 
-
-

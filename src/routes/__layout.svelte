@@ -28,7 +28,7 @@
 			<!-- svelte-ignore a11y-media-has-caption -->
 			<video id="intro-video" autoplay muted>
 				<source src="/silhouettes.mp4" type="video/mp4" />
-			</video>
+			</video> 
 		</div>
 		<div id="watch-silhouettes" class="container column">
 			<div class="container">
@@ -65,6 +65,10 @@
 </footer>
 
 <style global>
+
+	section {
+		width: 100vw;
+	}
 	#video-overlay {
 		display: inline-block;
 		text-align: center;
