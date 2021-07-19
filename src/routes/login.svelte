@@ -7,17 +7,17 @@
 	let password = 'liquidart';
 	let emailInput, show;
 
-  let error;
-  let err = (e) => (error = e);
+	let error;
+	let err = (e) => (error = e);
 
 	const login = async () => {
 		try {
-      error = false;
+		error = false;
 			let { jwt_token: token } = await auth 
 				.url('/login')
 				.post({
 					email,
-          password,
+					password,
 				})
 				.unauthorized(err)
 				.badRequest(err)
@@ -28,7 +28,7 @@
 				token
 			};
 		} catch (e) {
-      err(e.message);
+			err(e.message);
 		}
 	};
 </script>
@@ -62,7 +62,7 @@
 				</div>
 			</div>
 		</div>
-		<div id="form-submit-controls" class="container">
+		<div class="container form-submit-controls">
 			<div class="container column">
 				<button type="submit">Sign in / Register</button>
 				<a href="/forgot-password">Forgot password?</a>
@@ -77,84 +77,21 @@
 	#show-password {
 		width: 2rem;
 	}
-	form {
-		width: 75%;
-		font-family: Helvetica;
-	}
-	#form-submit-controls {
-		text-align: center;
-	}
 	#password {
 		position: relative;
 	}
-	.form-field {
-		margin: 10px 0;
-	}
 	input {
-		height: 2rem;
-		height: 5vh;
-	}
-	textarea {
-		height: 4rem;
-		height: 15vh;
-		resize : vertical;
-	}
-	input, textarea {
-		background-color: transparent;
-		border: 0;
 		border-bottom: 1px solid var(--main-blue);
-		width: 100%;
-		padding: 0;
-		font-size: 12px;
-		font-size: 2vh;
 		color: var(--main-blue);
 	}
-	input::placeholder, textarea::placeholder {
+	input::placeholder {
 		color: var(--main-blue);
 	}
-	input:hover, textarea:hover {
+	input:hover {
 		border: 1px solid var(--main-blue);
 	}
-	button#submit {
-		height: 2.5rem;
-		height: 8vh;
-		width: 100%;
-		padding: 0;
-		font-size: 14px;
-		font-size: 3vh;
-		border: 0;
-		transition: .6s;
-	}
-	button#submit:hover {
+	button[type=submit]:hover {
 		background-color: #ffffffaa;
 		color: var(--main-blue);
-		transition: .4s;
-		
-	}
-	@media screen and (max-width: 1025px) {
-		button#submit {
-			height:7vh;
-		}
-	}
-	@media screen and (max-width: 769px) {
-		button#submit {
-			height:6vh;
-			font-size: 2rem;
-			font-size: 3vh;
-		}
-	}
-	@media screen and (max-width: 481px) {
-		button#submit {
-			height:5vh;
-			font-size: 3vh;
-		}
-	}
-	@media (orientation: landscape) {
-		input, textarea {
-			font-size: 1.5vw;
-		}
-		button#submit {
-			font-size: 1.5vw;
-		}
 	}
 </style>

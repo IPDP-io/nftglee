@@ -1,5 +1,5 @@
 <script>
-	import '../app.css';
+	import { onMount } from 'svelte';
 	import { session } from '$app/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
@@ -10,7 +10,18 @@
 	import Form from '$components/form.svelte';
 	import { goto } from '$app/navigation';
 
+	import '../app.css';
+	
+
 	const year = new Date().getFullYear();
+	onMount(async () => {
+		const movieBanner = document.getElementById('movie-banner');
+		const introVideo = document.getElementById('intro-video');
+		movieBanner.addEventListener('click', () => {
+			introVideo.muted = !introVideo.muted;
+			document.querySelectorAll('.sound-icon').forEach((icon) => icon.classList.toggle('hidden'));
+		});
+	});
 
 </script>
 
@@ -63,123 +74,3 @@
 		</div>
 	</div>
 </footer>
-
-<style global>
-
-	section {
-		width: 100vw;
-	}
-	#video-overlay {
-		display: inline-block;
-		text-align: center;
-		position: absolute;
-		width: 20%;
-		padding-bottom: 2%;
-	}
-	#video-overlay p {
-		margin: 0;
-		text-transform: uppercase;
-		font-size: 35px;
-		font-size: 3vw;
-	}
-	#intro-video {
-		width: 100%;
-	}
-  
-	#lets-chat {
-		font-family: 'Oswald', sans-serif;
-		background-color: var(--main-blue);
-		color: white;
-		padding-bottom: 2rem;
-	}
-
-	section {
-		color: var(--main-blue);
-	}
-
-	#movie-banner {
-		align-items: flex-end;
-		position: relative;
-	}
-	#sound-toggle {
-		position: absolute;
-		left: 15px;
-		left: 1.5vh;
-		top: 15px;
-		top: 1.5vh;
-	}
-	.sound-icon {
-		width: 1rem;
-	}
-	#payment-options {
-		margin-bottom: 2rem;
-	}
-
-	button {
-		cursor: pointer;
-		background-color: transparent;
-		border: 5px solid var(--main-blue);
-		height: 40px;
-		margin: 0 10px;
-		font-size: 1rem;
-		padding: 0 10px;
-		color: var(--mainblue);
-		transition: 0.6s;
-	}
-	button:hover,
-	button.active {
-		background-color: var(--main-blue);
-		color: white;
-		transition: 0.6s;
-	}
-	.secondary-btn {
-		transform: scale(.75);
-	}
-
-	@media screen and (max-width: 1025px) {
-		
-	}
-	@media screen and (max-width: 769px) {
-		button {
-			font-size: 15px;
-			font-size: 2.25vw;
-		}
-	}
-	@media screen and (max-width: 481px) {
-		.sound-icon {
-			width: 1rem;
-		}
-		button {
-			font-size: 12px;
-			font-size: 3.5vw;
-
-		}
-	}
-	@media screen and (max-width: 320px) {
-		.sound-icon {
-	
-		}
-	}
-	@media (orientation: landscape) {
-		button {
-			font-size: 2vw;
-		}
-		.sound-icon {
-	
-		}
-	}
-	@media (orientation: landscape) and (max-width: 769px) {
-		.sound-icon {
-		
-		}
-	}
-
-	.qr {
-		margin: auto;
-		width: 300px;
-	}
-
-	.mb {
-		margin-bottom: 10px;
-	}
-</style>

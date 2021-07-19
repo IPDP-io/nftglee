@@ -93,12 +93,14 @@
 <style>
 	#payment-qr-code {
 		width: 100%;
-		font-size: 1rem;
 	}
 	#payment-qr-code p {
-		font-size: 1rem;
 		text-align: center;
 		margin: 0;
+	}
+	#payment-qr-code svg {
+		width: 35vh;
+		height: auto;
 	}
 	#loading {
 		text-align: center;
