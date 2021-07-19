@@ -8,6 +8,7 @@
   const shortDateOptions = { dateStyle: 'short', timeStyle: 'short' };
   let date = new Date().toLocaleString('en-US', fullDateOptions);
   let shortDate = new Date().toLocaleString('en-US', shortDateOptions);
+
 </script>
 
 	<div class="container">
@@ -101,8 +102,8 @@
 	
 	<div class="container column goodie">
 		<h3>Withdraw to Liquid Address</h3>
-		<form>
-			<div id="withdraw" class="container goodie">
+		<form on:submit|preventDefault>
+			<div id="withdraw" class="container">
 				<div>
 					Withdraw Address:
 				</div>
@@ -221,6 +222,7 @@
 		}
 		#withdraw {
 			flex-wrap: wrap;
+			align-items: center;
 		}
 		.withdraw {
 			border: 2px solid var(--main-blue);
