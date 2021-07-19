@@ -6,12 +6,26 @@
 
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine();
-
+			const intro = document.getElementById('intro-video');
+			const movieBanner = document.getElementById('movie-banner');
+			const soundToggle = document.getElementById('sound-toggle');
+			const videoOverlay = document.getElementById('video-overlay');
+			soundToggle.remove();
+			videoOverlay.remove();
+			intro.remove();
+			const videoPlayer = document.createElement('div');
+			videoPlayer.id = 'player';
+			videoPlayer.style.width = '100%';
+			videoPlayer.style.height = '100vh';
+			movieBanner.appendChild(videoPlayer);
 			var player = new Clappr.Player({
-				parentId: '#movie-banner',
-        source: '/static/girl.mp4',
-				mute: true,
-				autoPlay: true,
+				parentId: '#player',
+				// source: '/file/playlist.m3u8',
+				source: '/static/silhouettes.mp4',
+				mute: false,
+				autoPlay: false,
+				width: '100%',
+				height: '100%',
 				playback: {
 					hlsjsConfig: {
 						liveSyncDurationCount: 7,
@@ -37,4 +51,10 @@
 	<script src="https://cdn.jsdelivr.net/npm/clappr@latest"></script>
 </svelte:head>
 
-  <div id="player"></div>
+<!-- <div id="player"></div> -->
+<style>
+	/* #player {
+		width: 100%;
+		height: 100vh;
+	} */
+</style>

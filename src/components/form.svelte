@@ -54,75 +54,26 @@
 </form>
 
 <style>
-	form {
-		width: 75%;
-		font-family: Helvetica;
-	}
-	.form-field {
-		margin: 10px 0;
-	}
-	input {
-		height: 2rem;
-		height: 5vh;
-	}
-	textarea {
-		height: 4rem;
-		height: 15vh;
-		resize : vertical;
-	}
 	input, textarea {
 		background-color: transparent;
-		border: 0;
 		border-bottom: 1px solid white;
-		width: 100%;
-		padding: 0;
-		font-size: 12px;
-		font-size: 1.8vh;
 		color: white;
 	}
+	#submit {
+		width: 100%;
+		margin: 0;
+		background-color: white;
+		color: var(--main-blue);
+	}
+
 	input::placeholder, textarea::placeholder {
 		color: white;
 	}
 	input:hover, textarea:hover {
 		border: 1px solid white;
 	}
-	button#submit {
-		height: 2.5rem;
-		height: 8vh;
-		width: 100%;
-		padding: 0;
-		font-size: 14px;
-		font-size: 2vh;
-		border: 0;
-		transition: .6s;
-	}
-	button#submit:hover {
+	button[type=submit]:hover {
 		background-color: #ffffffaa;
 		color: white;
-		transition: .4s;
-		
-	}
-	@media screen and (max-width: 1025px) {
-		button#submit {
-			height:7vh;
-		}
-	}
-	@media screen and (max-width: 769px) {
-		button#submit {
-			height:6vh;
-		}
-	}
-	@media screen and (max-width: 481px) {
-		button#submit {
-			height:5vh;
-		}
-	}
-	@media (orientation: landscape) {
-		input, textarea {
-			font-size: 1.3vw;
-		}
-		button#submit {
-			font-size: 1.75vw;
-		}
 	}
 </style>

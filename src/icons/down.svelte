@@ -6,6 +6,7 @@
 	data-type="shape"
 	role="presentation"
 	aria-hidden="true"
+	class="icon"
 >
 	<g>
 		<path

@@ -5,7 +5,7 @@
 	import { session } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import socket from '$lib/socket';
-  import { unit, ws } from "$lib/stores";
+  	import { unit, ws } from "$lib/stores";
 
 	const logout = async () => {
 		try {
@@ -23,12 +23,6 @@
 
 	onMount(async () => {
 		$ws = socket();
-		const movieBanner = document.getElementById('movie-banner');
-		const introVideo = document.getElementById('intro-video');
-		movieBanner.addEventListener('click', () => {
-			introVideo.muted = !introVideo.muted;
-			document.querySelectorAll('.sound-icon').forEach((icon) => icon.classList.toggle('hidden'));
-		});
 	});
 
 	let mint = () => {

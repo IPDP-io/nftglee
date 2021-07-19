@@ -22,20 +22,24 @@
 <div id="payment-options" class="container">
 	<div class="container column">
 		<h3>Choose preferred payment option:</h3>
-		<div class="container space-around mb">
+		<div class="container space-evenly mb">
 			<button on:click={() => getInvoice('BTC')} class:active={$unit && $unit.includes('BTC')}
 				>Bitcoin</button
 			>
 			<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}>Litecoin</button>
 		</div>
 		{#if $unit && $unit.includes('BTC')}
-			<div class="container space-around">
-				<button on:click={() => getInvoice('BTC')} class:active={$unit === 'BTC'}>On-chain</button>
-				<button on:click={() => getInvoice('LBTC')} class:active={$unit === 'LBTC'}>Liquid</button>
-				<button on:click={() => getInvoice('LNBTC')} class:active={$unit === 'LNBTC'}
-					>Lightning</button
-				>
+			<div class="container space-evenly">
+				<button class="secondary-btn" on:click={() => getInvoice('BTC')} class:active={$unit === 'BTC'}>On-chain</button>
+				<button class="secondary-btn" on:click={() => getInvoice('LBTC')} class:active={$unit === 'LBTC'}>Liquid</button>
+				<button class="secondary-btn" on:click={() => getInvoice('LNBTC')} class:active={$unit === 'LNBTC'}>Lightning</button>
 			</div>
 		{/if}
 	</div>
 </div>
+
+<style>
+	#payment-options h3 {
+		text-align: center;
+	}
+</style>

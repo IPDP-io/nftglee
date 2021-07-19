@@ -7,17 +7,17 @@
 	let password = 'liquidart';
 	let emailInput, show;
 
-  let error;
-  let err = (e) => (error = e);
+	let error;
+	let err = (e) => (error = e);
 
 	const login = async () => {
 		try {
-      error = false;
+		error = false;
 			let { jwt_token: token } = await auth 
 				.url('/login')
 				.post({
 					email,
-          password,
+					password,
 				})
 				.unauthorized(err)
 				.badRequest(err)
@@ -28,82 +28,70 @@
 				token
 			};
 		} catch (e) {
-      err(e.message);
+			err(e.message);
 		}
 	};
 </script>
 
-<div class="form-container bg-lightblue px-4">
+<div class="container">
   {#if error}
     <div>{error}</div>
   {/if}
 
-	<form class="mb-6" on:submit|preventDefault={login} autocomplete="off">
-		<div class="flex flex-col mb-4">
-			<label class="mb-2 font-medium text-gray-600" for="first_name">Email</label>
-			<input bind:value={email} bind:this={emailInput} autocapitalize="off" />
-		</div>
-		<div class="flex flex-col mb-4">
-			<label class="mb-2 font-medium text-gray-600" for="last_name">Password</label>
-			<div class="relative">
-				{#if show}
-					<input class="w-full" bind:value={password} autocapitalize="off" />
-				{:else}
-					<input class="w-full" type="password" bind:value={password} autocapitalize="off" />
-				{/if}
-				<button
-					class="absolute h-full px-3 right-0 top-0 w-auto"
-					type="button"
-					on:click|preventDefault|stopPropagation={() => (show = !show)}
-				>
-					<Eye />
-				</button>
+	<form on:submit|preventDefault={login} autocomplete="off">
+		<div class="form-field">
+			<div>
+				<label for="first_name">Email</label>
+				<input bind:value={email} bind:this={emailInput} autocapitalize="off" />
 			</div>
 		</div>
-		<a href="/forgot-password" class="block w-full text-midblue">Forgot password?</a>
-		<div class="flex my-5 justify-end">
-			<button
-				class="rounded-xl bg-primary text-white py-2 px-6 md:text-lg whitespace-nowrap"
-        type="submit">Sign in / Register</button
-			>
+		<div class="form-field">
+			<div>
+				<label for="last_name">Password</label>
+				<div id="password">
+					{#if show}
+						<input bind:value={password} autocapitalize="off" />
+					{:else}
+						<input type="password" bind:value={password} autocapitalize="off" />
+					{/if}
+					<span id="show-password"
+						on:click|preventDefault|stopPropagation={() => (show = !show)}
+					>
+						<Eye />
+					</span>
+				</div>
+			</div>
 		</div>
-		<a href="/register" class="text-midblue">Don't have an account? Sign up</a>
+		<div class="container form-submit-controls">
+			<div class="container column">
+				<button type="submit">Sign in / Register</button>
+				<a href="/forgot-password">Forgot password?</a>
+				<!-- <a href="/register">Don't have an account? Sign up</a> -->
+			</div>
+		</div>
+		
 	</form>
 </div>
 
 <style>
-	.form-container {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
+	#show-password {
+		width: 2rem;
 	}
-
-	.form-container form {
-		width: 100%;
-		max-width: 450px;
-		background-color: white;
-		padding: 40px;
-		border-radius: 10px;
+	#password {
+		position: relative;
 	}
-
 	input {
-		@apply appearance-none border rounded text-gray-700 leading-tight;
-		padding: 0;
-		padding: 10px;
+		border-bottom: 1px solid var(--main-blue);
+		color: var(--main-blue);
 	}
-
-	@media only screen and (max-width: 640px) {
-		.form-container {
-			background: none;
-			height: auto;
-		}
-
-		.form-container form {
-			box-shadow: none;
-			padding: 0.2rem;
-			margin-top: 50px;
-		}
+	input::placeholder {
+		color: var(--main-blue);
+	}
+	input:hover {
+		border: 1px solid var(--main-blue);
+	}
+	button[type=submit]:hover {
+		background-color: #ffffffaa;
+		color: var(--main-blue);
 	}
 </style>
