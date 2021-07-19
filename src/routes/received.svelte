@@ -65,8 +65,12 @@
 		
 	</div>
 
-	<!-- <div class="container">
+	
+
+	<div class="container column goodie">
+		<h3>NFT Goodies</h3>
 		<video
+			class="goodie-video"
 			muted
 			playsinline
 			autoplay
@@ -78,24 +82,41 @@
 		</video>
 	</div>
 
-	<div class="container">
-		<h2>Extra NFT goodies</h2>
-
-		<div>
-			<video  muted playsinline autoplay loop>
-				<source src={'/static/girl.mp4'} />
-				Your browser does not support HTML5 video.
-			</video>
-		</div>
+	
+	<div class="container column goodie">
+		<h3>Extra NFT goodies</h3>
+		<video
+			class="goodie-video"
+			muted
+			playsinline
+			autoplay
+			loop
+			type="application/x-mpegURL"
+		>
+			<source src={'/static/girl.mp4'} />
+			Your browser does not support HTML5 video.
+		</video>
 	</div>
 
-	<div class="container">
-		<h2>Withdraw to Liquid Address</h2>
-		<div>
-			<input bind:value={to} />
-		</div>
-		<button on:click={send}>Withdraw</button>
-	</div> -->
+	
+	<div class="container column goodie">
+		<h3>Withdraw to Liquid Address</h3>
+		<form>
+			<div id="withdraw" class="container goodie">
+				<div>
+					Withdraw Address:
+				</div>
+				<div class="container grow">
+					<div class="grow">
+						<input class="withdraw" type="text" bind:value={to}>
+					</div>
+					<div>
+						<button class="withdraw" on:click={send}>Withdraw</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
 
 	<style>
 		.ticket {
@@ -107,6 +128,7 @@
 			background-color: #695a0f45;
 			color: #00000085;
 			font-size: 1.75vw;
+			margin: 1.5em;
 		}
 		.ticket-left {
 			justify-content: space-between;
@@ -190,13 +212,38 @@
 			font-weight: 600;
 			width: 4em;
 		}
+		.goodie {
+			margin: 1.5rem;
+			align-items: center;
+		}
+		.goodie-video {
+			width: 100%;
+		}
+		#withdraw {
+			flex-wrap: wrap;
+		}
+		.withdraw {
+			border: 2px solid var(--main-blue);
+			height: 2rem;
+			height: 5vh;
+			margin: 1.5rem 0;
+		}
+		button.withdraw {
+			transform: translateX(-1px);
+			background-color: var(--main-blue);
+			color: white;
+		}
+		button.withdraw:hover {
+			background-color: var(--secondary-blue);
+		}
+
 		@media screen and (max-width: 769px) {
 			.ticket {
 				font-size: 2vw;
 			}
 			#ticket-overlay {
 				font-size: 4em;
-		}
+			}
 		}
 		@media screen and (max-width: 481px) {
 			.ticket {
@@ -204,6 +251,16 @@
 			}
 			#ticket-overlay {
 			font-size: 2em;
+			}
 		}
+		@media screen and (orientation: landscape) and (max-height: 600px) {
+			.withdraw {
+				height: 3vw;
+			}
+		}
+		@media screen and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (max-width: 769px) {
+			.withdraw {
+				height: 6vw;
+			}
 		}
 	</style>

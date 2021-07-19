@@ -24,7 +24,6 @@
 	});
 
 </script>
-
 <main>
 	<section>
 		<div id="movie-banner" class="container">
