@@ -104,12 +104,9 @@
 		<h3>Withdraw to Liquid Address</h3>
 		<form on:submit|preventDefault>
 			<div id="withdraw-form" class="container">
-				<div>
-					Withdraw Address:
-				</div>
 				<div class="container grow">
 					<div class="grow">
-						<input class="withdraw" type="text" bind:value={to}>
+						<input class="withdraw" type="text" bind:value={to} placeholder="Withdraw Address">
 					</div>
 					<div>
 						<button class="withdraw" on:click={send}>Withdraw</button>
