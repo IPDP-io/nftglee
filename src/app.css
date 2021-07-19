@@ -1,5 +1,5 @@
 @import '../node_modules/normalize.css/normalize.css';
-@import url('https://fonts.googleapis.com/css2?family=Jockey+One&family=Oswald&family=Roboto:wght@100;300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jockey+One&family=Oswald&family=Roboto:wght@100;300&family=Abril+Fatface&family=Zen+Tokyo+Zoo&display=swap');
 
 :root {
     --main-blue: #1f4e6c;
@@ -46,10 +46,6 @@ a:visited {
 a:hover {
     color: var(--secondary-blue)
 }
-a:active {
-
-}
-
 section {
     width: 100vw;
     color: var(--main-blue);
@@ -64,6 +60,12 @@ section {
 .space-evenly {
     justify-content: space-evenly;
 }
+.space-between {
+    justify-content: space-between;
+}
+.grow {
+    flex-grow: 1;
+}
 .hidden {
     display: none;
 }
@@ -74,8 +76,11 @@ section {
     height: 1rem;
     height: 2.5vh;
     margin: 1rem;
-
 }
+#icon-eye {
+    height: 1rem;
+}
+
 #video-overlay {
     display: inline-block;
     text-align: center;
@@ -131,6 +136,10 @@ input, textarea {
     border: 0;
     width: 100%;
     padding: 0;
+    font-family: Helvetica;
+}
+input, textarea, label {
+    margin: .25rem 0;
 }
 button {
     cursor: pointer;
@@ -241,7 +250,7 @@ footer {
 
     }
     body {
-        font-size: 5vw;
+        font-size: 4vw;
     }
     button {
         height: 10vw;
@@ -327,7 +336,7 @@ footer {
     #payment-qr-code svg {
         width: 80vw;
     }
-    button: {
+    button {
         height: 10vw
     }
 }
