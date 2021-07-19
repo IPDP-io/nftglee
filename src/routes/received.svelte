@@ -100,10 +100,10 @@
 	</div>
 
 	
-	<div class="container column goodie">
+	<div id="withdraw" class="container column">
 		<h3>Withdraw to Liquid Address</h3>
 		<form on:submit|preventDefault>
-			<div id="withdraw" class="container">
+			<div id="withdraw-form" class="container">
 				<div>
 					Withdraw Address:
 				</div>
@@ -218,9 +218,12 @@
 			align-items: center;
 		}
 		.goodie-video {
-			width: 100%;
+			width: 75%;
 		}
 		#withdraw {
+			align-items: center;
+		}
+		#withdraw-form {
 			flex-wrap: wrap;
 			align-items: center;
 		}
