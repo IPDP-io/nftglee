@@ -1,10 +1,18 @@
 @import '../node_modules/normalize.css/normalize.css';
-@import url('https://fonts.googleapis.com/css2?family=Jockey+One&family=Oswald&family=Roboto:wght@100;300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jockey+One&family=Oswald&family=Roboto:wght@100;300&family=Abril+Fatface&family=Zen+Tokyo+Zoo&display=swap');
+
+/********* DEBUG ELEMENTS*********/
+/* * {
+    outline: 1px solid #f00 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  } */
+
 
 :root {
     --main-blue: #1f4e6c;
     --secondary-blue: #255f83;
-  }
+}
 
 html {
 box-sizing: border-box;
@@ -15,7 +23,7 @@ box-sizing: inherit;
 
 body {
     font-family: "Jockey One", sans-serif;
-    position: absolute;
+    /* position: absolute; */
     font-size: 12px;
     font-size: 1.5vw;
 }
@@ -46,12 +54,8 @@ a:visited {
 a:hover {
     color: var(--secondary-blue)
 }
-a:active {
-
-}
-
 section {
-    width: 100vw;
+    width: 100%;
     color: var(--main-blue);
 }
 .container {
@@ -64,6 +68,12 @@ section {
 .space-evenly {
     justify-content: space-evenly;
 }
+.space-between {
+    justify-content: space-between;
+}
+.grow {
+    flex-grow: 1;
+}
 .hidden {
     display: none;
 }
@@ -74,8 +84,11 @@ section {
     height: 1rem;
     height: 2.5vh;
     margin: 1rem;
-
 }
+#icon-eye {
+    height: 1rem;
+}
+
 #video-overlay {
     display: inline-block;
     text-align: center;
@@ -131,6 +144,10 @@ input, textarea {
     border: 0;
     width: 100%;
     padding: 0;
+    font-family: Helvetica;
+}
+input, textarea, label {
+    margin: .25rem 0;
 }
 button {
     cursor: pointer;
@@ -142,7 +159,7 @@ button {
     padding: 0 10px;
     padding: 0 4vw;
     color: var(--mainblue);
-    transition: 0.6s;
+    transition: color .6s, background-color .6s;
     white-space: nowrap;
 }
 button:hover,
@@ -196,6 +213,9 @@ footer {
         font-size: 15px;
         font-size: 2.25vw;
     }
+    form {
+        width: 90%;
+    }
 }
 @media screen and (max-width: 481px) {
     h1 {
@@ -241,16 +261,13 @@ footer {
 
     }
     body {
-        font-size: 5vw;
+        font-size: 4vw;
     }
     button {
         height: 10vw;
     }
 }
-@media (orientation: landscape) {
-    footer {
-        padding: 1rem;
-    }
+@media screen and (orientation: landscape) {
     .social-icons {
         margin: 1rem;
         height: 1.75vw;
@@ -266,7 +283,7 @@ footer {
         height: 3vw;
     }
 }
-@media (orientation: landscape) and (max-width: 1025px) {
+@media screen and (orientation: landscape) and (max-width: 1025px) {
     body {
         font-size: 1.5vw;
     }
@@ -274,7 +291,7 @@ footer {
         height: 5vw;
     }
 }
-@media (orientation: landscape) and (max-width: 769px) {
+@media screen and (orientation: landscape) and (max-width: 769px) {
     body {
         font-size: 2vw;
     }
@@ -282,12 +299,12 @@ footer {
         height: 8vw
     }
 }
-@media (orientation: landscape) and (max-width: 481px) {
+@media screen and (orientation: landscape) and (max-width: 481px) {
     body {
         font-size: 3vw;
     }
 }
-@media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) {
+@media screen and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) {
     body {
         font-size: 2vw;
     }
@@ -295,7 +312,7 @@ footer {
         height: 6vw;
     }
 }
-@media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (max-width: 769px) {
+@media screen and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (max-width: 769px) {
     body {
         font-size: 2.5vw;
     }
@@ -309,7 +326,7 @@ footer {
         height: 2.5vw;
     }
 }
-@media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (max-width: 481px) {
+@media screen and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (max-width: 481px) {
     body {
         font-size: 3vw;
     }
@@ -320,14 +337,14 @@ footer {
         height: 4vw;
     }
 }
-@media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (max-width: 390px) {
+@media screen and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (max-width: 390px) {
     body {
         font-size: 4.5vw;
     }
     #payment-qr-code svg {
         width: 80vw;
     }
-    button: {
+    button {
         height: 10vw
     }
 }

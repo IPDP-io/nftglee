@@ -40,19 +40,20 @@
 
 	<form on:submit|preventDefault={login} autocomplete="off">
 		<div class="form-field">
-			<div>
-				<label for="first_name">Email</label>
-				<input bind:value={email} bind:this={emailInput} autocapitalize="off" />
+			<div class="container">
+				<label for="first_name">Email: </label>
+				<input bind:value={email} bind:this={emailInput} autocapitalize="off" class="grow" />
 			</div>
 		</div>
 		<div class="form-field">
 			<div>
-				<label for="last_name">Password</label>
-				<div id="password">
+				<div id="password" class="container">
 					{#if show}
-						<input bind:value={password} autocapitalize="off" />
+						<label for="last_name">Password: </label>
+						<input bind:value={password} autocapitalize="off" class="grow" />
 					{:else}
-						<input type="password" bind:value={password} autocapitalize="off" />
+						<label for="last_name">Password: </label>
+						<input type="password" bind:value={password} autocapitalize="off" class="grow" />
 					{/if}
 					<span id="show-password"
 						on:click|preventDefault|stopPropagation={() => (show = !show)}
@@ -76,13 +77,21 @@
 <style>
 	#show-password {
 		width: 2rem;
+		position: absolute;
+		right: 0px;
 	}
 	#password {
 		position: relative;
 	}
-	input {
+	input, label {
 		border-bottom: 1px solid var(--main-blue);
 		color: var(--main-blue);
+	}
+	label {
+		width: 6em;
+	}
+	input {
+		width: fit-content;
 	}
 	input::placeholder {
 		color: var(--main-blue);
