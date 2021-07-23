@@ -1,6 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { session } from '$app/stores';
+	import { error } from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
@@ -11,7 +12,6 @@
 	import { goto } from '$app/navigation';
 
 	import '../app.css';
-	
 
 	const year = new Date().getFullYear();
 	onMount(async () => {
@@ -22,8 +22,8 @@
 			document.querySelectorAll('.sound-icon').forEach((icon) => icon.classList.toggle('hidden'));
 		});
 	});
-
 </script>
+
 <main>
 	<section>
 		<div id="movie-banner" class="container">
@@ -38,16 +38,26 @@
 			<!-- svelte-ignore a11y-media-has-caption -->
 			<video id="intro-video" autoplay muted>
 				<source src="/silhouettes.mp4" type="video/mp4" />
-			</video> 
+			</video>
 		</div>
 		<div id="watch-silhouettes" class="container column">
 			<div class="container">
-        <h1 on:click={() => goto('/', { noscroll: true })}>Watch Silhouettes</h1>
+				<h1 on:click={() => goto('/', { noscroll: true })}>Watch Silhouettes</h1>
 			</div>
 
-      <div style="min-height: 400px">
-			<slot />
-    </div>
+			{#if $error}
+				<div class="container" style="color: red">{$error}</div>
+			{/if}
+
+			{#if $session.user}
+				<div class="container">
+					{$session.user.email}
+				</div>
+			{/if}
+
+			<div style="min-height: 400px">
+				<slot />
+			</div>
 
 			<div id="lets-chat" class="container column">
 				<div class="container">

@@ -23,12 +23,12 @@
 	<div class="container column">
 		<h3>Choose preferred payment option:</h3>
 		<div class="container space-evenly mb">
-			<button on:click={() => getInvoice('BTC')} class:active={$unit && $unit.includes('BTC')}
+			<button on:click={() => $unit = 'B'} class:active={$unit && $unit.includes('BTC')}
 				>Bitcoin</button
 			>
 			<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}>Litecoin</button>
 		</div>
-		{#if $unit && $unit.includes('BTC')}
+		{#if $unit && $unit.includes('B')}
 			<div class="container space-evenly">
 				<button class="secondary-btn" on:click={() => getInvoice('BTC')} class:active={$unit === 'BTC'}>On-chain</button>
 				<button class="secondary-btn" on:click={() => getInvoice('LBTC')} class:active={$unit === 'LBTC'}>Liquid</button>

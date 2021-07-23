@@ -33,6 +33,7 @@ const sign = (p, sighash = 1) => {
 
 let Address,
 	confidential,
+  generateMnemonic,
 	ECPair,
 	Psbt,
 	payments,
@@ -45,15 +46,8 @@ let Address,
 export const setup = () => {
 	({ Address, confidential, ECPair, Psbt, payments, network, networks, Transaction } = liquidjs);
 	network = networks.regtest;
-	({ mnemonicToSeedSync } = bip39);
+	({ generateMnemonic, mnemonicToSeedSync } = bip39);
 	({ fromSeed } = bip32);
-  console.log(mnemonicToSeedSync);
-};
-
-const getMnemonic = (mnemonic, pass) => {
-	mnemonic = cryptojs.AES.decrypt(mnemonic, pass).toString(cryptojs.enc.Utf8);
-	if (!mnemonic) throw new Error('Unable to decrypt mnmemonic');
-	return mnemonic;
 };
 
 const singlesig = (key) => {
@@ -71,14 +65,10 @@ const singlesig = (key) => {
 	});
 };
 
-export const createWallet = (mnemonic, pass) => {
+export const createWallet = () => {
 	try {
-		if (!pass) pass = get(password);
-		if (!mnemonic) mnemonic = getMnemonic();
-
-		mnemonic = cryptojs.AES.encrypt(mnemonic, pass).toString();
-
-		const key = keypair(mnemonic, pass);
+    let mnemonic = generateMnemonic();
+		const key = keypair(mnemonic);
 
 		return {
 			address: singlesig(key).address,
@@ -91,8 +81,6 @@ export const createWallet = (mnemonic, pass) => {
 };
 
 export const keypair = (mnemonic, pass) => {
-	mnemonic = getMnemonic(mnemonic, pass);
-
 	try {
 		let seed = mnemonicToSeedSync(mnemonic);
 		let key = fromSeed(seed, network).derivePath(`m/84'/0'/0'/0/0`);

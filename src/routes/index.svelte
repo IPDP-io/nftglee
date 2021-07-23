@@ -5,19 +5,7 @@
 	import { session } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import socket from '$lib/socket';
-  	import { unit, ws } from "$lib/stores";
-
-	const logout = async () => {
-		try {
-			let refresh_token = $session.user.token;
-
-			await auth.url('/logout').query({ refresh_token }).post().res();
-
-			$session.user = undefined;
-		} catch (e) {
-			console.log(e);
-		}
-	};
+	import { unit, ws } from '$lib/stores';
 
 	let asset, txid;
 
@@ -43,4 +31,3 @@
 <div class="container mb">
 	<button on:click={() => goto('/login')}>I already have a ticket</button>
 </div>
-

@@ -36,6 +36,38 @@ app = require('fastify')({
 	logger: true
 });
 
+const login = async (req, res) => {
+	let { email, password } = req.body;
+	let query = `query  users($email: String!) {
+    users(where: {_or: [{display_name: {_eq: $email}}, {username: {_eq: $email }}]}, limit: 1) {
+      display_name
+    }
+  }`;
+
+	try {
+		let user;
+		let { data } = await hasura.post({ query, variables: { email } }).json();
+
+		if (data && data.users && data.users.length) {
+			user = data.users[0];
+			email = data.users[0].display_name;
+		} else {
+			throw new Error();
+		}
+
+		let response = await hbp.url('/auth/login').post({ email, password }).res();
+		Array.from(response.headers.entries()).forEach(([k, v]) => res.header(k, v));
+		res.send(await response.json());
+	} catch (e) {
+		let msg = 'Login failed';
+		if (e.message.includes('activated'))
+			msg = 'Account not activated, check email for a confirmation link';
+		res.code(401).send(msg);
+	}
+};
+
+app.post('/login', login);
+
 app.post('/register', async (req, res) => {
 	let { address, mnemonic, email, password, username } = req.body;
 
@@ -76,7 +108,7 @@ app.post('/register', async (req, res) => {
 			throw new Error('There was an error during registration');
 		}
 
-		res.send({ success: true });
+		login(req, res);
 	} catch (e) {
 		console.log(e);
 		res.code(500).send(e.message);
