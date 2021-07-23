@@ -28,10 +28,10 @@
 	const paymentMessage = 'Movie ticket';
 
 	onMount(async () => {
-		$address = 'bcasd098kjahsdkjya98s7d1234';
-		// let rates = await api.url('/rates').get().json();
-		// btcAmount = (amount / rates.btc).toFixed(8);
-		// ltcAmount = (amount / rates.ltc).toFixed(8);
+    // $address = 'bcasd098kjahsdkjya98s7d1234';
+		let rates = await api.url('/rates').get().json();
+		btcAmount = (amount / rates.btc).toFixed(8);
+		ltcAmount = (amount / rates.ltc).toFixed(8);
 		unitAmount = $unit === 'LTC' ? ltcAmount : btcAmount;
 		qrData = buildPaymentUrl($unit, $address, unitAmount, paymentLabel, paymentMessage);
 		const qrOptions = {

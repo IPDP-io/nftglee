@@ -1,9 +1,10 @@
 <script>
   import { received, unit } from "$lib/stores";
+  import { btc } from "$lib/utils";
+
   let to;
   let send;
-  let btc = (amt) => amt;
-  let received = .0002, unit = 'BTC', asset;
+  let asset;
   let movieTitle = "Silhouettes";
   const fullDateOptions = { dateStyle: 'long', timeStyle: 'short' };
   const shortDateOptions = { dateStyle: 'short', timeStyle: 'short' };
@@ -14,8 +15,8 @@
 
 	<div class="container">
 		<p>
-			Received {btc(received)}
-			{unit}!
+			Received {btc($received)}
+			{$unit}!
 		</p>
 	</div>
 
