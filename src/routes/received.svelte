@@ -19,11 +19,7 @@
 	</p>
 </div>
 
-<p class="container">Before we mint your ticket and goodies, let's get you an account.</p>
-
-<p class="container">
-	First off, please write down this wallet backup phrase and keep it a secret:
-</p>
+  <h2 class="container">Write this down and keep it a secret!</h2>
 
 {#if $mnemonic}
 	<!-- columns
@@ -41,12 +37,12 @@
 	</div>
   -->
 
-	<div class="container">
+	<div class="container mb">
 		{$mnemonic}
 	</div>
 
 	<div class="container mb">
-		<button on:click={() => goto('/login', { noscroll: true })}>Next</button>
+		<button on:click={() => goto('/register', { noscroll: true })}>I wrote it down</button>
 	</div>
 {/if}
 

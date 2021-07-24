@@ -8,192 +8,20 @@ const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
 const fs = require('fs');
 
-const { binance, coinos, electrs, hbp, hasura } = require('./api');
+const { binance } = require('./api');
 
 const network = networks.litereg;
-const subscribers = {};
-const invoices = {};
+
+invoices = {};
+subscribers = {};
+
 let asset;
-
-auth = {
-	preValidation(req, res, done) {
-		let fail = () => res.code(401).send('Unauthorized');
-		if (!req.headers.authorization) fail();
-		let token = req.headers.authorization.split(' ')[1];
-		if (!token) fail();
-		let { key } = JSON.parse(HASURA_JWT);
-		try {
-			req.token = jwt.verify(token, key);
-			done();
-		} catch (e) {
-			console.log(e.message);
-			fail();
-		}
-	}
-};
-
 app = require('fastify')({
 	logger: true
 });
 
-const login = async (req, res) => {
-	let { email, password } = req.body;
-	let query = `query  users($email: String!) {
-    users(where: {_or: [{display_name: {_eq: $email}}, {username: {_eq: $email }}]}, limit: 1) {
-      display_name
-    }
-  }`;
-
-	try {
-		let user;
-		let { data } = await hasura.post({ query, variables: { email } }).json();
-
-		if (data && data.users && data.users.length) {
-			user = data.users[0];
-			email = data.users[0].display_name;
-		} else {
-			throw new Error();
-		}
-
-		let response = await hbp.url('/auth/login').post({ email, password }).res();
-		Array.from(response.headers.entries()).forEach(([k, v]) => res.header(k, v));
-		res.send(await response.json());
-	} catch (e) {
-		let msg = 'Login failed';
-		if (e.message.includes('activated'))
-			msg = 'Account not activated, check email for a confirmation link';
-		res.code(401).send(msg);
-	}
-};
-
-app.post('/login', login);
-
-app.post('/register', async (req, res) => {
-	let { address, mnemonic, email, password, username } = req.body;
-
-	try {
-		let response = await hbp.url('/auth/register').post({ email, password }).res();
-
-		let query = `mutation ($user: users_set_input!, $email: String!) {
-      update_users(where: {display_name: {_eq: $email}}, _set: $user) {
-        affected_rows 
-      }
-    }`;
-
-		response = await hasura
-			.post({
-				query,
-				variables: {
-					email,
-					user: {
-						username,
-						address,
-						mnemonic
-					}
-				}
-			})
-			.json();
-
-		if (response.errors) {
-			let deleteQuery = `mutation { 
-        delete_users(where: { account: { email: { _eq: "${email}" } } }) 
-        { 
-          affected_rows 
-        } 
-      }`;
-
-			await hasura.post({ query: deleteQuery }).json();
-			if (response.errors.find((e) => e.message.includes('Unique')))
-				throw new Error('Username taken');
-			throw new Error('There was an error during registration');
-		}
-
-		login(req, res);
-	} catch (e) {
-		console.log(e);
-		res.code(500).send(e.message);
-	}
-});
-
-app.post('/boom', async (req, res) => {
-	let { amount: value, confirmed, text } = req.body;
-
-	if (confirmed && value >= invoices[text])
-		subscribers[text].send(JSON.stringify({ type: 'payment', value }));
-	else subscribers[text].send(JSON.stringify({ type: 'pending', value }));
-
-	res.send(req.body);
-});
-
-app.post('/BTC', async (req, res) => {
-	let network = 'bitcoin';
-	let { amount } = req.body;
-	let { address } = await coinos.url('/address').query({ network, type: 'bech32' }).get().json();
-	invoices[address] = amount;
-
-	let invoice = {
-		address,
-		network,
-		text: address,
-		amount,
-		webhook: 'http://172.17.0.1:8091/boom'
-	};
-
-	await coinos.url('/invoice').post({ invoice }).json();
-
-	return { address };
-});
-
-app.post('/LBTC', async (req, res) => {
-	let network = 'liquid';
-	let { amount } = req.body;
-	let { address, confidentialAddress } = await coinos
-		.url('/address')
-		.query({ network })
-		.get()
-		.json();
-
-	invoices[address] = amount;
-
-	await coinos
-		.url('/invoice')
-		.post({
-			invoice: {
-				address: confidentialAddress,
-				unconfidential: address,
-				network,
-				text: address,
-				amount,
-				webhook: 'http://172.17.0.1:8091/boom'
-			}
-		})
-		.json();
-
-	return { address };
-});
-
-app.post('/LNBTC', async (req, res) => {
-	let network = 'lightning';
-	let { amount } = req.body;
-
-	let text = await coinos.url('/lightning/invoice').post({ amount }).text().catch(console.log);
-
-	invoices[text] = amount;
-
-	await coinos
-		.url('/invoice')
-		.post({
-			invoice: {
-				network,
-				text,
-				amount,
-				webhook: 'http://172.17.0.1:8091/boom'
-			}
-		})
-		.json();
-
-	return { address: text };
-});
+require("./auth");
+require("./coinos");
 
 app.get('/rates', async function (request, reply) {
 	let { price: btc } = await binance.query({ symbol: 'BTCUSDT' }).get().json().catch(console.log);
@@ -230,6 +58,7 @@ async function run() {
 				let { type, value } = JSON.parse(message);
 
 				if (type === 'subscribe') {
+          console.log("subscribing", value);
 					subscribers[value] = ws;
 				}
 
@@ -240,9 +69,9 @@ async function run() {
 
 				if (type === 'mint') {
 					asset = await createIssuance({
-						domain: 'litecoin.com',
-						name: 'chikkun',
-						ticker: 'CHIK'
+						domain: 'silhouettesthemovie.com',
+						name: 'SIL',
+						ticker: 'TIER1'
 					});
 
 					ws.send(JSON.stringify({ type: 'asset', value: asset }));

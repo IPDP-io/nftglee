@@ -2,7 +2,6 @@
 	import { btc } from '$lib/utils';
 	import { pending, unit } from "$lib/stores";
 	import PendingIcon from '$icons/pending.svelte';
-	import About from './about.svelte';
 </script>
 
 <div class="container">

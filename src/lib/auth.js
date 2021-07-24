@@ -1,10 +1,23 @@
-import { auth } from '$lib/api';
+import { api } from '$lib/api';
 import { error } from '$lib/stores';
 import { session } from '$app/stores';
 
+export const activate = async () => {
+	try {
+		err(undefined);
+		let { jwt_token: token } = await api.url('/activate').post({ code })
+			.unauthorized(err)
+			.badRequest(err)
+			.json();
+	} catch (e) {
+		err(e.message);
+	}
+};
+
 export const login = async () => {
 	try {
-		let { jwt_token: token } = await auth
+		err(undefined);
+		let { jwt_token: token } = await api
 			.url('/login')
 			.post({
 				email,
@@ -14,9 +27,11 @@ export const login = async () => {
 			.badRequest(err)
 			.json();
 
-		session.set('user', {
-			email,
-          token
+		session.set({
+			user: {
+				email,
+				token
+			}
 		});
 	} catch (e) {
 		err(e.message);
@@ -34,7 +49,8 @@ export const logout = async (refresh_token) => {
 
 export const register = async (email, password, mnemonic) => {
 	try {
-		let res = await auth
+		err(undefined);
+		let { jwt_token: token } = await api
 			.url('/register')
 			.post({
 				email,
@@ -45,11 +61,11 @@ export const register = async (email, password, mnemonic) => {
 			.badRequest(err)
 			.json();
 
-		console.log(res);
-
-		session.set('user', {
-			email,
-			token
+		session.set({
+			user: {
+				email,
+				token
+			}
 		});
 	} catch (e) {
 		console.log(e.stack);

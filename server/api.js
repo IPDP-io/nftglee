@@ -2,7 +2,7 @@ const wretch = require('wretch');
 const fetch = require("node-fetch");
 wretch().polyfills({ fetch });
 
-const { COINOS_URL, COINOS_TOKEN, HASURA_JWT, HASURA_SECRET } = process.env;
+const { COINOS_URL, COINOS_TOKEN, HASURA_SECRET } = process.env;
 
 const coinos = wretch()
 	.url(COINOS_URL)
