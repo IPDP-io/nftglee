@@ -1,14 +1,19 @@
 import { api } from '$lib/api';
-import { error } from '$lib/stores';
 import { session } from '$app/stores';
+import { goto } from '$app/navigation';
+import { err } from "$lib/utils";
 
-export const activate = async () => {
+export const activate = async (code, email) => {
 	try {
 		err(undefined);
-		let { jwt_token: token } = await api.url('/activate').post({ code })
+		await api
+			.url('/activate')
+			.post({ code, email })
 			.unauthorized(err)
 			.badRequest(err)
 			.json();
+
+    goto('/goodies', { noscroll: true });
 	} catch (e) {
 		err(e.message);
 	}
@@ -72,4 +77,3 @@ export const register = async (email, password, mnemonic) => {
 		err(e.message);
 	}
 };
-const err = (msg) => error.set(msg);

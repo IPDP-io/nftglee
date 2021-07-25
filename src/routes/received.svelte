@@ -8,7 +8,7 @@
 	let words;
 	onMount(async () => {
 		setup();
-		$mnemonic = (await createWallet()).mnemonic;
+    if (!$mnemonic) $mnemonic = (await createWallet()).mnemonic;
 	});
 </script>
 
@@ -42,7 +42,7 @@
 	</div>
 
 	<div class="container mb">
-		<button on:click={() => goto('/register', { noscroll: true })}>I wrote it down</button>
+		<button on:click={() => goto('/verify', { noscroll: true })}>I wrote it down</button>
 	</div>
 {/if}
 

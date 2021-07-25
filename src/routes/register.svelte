@@ -4,11 +4,11 @@
 	import { mnemonic } from '$lib/stores';
 	import { activate, register } from '$lib/auth';
 	import Fields from '$components/fields.svelte';
+	import { focus } from '$lib/utils';
 
-	let email = 'test12@coinos.io';
+	let email;
 	let password = 'liquidart';
 	let code;
-	let input;
 	let loading;
 
 	let submit = async () => {
@@ -16,19 +16,24 @@
 		await register(email, password, $mnemonic);
 		loading = false;
 	};
+
+  $: if (code && code.length >= 6) activate(code, $session.user.email)
+
 </script>
 
 {#if $session.user}
 	<h2 class="container">Registered!</h2>
 	<div class="container mb">Check your email for an activation code</div>
-	<div class="form-field">
-		<div class="container" style="max-width: 200px; margin: 0 auto">
-			<input id="code" bind:value={code} bind:this={input} autocapitalize="off" class="grow" />
+	<form on:submit|preventDefault={() => activate(code, $session.user.email)}>
+		<div class="form-field">
+			<div class="container" style="max-width: 200px; margin: 0 auto">
+				<input id="code" bind:value={code} autofocus autocapitalize="off" class="grow" use:focus />
+			</div>
 		</div>
-	</div>
-	<div class="container">
-		<button on:click={activate}>Submit</button>
-	</div>
+		<div class="container">
+			<button>Submit</button>
+		</div>
+	</form>
 {:else if loading}
 	<div id="loading" class="container column">
 		<div class="container">
@@ -52,25 +57,3 @@
 		</form>
 	</div>
 {/if}
-
-<style>
-	input,
-	label {
-		border-bottom: 1px solid var(--main-blue);
-		color: var(--main-blue);
-	}
-	label {
-		width: 6em;
-	}
-	input {
-		padding: 10px;
-		height: 60px;
-		width: fit-content;
-	}
-	input::placeholder {
-		color: var(--main-blue);
-	}
-	input:hover {
-		border: 1px solid var(--main-blue);
-	}
-</style>

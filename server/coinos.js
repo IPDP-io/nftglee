@@ -3,11 +3,10 @@ const { coinos } = require('./api');
 app.post('/boom', async (req, res) => {
 	let { amount: value, confirmed, text } = req.body;
 
-  if (!subscribers[text]) return res.code(500).send({ message: "no subscribers" });
+	if (!subscribers[text]) return res.code(500).send({ message: 'no subscribers' });
 
-	if (confirmed && value >= invoices[text])
-		subscribers[text].send(JSON.stringify({ type: 'payment', value }));
-	else subscribers[text].send(JSON.stringify({ type: 'pending', value }));
+	if (confirmed && value >= invoices[text]) console.log("mint");
+  subscribers[text].send(JSON.stringify({ type: 'payment', value }));
 
 	res.send(req.body);
 });

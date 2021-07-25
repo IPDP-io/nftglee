@@ -1,7 +1,7 @@
 <script>
 	import { api } from '$lib/api';
 	import { address, unit, ws } from '$lib/stores';
-	import { goto } from '$app/navigation';
+  import { go } from '$lib/utils';
 
 	let getInvoice = async (u) => {
 		$unit = u;
@@ -15,7 +15,7 @@
 
 		$ws.send(JSON.stringify({ type: 'subscribe', value: $address }));
 
-    goto('/invoice', { noscroll: true });
+    go('/invoice');
 	};
 </script>
 

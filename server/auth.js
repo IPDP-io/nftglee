@@ -40,7 +40,7 @@ const login = async (req, res) => {
 		let response = await hbp.url('/auth/login').post({ email, password }).res();
 		Array.from(response.headers.entries()).forEach(([k, v]) => res.header(k, v));
 
-    let json = await response.json();
+		let json = await response.json();
 		return res.send(json);
 	} catch (e) {
 		console.log(e);
@@ -52,6 +52,36 @@ const login = async (req, res) => {
 };
 
 app.post('/login', login);
+
+app.post('/activate', async (req, res) => {
+	let { code, email } = req.body;
+
+	let query = `query($email: citext!) {
+      tickets(where: {email: {_eq: $email}}) {
+        active
+        ticket
+      }
+    }`;
+
+	let response = await hasura
+		.post({
+			query,
+			variables: {
+				email
+			}
+		})
+		.json();
+
+	let { active, ticket } = response.data.tickets[0];
+
+  if (!active) {
+    if (code.length >= 6 && ticket.startsWith(code))
+      response = await hbp.url('/auth/activate').query({ ticket }).get().res();
+    else return res.code(500).send("Invalid code");
+  }
+
+	res.send(true);
+});
 
 app.post('/register', async (req, res) => {
 	let { address, mnemonic, email, password } = req.body;
@@ -79,7 +109,7 @@ app.post('/register', async (req, res) => {
 			.json();
 
 		if (response.errors) {
-      console.log(response.errors);
+			console.log(response.errors);
 			let deleteQuery = `mutation { 
         delete_users(where: { account: { email: { _eq: "${email}" } } }) 
         { 
@@ -93,11 +123,11 @@ app.post('/register', async (req, res) => {
 			throw new Error('There was an error during registration');
 		}
 
-    return res.send({ success: true });
+		return res.send({ success: true });
 
 		// return await login(req, res);
 	} catch (e) {
-    console.log(e);
+		console.log(e);
 		if (e.message.includes('Account')) res.code(500).send('Account already exists');
 		else res.code(500).send(e.message);
 	}

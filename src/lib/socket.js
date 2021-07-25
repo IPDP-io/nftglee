@@ -1,6 +1,6 @@
-import { goto } from '$app/navigation';
+import { go } from '$lib/utils';
 import { pending, received } from '$lib/stores';
-import { get } from "svelte/store";
+import { get } from 'svelte/store';
 
 export default (address) => {
 	let ws = new WebSocket(`ws://localhost:9090/ws`);
@@ -9,16 +9,9 @@ export default (address) => {
 		try {
 			let { type, value } = JSON.parse(data);
 
-			if (type === 'pending') {
-				pending.set(get(pending) + value);
-        goto('/confirming', { noscroll: true });
-			}
-
 			if (type === 'payment') {
-        received.set(get(received) + value);
-        goto('/received', { noscroll: true })
-
-				// mint();
+				received.set(value);
+				go('/received');
 			}
 
 			if (type === 'asset') {

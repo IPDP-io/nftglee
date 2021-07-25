@@ -43,7 +43,9 @@ let Address,
 	mnemonicToSeedSync,
 	fromSeed;
 
+let retries = 0;
 export const setup = () => {
+  if ((typeof liquidjs === 'undefined' || typeof bip39 === 'undefined' || typeof bip32 === 'undefined') && retries < 5) return retries++ && setTimeout(setup, 1000);
 	({ Address, confidential, ECPair, Psbt, payments, network, networks, Transaction } = liquidjs);
 	network = networks.regtest;
 	({ generateMnemonic, mnemonicToSeedSync } = bip39);

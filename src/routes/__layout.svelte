@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { session } from '$app/stores';
+	import { page, session } from '$app/stores';
 	import { error } from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
@@ -9,7 +9,7 @@
 	import TwitterIcon from '$icons/twitter.svelte';
 	import LinkedInIcon from '$icons/linkedin.svelte';
 	import Form from '$components/form.svelte';
-	import { goto } from '$app/navigation';
+  import { err, go } from '$lib/utils';
 
 	import '../app.css';
 
@@ -22,6 +22,9 @@
 			document.querySelectorAll('.sound-icon').forEach((icon) => icon.classList.toggle('hidden'));
 		});
 	});
+
+  $: clear($page)
+  let clear = () => err(undefined);
 </script>
 
 <main>
@@ -42,7 +45,7 @@
 		</div>
 		<div id="watch-silhouettes" class="container column">
 			<div class="container">
-				<h1 on:click={() => goto('/', { noscroll: true })}>Watch Silhouettes</h1>
+				<h1 on:click={() => go('/')}>Watch Silhouettes</h1>
 			</div>
 
 			{#if $error}
@@ -83,3 +86,25 @@
 		</div>
 	</div>
 </footer>
+
+<style global>
+	input,
+	label {
+		border-bottom: 1px solid var(--main-blue);
+		color: var(--main-blue);
+		padding: 10px;
+		height: 60px;
+	}
+	label {
+		width: 6em;
+	}
+	input {
+		width: fit-content;
+	}
+	input::placeholder {
+		color: var(--main-blue);
+	}
+	input:hover {
+		border: 1px solid var(--main-blue);
+	}
+</style>

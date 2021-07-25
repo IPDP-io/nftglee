@@ -1,13 +1,14 @@
 <script>
+  import { focus } from "$lib/utils";
 	import Eye from '../icons/eye.svelte';
 	export let email, password;
-	let emailInput, show;
+	let show;
 </script>
 
 <div class="form-field">
 	<div class="container">
 		<label for="first_name">Email: </label>
-		<input bind:value={email} bind:this={emailInput} autocapitalize="off" class="grow" />
+		<input bind:value={email} autocapitalize="off" class="grow" autofocus use:focus />
 	</div>
 </div>
 <div class="form-field">
@@ -20,16 +21,15 @@
 				<label for="last_name">Password: </label>
 				<input type="password" bind:value={password} autocapitalize="off" class="grow" />
 			{/if}
-			<span id="show-password" on:click|preventDefault|stopPropagation={() => (show = !show)}>
-				<Eye />
-			</span>
+			<div id="show-password" on:click|preventDefault|stopPropagation={() => (show = !show)} style="height: 100%">
+				<Eye size={60} />
+			</div>
 		</div>
 	</div>
 </div>
 
 <style>
 	#show-password {
-		width: 2rem;
 		position: absolute;
 		right: 0px;
 	}

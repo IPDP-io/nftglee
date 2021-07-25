@@ -50,7 +50,6 @@
 			}
 			qrCode = string;
 		});
-		console.log(qrCode);
 	});
 
 	function buildPaymentUrl(coin, address, amount, label = 'Silhouettes', message = 'Movie ticket') {
