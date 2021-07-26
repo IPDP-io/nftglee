@@ -11,7 +11,7 @@
 
 :root {
     --main-blue: #1f4e6c;
-    --secondary-blue: #255f83;
+    --secondary-blue: #317ba8;
 }
 
 html {
@@ -26,10 +26,12 @@ body {
     /* position: absolute; */
     font-size: 12px;
     font-size: 1.5vw;
+    line-height: 1;
 }
 h1,h2,h3,h4,h5,h6 {
     text-transform: uppercase;
     font-weight: 400;
+    margin: 0;
 }
 h1 {
     font-size: 3rem;
@@ -64,6 +66,9 @@ section {
 }
 .column {
     flex-direction: column;
+}
+.page-block {
+    padding: 2em 0;
 }
 .space-evenly {
     justify-content: space-evenly;
@@ -107,7 +112,6 @@ section {
     font-family: 'Oswald', sans-serif;
     background-color: var(--main-blue);
     color: white;
-    padding-bottom: 2rem;
 }
 #movie-banner {
     align-items: flex-end;
@@ -131,6 +135,19 @@ form {
     width: 75%;
     font-family: Helvetica;
 }
+.form-field {
+    margin: 2.5em 0;
+}
+.form-field.focused {
+    border: 1px solid var(--main-blue)!important;
+}
+input, label {
+    height: 2rem;
+}
+label {
+    display: flex;
+    align-items: center;
+}
 textarea {
     height: 4rem;
     height: 15vh;
@@ -140,11 +157,14 @@ input, textarea {
     background-color: transparent;
     border: 0;
     width: 100%;
-    padding: 0;
     font-family: Helvetica;
+    outline-color: white;
 }
-input, textarea, label {
-    margin: .25rem 0;
+label, input, textarea{
+    padding: .5em;
+}
+input:focus::placeholder, textarea:focus::placeholder{
+    color: transparent;
 }
 button {
     cursor: pointer;
@@ -154,10 +174,14 @@ button {
     height: 4vh;
     margin: 1rem;
     padding: 0 10px;
-    padding: 0 4vw;
+    padding: .5em 4vw;
     color: var(--mainblue);
     transition: color .6s, background-color .6s;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
 }
 button:hover,
 button.active {
@@ -191,15 +215,15 @@ footer {
 @media screen and (max-width: 1025px) {
     h1 {
         font-size: 2.5rem;
-        font-size: 7vw;
+        font-size: 5.5vw;
     }
     h2 {
         font-size: 2rem;
-        font-size: 6vw;
+        font-size: 3.5vw;
     }
     h3 {
         font-size: 1rem;
-        font-size: 5vw;
+        font-size: 2.5vw;
     }
     button#submit {
         height:7vh;
@@ -217,20 +241,23 @@ footer {
 @media screen and (max-width: 481px) {
     h1 {
         font-size: 2rem;
-        font-size: 10vw;
+        font-size: 5.5vw;
 
     }
     h2 {
         font-size: 1.5rem;
-        font-size: 9vw;
+        font-size: 4vw;
 
     }
     h3 {
         font-size: 1rem;
-        font-size: 6vw;
+        font-size: 3vw;
     }
     body {
         font-size: 3.5vw;
+    }
+    .page-block {
+        padding: 1em 0;
     }
 
     .sound-icon {
