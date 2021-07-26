@@ -1,12 +1,12 @@
 <script>
 	import { auth } from '$lib/api';
 	import { session } from '$app/stores';
-  import { mnemonic } from '$lib/stores';
-  import { Fields } from "$components/fields.svelte";
+	import { mnemonic } from '$lib/stores';
+	import Fields  from "$components/fields.svelte";
 
 	let email = 'test12@coinos.io';
 	let password = 'liquidart';
-
+	let login;
 	let error;
 	let err = (e) => (error = e);
 </script>
@@ -28,32 +28,26 @@
 </div>
 
 <style>
-	#show-password {
-		width: 2rem;
-		position: absolute;
-		right: 0px;
-	}
-	#password {
-		position: relative;
-	}
-	input, label {
-		border-bottom: 1px solid var(--main-blue);
-		color: var(--main-blue);
-	}
-	label {
-		width: 6em;
-	}
-	input {
-		width: fit-content;
-	}
-	input::placeholder {
-		color: var(--main-blue);
-	}
-	input:hover {
-		border: 1px solid var(--main-blue);
-	}
 	button[type=submit]:hover {
 		background-color: #ffffffaa;
 		color: var(--main-blue);
+	}
+	form {
+		width: 33%;
+	}
+	@media screen and (max-width: 1025px) {
+		form {
+			width: 50%;
+		}
+	}
+	@media screen and (max-width: 769px) {
+		form {
+			width: 66%;
+		}
+	}
+	@media screen and (max-width: 480px) {
+		form {
+			width: 100%;
+		}
 	}
 </style>

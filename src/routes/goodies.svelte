@@ -9,7 +9,7 @@
 	let shortDate = new Date().toLocaleString('en-US', shortDateOptions);
 </script>
 
-<div class="container">
+<div class="container movie-ticket">
 	<div class="container ticket">
 		<div class="container column ticket-left grow">
 			<div class="container ticket-details">
@@ -40,13 +40,14 @@
 				{shortDate}
 			</div>
 		</div>
-		<div id="ticket-overlay" class="overlay">Admit one</div>
+		<div id="ticket-overlay" class="overlay">Admit</div>
 		<div id="stub-overlay" class="overlay">1</div>
 	</div>
 </div>
 
 <div class="container column goodie">
-	<h3>NFT Goodies</h3>
+	<h2 class="nft-label">NFT Goodies</h2>
+	<h3 class="nft-item">Silhouettes Ticket Stub</h3>
 	<video class="goodie-video" muted playsinline autoplay loop type="application/x-mpegURL">
 		<source src={'/static/ticket.mp4'} />
 		Your browser does not support HTML5 video.
@@ -54,7 +55,8 @@
 </div>
 
 <div class="container column goodie">
-	<h3>Extra NFT goodies</h3>
+	<h2 class="nft-label">Extra NFT goodies</h2>
+	<h3 class="nft-item">Constellation Poster</h3>
 	<video class="goodie-video" muted playsinline autoplay loop type="application/x-mpegURL">
 		<source src={'/static/girl.mp4'} />
 		Your browser does not support HTML5 video.
@@ -62,7 +64,15 @@
 </div>
 
 <div id="withdraw" class="container column">
-	<h3>Withdraw to Liquid Address</h3>
+	<h2 class="nft-label">Withdraw to Liquid Address</h2>
+	<h3 class="nft-item">You can use any Liquid wallet such as
+		<a href="https://blockstream.com/green/" class="blockstream-green" target="_blank">
+			Blockstream Green
+		</a> or 
+		<a href="https://blockstream.com/aqua/" class="blockstream-aqua" target="_blank">
+			Aqua	
+		</a>
+	</h3>
 	<form on:submit|preventDefault>
 		<div id="withdraw-form" class="container">
 			<div class="container grow">
@@ -78,9 +88,12 @@
 </div>
 
 <style>
+	.movie-ticket, .goodie {
+		padding: 1.5em 0;
+	}
 	.ticket {
 		border: 0.2em dashed white;
-		width: 75%;
+		width: 50%;
 		height: calc(75vw * 0.3);
 		position: relative;
 		padding: 1em 2em;
@@ -115,7 +128,7 @@
 	}
 	#ticket-overlay {
 		left: 0.3em;
-		font-size: 5em;
+		font-size: 4em;
 		text-transform: uppercase;
 		font-family: 'Zen Tokyo Zoo';
 	}
@@ -170,15 +183,29 @@
 		font-weight: 600;
 		width: 4em;
 	}
+	.nft-label {
+		margin-bottom: 1em;
+	}
+	.nft-item {
+		margin-bottom: .25em;
+	}
+	.nft-label, .nft-item {
+		text-align: center;
+	}
 	.goodie {
-		margin: 1.5rem;
 		align-items: center;
+		border-bottom: 1px solid var(--main-blue);
+		padding-bottom: 4em;
+	}
+	.goodie:nth-child(odd) {
+		background-color: #eeeeee;
 	}
 	.goodie-video {
-		width: 75%;
+		width: 50%;
 	}
 	#withdraw {
 		align-items: center;
+		margin-top: 1.5em;
 	}
 	#withdraw-form {
 		flex-wrap: wrap;
@@ -195,21 +222,36 @@
 		background-color: var(--main-blue);
 		color: white;
 	}
+	input {
+		outline-color: var(--main-blue);
+	}
 	button.withdraw:hover {
 		background-color: var(--secondary-blue);
+	}
+	a.blockstream-green:hover {
+		color: #00b45a;
+	}
+	a.blockstream-aqua:hover {
+		color: #13cdc2;
 	}
 
 	@media screen and (max-width: 769px) {
 		.ticket {
 			font-size: 2vw;
 		}
+		.ticket, .goodie-video {
+			width: 60%;
+		}
 		#ticket-overlay {
 			font-size: 4em;
 		}
+		.ticket-stub {
+			padding-left: 0;
+		}
 	}
 	@media screen and (max-width: 481px) {
-		.ticket {
-			font-size: 3vw;
+		.ticket, .goodie-video {
+			width: 75%;
 		}
 		#ticket-overlay {
 			font-size: 2em;

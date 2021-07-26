@@ -1,7 +1,7 @@
 <script>
 	import { api } from '$lib/api';
 	import { address, unit, ws } from '$lib/stores';
-  import { go } from '$lib/utils';
+	import { go } from '$lib/utils';
 
 	let getInvoice = async (u) => {
 		$unit = u;
@@ -23,10 +23,12 @@
 	<div class="container column">
 		<h3>Choose preferred payment option:</h3>
 		<div class="container space-evenly mb">
-			<button on:click={() => $unit = 'B'} class:active={$unit && $unit.includes('BTC')}
-				>Bitcoin</button
-			>
-			<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}>Litecoin</button>
+			<button on:click={() => $unit = 'B'} class:active={$unit && $unit.includes('BTC')}>
+				Bitcoin
+			</button>
+			<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}>
+				Litecoin
+			</button>
 		</div>
 		{#if $unit && $unit.includes('B')}
 			<div class="container space-evenly">

@@ -8,7 +8,7 @@
   aria-hidden="true"
   preserveAspectRatio="none"
   viewBox="0 0 24 24"
-  width={size}
+  height={size}
   class="icon"
   style="margin: auto"
 >

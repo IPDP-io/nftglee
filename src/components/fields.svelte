@@ -1,32 +1,49 @@
 <script>
-  import { focus } from "$lib/utils";
+	import { focus } from "$lib/utils";
+	import { onMount } from "svelte";
 	import Eye from '../icons/eye.svelte';
 	export let email, password;
 	let show;
-</script>
 
-<div class="form-field">
-	<div class="container">
-		<label for="first_name">Email: </label>
-		<input bind:value={email} autocapitalize="off" class="grow" autofocus use:focus />
+	onMount(async () => {
+		const loginFields = document.getElementById('login-fields');
+		const formFields = loginFields.querySelectorAll('.form-field');
+		const getParentFormField = (element) => element.closest('.form-field');
+		for (let formField of formFields) {
+			formField.addEventListener('focusin', (e) => {
+				getParentFormField(e.target).classList.add('focused');
+			});
+			formField.addEventListener('focusout', (e) => {
+				getParentFormField(e.target).classList.remove('focused');
+			});
+		}
+	});
+</script>
+<div id="login-fields">
+	<div class="form-field">
+		<div class="container">
+			<label for="first_name">Email: </label>
+			<input id="first_name" bind:value={email} autocapitalize="off" class="grow" autofocus use:focus />
+		</div>
 	</div>
-</div>
-<div class="form-field">
-	<div>
-		<div id="password" class="container">
-			{#if show}
-				<label for="last_name">Password: </label>
-				<input bind:value={password} autocapitalize="off" class="grow" />
-			{:else}
-				<label for="last_name">Password: </label>
-				<input type="password" bind:value={password} autocapitalize="off" class="grow" />
-			{/if}
-			<div id="show-password" on:click|preventDefault|stopPropagation={() => (show = !show)} style="height: 100%">
-				<Eye size={60} />
+	<div class="form-field">
+		<div>
+			<div id="password" class="container">
+				{#if show}
+					<label for="password-input">Password: </label>
+					<input id="password-input" bind:value={password} autocapitalize="off" class="grow" />
+				{:else}
+					<label for="password-input">Password: </label>
+					<input id="password-input" type="password" bind:value={password} autocapitalize="off" class="grow" />
+				{/if}
+				<div id="show-password" on:click|preventDefault|stopPropagation={() => (show = !show)} style="height: 100%">
+					<Eye size={'100%'} />
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 
 <style>
 	#show-password {
@@ -36,24 +53,26 @@
 	#password {
 		position: relative;
 	}
+	input {
+		outline: none;
+	}
 	input, label {
-		border-bottom: 1px solid var(--main-blue);
 		color: var(--main-blue);
+		border: 0;
 	}
 	label {
-		width: 6em;
+		width: 7em;
 	}
-	input {
-		width: fit-content;
+	label:hover, input:hover {
+		border: 0;
 	}
 	input::placeholder {
 		color: var(--main-blue);
 	}
-	input:hover {
-		border: 1px solid var(--main-blue);
+	.form-field {
+		border-bottom: 1px solid var(--main-blue);
 	}
-	button[type=submit]:hover {
-		background-color: #ffffffaa;
-		color: var(--main-blue);
+	.form-field:hover {
+		border: 1px solid var(--main-blue);
 	}
 </style>

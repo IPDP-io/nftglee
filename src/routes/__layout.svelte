@@ -7,9 +7,8 @@
 	import VolumeIconMute from '$icons/volume-mute.svelte';
 	import FacebookIcon from '$icons/facebook.svelte';
 	import TwitterIcon from '$icons/twitter.svelte';
-	import LinkedInIcon from '$icons/linkedin.svelte';
 	import Form from '$components/form.svelte';
-  import { err, go } from '$lib/utils';
+  	import { err, go } from '$lib/utils';
 
 	import '../app.css';
 
@@ -44,8 +43,8 @@
 			</video>
 		</div>
 		<div id="watch-silhouettes" class="container column">
-			<div class="container">
-				<h1 on:click={() => go('/')}>Watch Silhouettes</h1>
+			<div class="container page-block">
+				<h1 on:click={() => go('/')}>Silhouettes</h1>
 			</div>
 
 			{#if $error}
@@ -58,11 +57,11 @@
 				</div>
 			{/if}
 
-			<div style="min-height: 400px">
+			<div style="min-height: 400px" class="page-block">
 				<slot />
 			</div>
 
-			<div id="lets-chat" class="container column">
+			<div id="lets-chat" class="container column page-block">
 				<div class="container">
 					<h2>Let's chat</h2>
 				</div>
@@ -75,14 +74,13 @@
 </main>
 
 <footer>
-	<div class="container column">
+	<div class="container column page-block">
 		<div id="social-media" class="container">
 			<FacebookIcon />
 			<TwitterIcon />
-			<LinkedInIcon />
 		</div>
 		<div class="container">
-			<p>©{year} Silhouettes</p>
+			<p>© {year} Silhouettes Movie</p>
 		</div>
 	</div>
 </footer>
@@ -92,14 +90,9 @@
 	label {
 		border-bottom: 1px solid var(--main-blue);
 		color: var(--main-blue);
-		padding: 10px;
-		height: 60px;
 	}
 	label {
 		width: 6em;
-	}
-	input {
-		width: fit-content;
 	}
 	input::placeholder {
 		color: var(--main-blue);
