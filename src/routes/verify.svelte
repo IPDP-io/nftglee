@@ -6,7 +6,7 @@
 	let word;
 
 	let verify = () => {
-    console.log("bingo");
+    console.log($mnemonic);
 		if (word === $mnemonic.split(' ')[6]) go('/register');
 		else err('Nope');
 	};

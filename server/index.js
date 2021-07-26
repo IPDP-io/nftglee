@@ -8,7 +8,6 @@ const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
 const fs = require('fs');
 
-const { binance } = require('./api');
 
 const network = networks.litereg;
 
@@ -21,14 +20,7 @@ app = require('fastify')({
 });
 
 require("./auth");
-require("./coinos");
-
-app.get('/rates', async function (request, reply) {
-	let { price: btc } = await binance.query({ symbol: 'BTCUSDT' }).get().json().catch(console.log);
-	let { price: ltc } = await binance.query({ symbol: 'LTCUSDT' }).get().json().catch(console.log);
-
-	reply.send({ btc, ltc });
-});
+require("./payments");
 
 app.get('/file/:name', function (request, reply) {
 	const { name } = request.params;

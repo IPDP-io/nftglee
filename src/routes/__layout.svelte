@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page, session } from '$app/stores';
-	import { error } from '$lib/stores';
+	import { error, mnemonic, ws } from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
@@ -9,12 +9,17 @@
 	import TwitterIcon from '$icons/twitter.svelte';
 	import LinkedInIcon from '$icons/linkedin.svelte';
 	import Form from '$components/form.svelte';
-  import { err, go } from '$lib/utils';
+	import { err, go } from '$lib/utils';
+	import socket from '$lib/socket';
+	import { createWallet, setup } from '$lib/wallet';
 
 	import '../app.css';
 
 	const year = new Date().getFullYear();
 	onMount(async () => {
+		$ws = socket();
+		setup();
+    if (!$mnemonic) await createWallet();
 		const movieBanner = document.getElementById('movie-banner');
 		const introVideo = document.getElementById('intro-video');
 		movieBanner.addEventListener('click', () => {
@@ -23,8 +28,8 @@
 		});
 	});
 
-  $: clear($page)
-  let clear = () => err(undefined);
+	$: clear($page);
+	let clear = () => err(undefined);
 </script>
 
 <main>

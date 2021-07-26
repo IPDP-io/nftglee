@@ -1,5 +1,7 @@
 import { Buffer } from 'buffer';
 import wretch from 'wretch';
+import { get } from 'svelte/store';
+import { mnemonic } from '$lib/stores';
 
 import cryptojs from 'crypto-js';
 
@@ -33,7 +35,7 @@ const sign = (p, sighash = 1) => {
 
 let Address,
 	confidential,
-  generateMnemonic,
+	generateMnemonic,
 	ECPair,
 	Psbt,
 	payments,
@@ -45,16 +47,21 @@ let Address,
 
 let retries = 0;
 export const setup = () => {
-  if ((typeof liquidjs === 'undefined' || typeof bip39 === 'undefined' || typeof bip32 === 'undefined') && retries < 5) return retries++ && setTimeout(setup, 1000);
+	if (
+		(typeof liquidjs === 'undefined' ||
+			typeof bip39 === 'undefined' ||
+			typeof bip32 === 'undefined') &&
+		retries < 5
+	)
+		return retries++ && setTimeout(setup, 1000);
 	({ Address, confidential, ECPair, Psbt, payments, network, networks, Transaction } = liquidjs);
 	network = networks.regtest;
 	({ generateMnemonic, mnemonicToSeedSync } = bip39);
 	({ fromSeed } = bip32);
 };
 
-const singlesig = (key) => {
-	if (!key) key = keypair();
-	let { pubkey, seed } = key;
+export const p2wpkh = () => {
+	let { pubkey } = keypair();
 
 	let redeem = payments.p2wpkh({
 		pubkey,
@@ -69,11 +76,10 @@ const singlesig = (key) => {
 
 export const createWallet = () => {
 	try {
-    let mnemonic = generateMnemonic();
-		const key = keypair(mnemonic);
+		mnemonic.set(generateMnemonic());
 
 		return {
-			address: singlesig(key).address,
+			address: p2wpkh().address,
 			mnemonic
 		};
 	} catch (e) {
@@ -82,9 +88,11 @@ export const createWallet = () => {
 	}
 };
 
-export const keypair = (mnemonic, pass) => {
+export const keypair = () => {
 	try {
-		let seed = mnemonicToSeedSync(mnemonic);
+    console.log(
+      "bang", get(mnemonic));
+		let seed = mnemonicToSeedSync(get(mnemonic));
 		let key = fromSeed(seed, network).derivePath(`m/84'/0'/0'/0/0`);
 		let { publicKey: pubkey, privateKey: privkey } = key;
 		let base58 = key.neutered().toBase58();
@@ -94,21 +102,6 @@ export const keypair = (mnemonic, pass) => {
 		console.log(e);
 		throw new Error('Failed to generate keys with mnemonic');
 	}
-};
-
-export const p2wpkh = (key) => {
-	if (!key) key = keypair();
-	let { pubkey, seed } = key;
-
-	let redeem = payments.p2wpkh({
-		pubkey,
-		network
-	});
-
-	return payments.p2sh({
-		redeem,
-		network
-	});
 };
 
 export const faucet = async (address) => {

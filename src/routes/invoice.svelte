@@ -3,7 +3,7 @@
 	import { api } from '$lib/api';
 	import QRCode from 'qrcode';
 	import PendingIcon from '$icons/pending.svelte';
-	import { address, unit } from '$lib/stores';
+	import { address, amount, unit } from '$lib/stores';
 	import { copy as copyToClipboard } from '$lib/utils';
 
 	let copied;
@@ -13,11 +13,7 @@
 		setTimeout(() => (copied = false), 3000);
 	};
 
-	let amount = 20;
-	let btcAmount = 0.0002;
-	let ltcAmount = 0.2;
 	let qrData;
-	let unitAmount;
 	let qrCode;
 	let test = false;
 	setTimeout(() => {
@@ -28,47 +24,33 @@
 	const paymentMessage = 'Movie ticket';
 
 	onMount(async () => {
-    // $address = 'bcasd098kjahsdkjya98s7d1234';
-		let rates = await api.url('/rates').get().json();
-		btcAmount = (amount / rates.btc).toFixed(8);
-		ltcAmount = (amount / rates.ltc).toFixed(8);
-		unitAmount = $unit === 'LTC' ? ltcAmount : btcAmount;
-		qrData = buildPaymentUrl($unit, $address, unitAmount, paymentLabel, paymentMessage);
-		const qrOptions = {
-			errorCorrectionLevel: 'H',
-			type: 'svg',
-			width: '250',
-			height: '250',
-			color: {
-				dark: '#1f4e6c',
-				light: '#FFFFFF'
+		QRCode.toString(
+			`${
+				$unit === 'LTC' ? 'litecoin' : 'bitcoin'
+			}:${$address}?amount=${$amount}&label=Silhouettes&message=Movie%20ticket`,
+			{
+				errorCorrectionLevel: 'H',
+				type: 'svg',
+				width: '250',
+				height: '250',
+				color: {
+					dark: '#1f4e6c',
+					light: '#FFFFFF'
+				}
+			},
+			function (err, string) {
+				if (err) {
+					throw err;
+				}
+				qrCode = string;
 			}
-		};
-		QRCode.toString(qrData, qrOptions, function (err, string) {
-			if (err) {
-				throw err;
-			}
-			qrCode = string;
-		});
+		);
 	});
-
-	function buildPaymentUrl(coin, address, amount, label = 'Silhouettes', message = 'Movie ticket') {
-		let protocol;
-		switch (coin) {
-			case 'LTC':
-				protocol = 'litecoin';
-				break;
-			case 'BTC':
-				protocol = 'bitcoin';
-				break;
-		}
-		return `${protocol}:${address}?amount=${amount}&label=${label}&message=${message}`;
-	}
 </script>
 
 <div class="container column">
 	{#if test}
-		<div class="container">Send {unitAmount} {$unit} (${amount}) to:</div>
+		<div class="container">Send {$amount} {$unit} ($20) to:</div>
 
 		<div id="payment-qr-code" class="container column">
 			<div class="container">

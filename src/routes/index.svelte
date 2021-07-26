@@ -4,22 +4,7 @@
 	import Options from '$components/options.svelte';
 	import { session } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import socket from '$lib/socket';
-	import { unit, ws } from '$lib/stores';
-
-	let asset, txid;
-
-	onMount(async () => {
-		$ws = socket();
-	});
-
-	let mint = () => {
-		$ws.send(JSON.stringify({ type: 'mint' }));
-	};
-
-	let send = () => {
-		$ws.send(JSON.stringify({ type: 'send', value: to, asset }));
-	};
+	import { mnemonic, unit, ws } from '$lib/stores';
 </script>
 
 <Options />

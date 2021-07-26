@@ -2,14 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { mnemonic, received, unit } from '$lib/stores';
 	import { btc } from '$lib/utils';
-	import { onMount } from 'svelte';
-	import { createWallet, setup } from '$lib/wallet';
 
 	let words;
-	onMount(async () => {
-		setup();
-    if (!$mnemonic) $mnemonic = (await createWallet()).mnemonic;
-	});
 </script>
 
 <div class="container">
@@ -45,9 +39,3 @@
 		<button on:click={() => goto('/verify', { noscroll: true })}>I wrote it down</button>
 	</div>
 {/if}
-
-<svelte:head>
-	<script src="/static/bip32.js"></script>
-	<script src="/static/bip39.js"></script>
-	<script src="/static/liquidjs.js"></script>
-</svelte:head>
