@@ -18,7 +18,6 @@
 	};
 
   $: if (code && code.length >= 6) activate(code, $session.user.email)
-
 </script>
 
 {#if $session.user}

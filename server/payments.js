@@ -6,8 +6,10 @@ app.post('/boom', async (req, res) => {
 	let { amount: value, confirmed, text } = req.body;
 
 	if (!subscribers[text]) return res.code(500).send({ message: 'no subscribers' });
+  
+  let { amount, address } = invoices[text];
 
-	if (confirmed && value >= invoices[text]) console.log('mint');
+	if (confirmed && value >= amount) console.log('mint', address);
 	subscribers[text].send(JSON.stringify({ type: 'payment', value }));
 
 	res.send(req.body);

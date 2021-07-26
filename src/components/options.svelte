@@ -15,6 +15,8 @@
 		$address = invoice.address;
 		$amount = invoice.amount;
 
+    console.log("subscribing", $address, invoice);
+    console.log($ws);
 		$ws.send(JSON.stringify({ type: 'subscribe', value: $address }));
 
 		go('/invoice');

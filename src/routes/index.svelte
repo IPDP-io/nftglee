@@ -4,7 +4,7 @@
 	import Options from '$components/options.svelte';
 	import { session } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { mnemonic, unit, ws } from '$lib/stores';
+	import { unit, ws } from '$lib/stores';
 </script>
 
 <Options />
