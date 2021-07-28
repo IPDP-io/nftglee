@@ -71,7 +71,7 @@ const sign = (p, sighash = 1) => {
 const broadcast = async (p) =>
 	electrs.url('/tx').body(p.extractTransaction().toHex()).post().text();
 
-const createIssuance = async (address) => {
+const mint = async (address) => {
 	let out = p2wpkh();
 
 	let utxos = await electrs.url(`/address/${address}/utxo`).get().json();
@@ -117,4 +117,4 @@ const getHex = async (txid) => {
 	return electrs.url(`/tx/${txid}/hex`).get().text();
 };
 
-module.exports = { createIssuance };
+module.exports = { mint };

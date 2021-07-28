@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page, session } from '$app/stores';
-	import { error, mnemonic, ws } from '$lib/stores';
+	import { address, error, mnemonic, ws } from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
 	import VolumeIconMute from '$icons/volume-mute.svelte';

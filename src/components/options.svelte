@@ -1,23 +1,26 @@
 <script>
 	import { api } from '$lib/api';
-	import { address, amount, mnemonic, unit, ws } from '$lib/stores';
+	import { address as invoiceAddress, amount, mnemonic, unit, ws } from '$lib/stores';
 	import { go } from '$lib/utils';
 	import { p2wpkh } from '$lib/wallet';
 
 	let getInvoice = async (u) => {
 		$unit = u;
+		let {
+			address,
+			redeem: { pubkey }
+		} = p2wpkh();
+    pubkey = pubkey.toString('hex');
 
 		let invoice = await api
 			.url('/' + u)
-			.post({ address: p2wpkh().address })
+			.post({ address, pubkey })
 			.json();
 
-		$address = invoice.address;
+		$invoiceAddress = invoice.address;
 		$amount = invoice.amount;
 
-    console.log("subscribing", $address, invoice);
-    console.log($ws);
-		$ws.send(JSON.stringify({ type: 'subscribe', value: $address }));
+		$ws.send(JSON.stringify({ type: 'subscribe', value: invoice.address }));
 
 		go('/invoice');
 	};
@@ -27,12 +30,10 @@
 	<div class="container column">
 		<h3>Choose preferred payment option:</h3>
 		<div class="container space-evenly mb">
-			<button on:click={() => $unit = 'B'} class:active={$unit && $unit.includes('BTC')}>
+			<button on:click={() => ($unit = 'B')} class:active={$unit && $unit.includes('BTC')}>
 				Bitcoin
 			</button>
-			<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}>
-				Litecoin
-			</button>
+			<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}> Litecoin </button>
 		</div>
 		{#if $unit && $unit.includes('B')}
 			<div class="container space-evenly">
