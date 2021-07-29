@@ -14,7 +14,7 @@ export const activate = async (code, email) => {
 			.badRequest(err)
 			.json();
 
-    goto('/goodies', { noscroll: true });
+    goto('/watch', { noscroll: true });
 	} catch (e) {
 		err(e.message);
 	}
