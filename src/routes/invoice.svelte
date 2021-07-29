@@ -15,13 +15,17 @@
 
 	let qrData;
 	let qrCode;
-	let tier = 'Tier 1';
-  let ticketNumber = 22;
+
+	let ticketNumber;
+
+	$: tier = ticketNumber < 100 ? 1 : ticketNumber < 1000 ? 2 : 3;
 
 	const paymentLabel = 'Silhouettes';
 	const paymentMessage = 'Movie ticket';
 
 	onMount(async () => {
+		ticketNumber = await api.url('/ticket').get().json();
+
 		QRCode.toString(
 			`${
 				$unit === 'LTC' ? 'litecoin' : 'bitcoin'
@@ -50,13 +54,16 @@
 
 <div class="container column">
 	<div class="container mb">
-		Purchasing ticket #{ticketNumber}, a {tier} ticket
+		Purchasing ticket #{ticketNumber + 1}, a Tier {tier} ticket
 	</div>
-  <div class="container">
-  <button on:click={() => (showInfo = !showInfo)}>What does that mean?</button>
-</div>
+	<div class="container">
+		<button on:click={() => (showInfo = !showInfo)}>What does that mean?</button>
+	</div>
 	{#if showInfo}
 		<img src="/static/tiers.png" alt="Silhouette Tiers" style="max-width: 600px; margin: 0 auto;" />
+    <div class="container mb">
+		<button on:click={() => (showInfo = !showInfo)}>Got it</button>
+  </div>
 	{/if}
 
 	<div class="container">Send {$amount} {$unit} ($20) to:</div>

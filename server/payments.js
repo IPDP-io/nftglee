@@ -2,6 +2,39 @@ const { binance, coinos, hasura } = require('./api');
 const { mint } = require('./wallet');
 const ticketPrice = 20;
 
+const getTicket = async () => {
+	let query = `query {
+    nfts_aggregate {
+      aggregate {
+        max {
+          ticket
+        } 
+      } 
+    }
+  }`;
+
+	let {
+		data: {
+			nfts_aggregate: {
+				aggregate: {
+					max: { ticket }
+				}
+			}
+		}
+	} = await hasura.post({ query }).json();
+
+	return ticket;
+};
+
+app.get('/ticket', async (req, res) => {
+	try {
+		res.send(await getTicket());
+	} catch (e) {
+		console.log(e);
+		res.send(false);
+	}
+});
+
 app.post('/boom', async (req, res) => {
 	let { amount: value, confirmed, text } = req.body;
 
@@ -9,20 +42,52 @@ app.post('/boom', async (req, res) => {
 
 	let { amount, address, pubkey } = invoices[text];
 
+	let ticket = await getTicket();
+  console.log("ticket", ticket);
+
 	if (confirmed && value >= amount) {
+		let domain = 'silhouettesthemovie.com';
 		let res = await coinos
 			.url('/assets')
 			.post({
 				address,
 				pubkey,
-				domain: 'silhouettesthemovie.com',
-				filename: 'abc',
-				name: 'Ticket stub',
+				domain,
+				filename: 'QmSmQduTPXamJBQLTxVs2nZAkVYdRWk7K1gqtQyqsBmNo8',
+				name: 'Silhouettes Ticket Stub',
 				asset_amount: 1,
 				precision: 0,
-				ticker: 'TCKT'
+				ticker: 'T' + ticket
 			})
 			.json();
+
+		if (ticket < 1000) {
+			await coinos.url('/assets').post({
+				address,
+				pubkey,
+				domain,
+				filename: 'QmSmQduTPXamJBQLTxVs2nZAkVYdRWk7K1gqtQyqsBmNo8',
+				name: 'Silhouettes Poster',
+				asset_amount: 1,
+				precision: 0,
+				ticker: 'P' + ticket
+			});
+		}
+
+		if (ticket < 100) {
+			/* TBD
+			await coinos.url('/assets').post({
+				address,
+				pubkey,
+				domain,
+				filename: 'QmSmQduTPXamJBQLTxVs2nZAkVYdRWk7K1gqtQyqsBmNo8',
+				name: 'Silhouettes Poster',
+				asset_amount: 1,
+				precision: 0,
+				ticker: 'P' + ticket
+			});
+      */
+		}
 	}
 	subscribers[text].send(JSON.stringify({ type: 'payment', value }));
 

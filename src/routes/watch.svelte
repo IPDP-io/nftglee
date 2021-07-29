@@ -1,8 +1,14 @@
 <script>
-	import { onMount } from 'svelte';
+  import { onMount } from "svelte";
+  import * as animateScroll from "svelte-scrollto";
 
-	let loadVideo = () => {
+	let y;
+	let scroll;
+
+	let loadVideo = async () => {
 		let { p2pml } = window;
+
+    animateScroll.scrollToTop({ duration: 2000 })
 
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine();
@@ -10,9 +16,13 @@
 			const movieBanner = document.getElementById('movie-banner');
 			const soundToggle = document.getElementById('sound-toggle');
 			const videoOverlay = document.getElementById('video-overlay');
-			soundToggle.remove();
+
+			if (soundToggle) soundToggle.remove();
+			else return;
+
 			videoOverlay.remove();
 			intro.remove();
+
 			const videoPlayer = document.createElement('div');
 			videoPlayer.id = 'player';
 			videoPlayer.style.width = '100%';
@@ -35,6 +45,9 @@
 			});
 
 			p2pml.hlsjs.initClapprPlayer(player);
+
+			console.log('scrolling');
+			await tick();
 		} else {
 			setTimeout(loadVideo, 100);
 		}
@@ -42,6 +55,8 @@
 
 	onMount(loadVideo);
 </script>
+
+<svelte:window bind:scrollY={y} />
 
 <svelte:head>
 	<script

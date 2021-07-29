@@ -1,4 +1,5 @@
 <script>
+  import { go } from "$lib/utils";
 	let to;
 	let send;
 	let asset;
@@ -9,41 +10,24 @@
 	let shortDate = new Date().toLocaleString('en-US', shortDateOptions);
 </script>
 
-<div class="container movie-ticket">
-	<div class="container ticket">
-		<div class="container column ticket-left grow">
-			<div class="container ticket-details">
-				<div class="ticket-prop">Title:</div>
-				<div class="ticket-value grow">
-					{movieTitle}
-				</div>
-				<div class="ticket-type ticket-value">Early bird (57/100)</div>
-			</div>
-			{#if asset}
-				<div>
-					Asset ID:
-					<a href={`http://localhost:5005/asset/${asset}`}>{asset.substr(0, 20)}....</a>
-				</div>
-			{/if}
-			<div class="container">
-				<div class="ticket-prop">Date:</div>
-				<div class="ticket-value grow">
-					{date}
-				</div>
-			</div>
+<div class="container">
+	{#if asset}
+		<div>
+			Asset ID:
+			<a href={`http://localhost:5005/asset/${asset}`}>{asset.substr(0, 20)}....</a>
 		</div>
-		<div class="container column ticket-stub">
-			<div>
-				{movieTitle}
-			</div>
-			<div class="ticket-value">
-				{shortDate}
-			</div>
+	{/if}
+	<div class="container">
+		Date:
+		<div class="ticket-value grow">
+			{date}
 		</div>
-		<div id="ticket-overlay" class="overlay">Admit</div>
-		<div id="stub-overlay" class="overlay">1</div>
 	</div>
 </div>
+
+	<div class="container">
+    <button on:click={() => go('/watch')}>Watch Now</button>
+	</div>
 
 <div class="container column goodie">
 	<h2 class="nft-label">NFT Goodies</h2>
@@ -65,13 +49,13 @@
 
 <div id="withdraw" class="container column">
 	<h2 class="nft-label">Withdraw to Liquid Address</h2>
-	<h3 class="nft-item">You can use any Liquid wallet such as
+	<h3 class="nft-item">
+		You can use any Liquid wallet such as
 		<a href="https://blockstream.com/green/" class="blockstream-green" target="_blank">
 			Blockstream Green
-		</a> or 
-		<a href="https://blockstream.com/aqua/" class="blockstream-aqua" target="_blank">
-			Aqua	
 		</a>
+		or
+		<a href="https://blockstream.com/aqua/" class="blockstream-aqua" target="_blank"> Aqua </a>
 	</h3>
 	<form on:submit|preventDefault>
 		<div id="withdraw-form" class="container">
@@ -88,7 +72,8 @@
 </div>
 
 <style>
-	.movie-ticket, .goodie {
+	.movie-ticket,
+	.goodie {
 		padding: 1.5em 0;
 	}
 	.ticket {
@@ -187,9 +172,10 @@
 		margin-bottom: 1em;
 	}
 	.nft-item {
-		margin-bottom: .25em;
+		margin-bottom: 0.25em;
 	}
-	.nft-label, .nft-item {
+	.nft-label,
+	.nft-item {
 		text-align: center;
 	}
 	.goodie {
@@ -239,7 +225,8 @@
 		.ticket {
 			font-size: 2vw;
 		}
-		.ticket, .goodie-video {
+		.ticket,
+		.goodie-video {
 			width: 60%;
 		}
 		#ticket-overlay {
@@ -250,7 +237,8 @@
 		}
 	}
 	@media screen and (max-width: 481px) {
-		.ticket, .goodie-video {
+		.ticket,
+		.goodie-video {
 			width: 75%;
 		}
 		#ticket-overlay {
