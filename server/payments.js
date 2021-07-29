@@ -1,4 +1,4 @@
-const { binance, coinos } = require('./api');
+const { binance, coinos, hasura } = require('./api');
 const { mint } = require('./wallet');
 const ticketPrice = 20;
 

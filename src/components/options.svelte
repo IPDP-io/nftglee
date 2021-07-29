@@ -1,11 +1,13 @@
 <script>
 	import { api } from '$lib/api';
-	import { address as invoiceAddress, amount, mnemonic, unit, ws } from '$lib/stores';
+	import { address as invoiceAddress, amount, loading, mnemonic, unit, ws } from '$lib/stores';
 	import { go } from '$lib/utils';
 	import { p2wpkh } from '$lib/wallet';
 
 	let getInvoice = async (u) => {
+    $loading = true;
 		$unit = u;
+
 		let {
 			address,
 			redeem: { pubkey }
@@ -22,6 +24,7 @@
 
 		$ws.send(JSON.stringify({ type: 'subscribe', value: invoice.address }));
 
+    $loading = false;
 		go('/invoice');
 	};
 </script>
