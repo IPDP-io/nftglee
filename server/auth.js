@@ -74,11 +74,11 @@ app.post('/activate', async (req, res) => {
 
 	let { active, ticket } = response.data.tickets[0];
 
-  if (!active) {
-    if (code.length >= 6 && ticket.startsWith(code))
-      response = await hbp.url('/auth/activate').query({ ticket }).get().res();
-    else return res.code(500).send("Invalid code");
-  }
+	if (!active) {
+		if (code.length >= 6 && ticket.startsWith(code))
+			response = await hbp.url('/auth/activate').query({ ticket }).get().res();
+		else return res.code(500).send('Invalid code');
+	}
 
 	res.send(true);
 });

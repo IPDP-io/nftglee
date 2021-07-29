@@ -6,6 +6,7 @@ import { err } from "$lib/utils";
 export const activate = async (code, email) => {
 	try {
 		err(undefined);
+
 		await api
 			.url('/activate')
 			.post({ code, email })

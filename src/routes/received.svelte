@@ -1,7 +1,6 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { mnemonic, received, unit } from '$lib/stores';
-	import { btc } from '$lib/utils';
+	import { btc, go } from '$lib/utils';
 
 	let words;
 </script>
@@ -36,6 +35,6 @@
 	</div>
 
 	<div class="container mb">
-		<button on:click={() => goto('/verify', { noscroll: true })}>I wrote it down</button>
+		<button on:click={() => go('/verify')}>I wrote it down</button>
 	</div>
 {/if}

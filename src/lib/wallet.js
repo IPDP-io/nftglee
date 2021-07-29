@@ -90,8 +90,6 @@ export const createWallet = () => {
 
 export const keypair = () => {
 	try {
-    console.log(
-      "bang", get(mnemonic));
 		let seed = mnemonicToSeedSync(get(mnemonic));
 		let key = fromSeed(seed, network).derivePath(`m/84'/0'/0'/0/0`);
 		let { publicKey: pubkey, privateKey: privkey } = key;
