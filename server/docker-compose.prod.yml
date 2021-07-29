@@ -1,0 +1,19 @@
+version: '3.6'
+services:
+  coming:
+    container_name: coming
+    image: asoltys/silhouettes
+    restart: on-failure
+    ports:
+      - '3001:3000'
+    volumes:
+      - /home/asoltys/silhouettes:/silhouettes
+    command: "node coming"
+  ui:
+    container_name: ui
+    image: asoltys/silhouettes
+    restart: on-failure
+    ports:
+      - '3000:3000'
+    volumes:
+      - /home/asoltys/silhouettes:/silhouettes
