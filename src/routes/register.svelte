@@ -17,13 +17,17 @@
 		loading = false;
 	};
 
-  $: if (code && code.length >= 6) activate(code, $session.user.email)
+	$: if (code && code.length >= 6) activate(code, $session.user.email);
 </script>
 
 {#if $session.user}
-	<h2 class="container">Registered!</h2>
+	<h2 class="container mb">Registered!</h2>
 	<div class="container mb">Check your email for an activation code</div>
-	<form on:submit|preventDefault={() => activate(code, $session.user.email)}>
+<div class="container">
+	<form
+		on:submit|preventDefault={() => activate(code, $session.user.email)}
+		class="small-form white-form"
+	>
 		<div class="form-field">
 			<div class="container" style="max-width: 200px; margin: 0 auto">
 				<input id="code" bind:value={code} autocapitalize="off" class="grow" use:focus />
@@ -33,6 +37,8 @@
 			<button>Submit</button>
 		</div>
 	</form>
+</div>
+
 {:else if loading}
 	<div id="loading" class="container column">
 		<div class="container">
