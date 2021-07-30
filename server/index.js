@@ -1,5 +1,5 @@
+const { userApi } = require('./api');
 const path = require('path');
-const jwt = require('jsonwebtoken');
 const zmq = require('zeromq');
 const WebSocket = require('ws');
 
@@ -21,6 +21,22 @@ app = require('fastify')({
 require('./auth');
 require('./mail');
 require('./payments');
+
+app.get('/user', auth, async function (request, reply) {
+	let query = `query {
+    currentuser {
+      address,
+      pubkey,
+      mnemonic,
+      display_name
+    }
+  }`;
+
+	let result = await userApi(request.headers).post({ query }).json();
+	let user = result.data.currentuser[0];
+	user.email = user.display_name;
+	reply.send(user);
+});
 
 app.get('/file/:name', function (request, reply) {
 	const { name } = request.params;

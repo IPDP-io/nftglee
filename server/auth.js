@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const { hasura, hbp } = require('./api');
 const { HASURA_JWT } = process.env;
 
@@ -9,6 +10,7 @@ auth = {
 		if (!token) fail();
 		let { key } = JSON.parse(HASURA_JWT);
 		try {
+      console.log(req.headers);
 			req.token = jwt.verify(token, key);
 			done();
 		} catch (e) {

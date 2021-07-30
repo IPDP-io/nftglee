@@ -5,7 +5,7 @@
 	import { page, session } from '$app/stores';
 	import { player } from '$lib/stores';
 
-  onMount(() => requireLogin($session.user && $session.user.refresh_token));
+  onMount(requireLogin);
 
 	let to;
 	let send;

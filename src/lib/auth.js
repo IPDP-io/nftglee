@@ -5,34 +5,41 @@ import { session } from '$app/stores';
 import { goto } from '$app/navigation';
 import { err } from '$lib/utils';
 import { get } from 'svelte/store';
-import { token } from '$lib/stores';
+import { initialized, token } from '$lib/stores';
+import { p2wpkh } from '$lib/wallet';
 
 export const expired = (t) => !t || decode(t).exp * 1000 < Date.now();
 
-export const refreshToken = async (refresh_token) => {
-  if (!refresh_token) return;
-
-	let { jwt_token } = await auth
-		.url('/token/refresh')
-		.query({ refresh_token })
-		.get()
-		.json()
-
-  return jwt_token;
+export const getToken = async () => {
+	let refresh_token = window.localStorage.getItem('refresh');
+	if (!refresh_token) return;
+  console.log("rt", refresh_token);
+	let result = await auth.url('/token/refresh').query({ refresh_token }).get().json();
+	let jwt_token;
+	console.log('WHOA', result);
+	({ jwt_token, refresh_token } = result);
+	window.localStorage.setItem('refresh', refresh_token);
+	token.set(jwt_token);
+	return jwt_token;
 };
 
-export const requireLogin = async (refresh_token) => {
+export const requireLogin = async () => {
+  if (!get(initialized)) setTimeout(requireLogin, 500);
+
 	await tick();
 
 	let $token = get(token);
 
+  console.log("require login", $token);
 	if (expired($token)) {
 		try {
-			$token = await refreshToken(refresh_token);
+			$token = await getToken();
 		} catch (e) {
-			console.log(e);
+			console.log("BOOM", e);
 		}
 	}
+
+  console.log("checking", $token, expired($token));
 
 	if (expired($token)) {
 		goto('/login');
@@ -65,9 +72,10 @@ export const login = async (email, password) => {
 			.badRequest(err)
 			.json();
 
+		window.localStorage.setItem('refresh', refresh_token);
+
 		let user = {
 			email,
-			refresh_token,
 			token
 		};
 
@@ -84,7 +92,7 @@ export const logout = async (refresh_token) => {
 	try {
 		await auth.url('/logout').query({ refresh_token }).post().res();
 		session.set('user', undefined);
-    goto('/');
+		goto('/');
 	} catch (e) {
 		console.log(e);
 	}
@@ -93,16 +101,27 @@ export const logout = async (refresh_token) => {
 export const register = async (email, password, mnemonic) => {
 	try {
 		err(undefined);
-		let { jwt_token: token } = await api
+
+		let {
+			address,
+			redeem: { pubkey }
+		} = p2wpkh();
+		pubkey = pubkey.toString('hex');
+
+		let { jwt_token: token, refresh_token } = await api
 			.url('/register')
 			.post({
 				email,
 				password,
-				mnemonic
+				mnemonic,
+				pubkey,
+				address
 			})
 			.unauthorized(err)
 			.badRequest(err)
 			.json();
+
+		window.localStorage.setItem('refresh', refresh_token);
 
 		session.set({
 			user: {

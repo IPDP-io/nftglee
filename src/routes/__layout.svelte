@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page, session } from '$app/stores';
-	import { address, error, mnemonic, player, ws } from '$lib/stores';
+	import { address, error, mnemonic, initialized, player, token, ws } from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
@@ -11,10 +11,12 @@
 	import { err, go } from '$lib/utils';
 	import socket from '$lib/socket';
 	import { createWallet, setup } from '$lib/wallet';
+	import { api } from '$lib/api';
+	import { getToken } from '$lib/auth';
 
 	import '../app.css';
 
-	let start = async () => {
+	let trailer = () => {
 		let { p2pml } = window;
 
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
@@ -47,12 +49,23 @@
 		}
 	};
 
+	token.subscribe(async (t) => {
+		console.log('token changed', t);
+    if (t && !$session.user) {
+      console.log('getting user');
+			$session.user = await api.auth(`Bearer ${t}`).url('/user').get().json();
+      console.log($session.user);
+    } 
+	});
+
 	const year = new Date().getFullYear();
 	onMount(async () => {
-		await start();
-    socket();
+		await getToken();
+		trailer();
+		socket();
 		setup();
 		if (!$mnemonic) await createWallet();
+    $initialized = true;
 	});
 
 	let muted = true;
