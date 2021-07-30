@@ -1,3 +1,4 @@
+import decode from 'jwt-decode';
 import { tick } from 'svelte';
 import { api, auth } from '$lib/api';
 import { session } from '$app/stores';
@@ -8,30 +9,30 @@ import { token } from '$lib/stores';
 
 export const expired = (t) => !t || decode(t).exp * 1000 < Date.now();
 
-export const refreshToken = () => {
-	return auth
+export const refreshToken = async (refresh_token) => {
+  if (!refresh_token) return;
+
+	let { jwt_token } = await auth
 		.url('/token/refresh')
+		.query({ refresh_token })
 		.get()
-		.json(({ jwt_token }) => {
-			token.set(jwt_token);
-			window.sessionStorage.setItem('token', jwt_token);
-		});
+		.json()
+
+  return jwt_token;
 };
 
-export const requireLogin = async (page) => {
+export const requireLogin = async (refresh_token) => {
 	await tick();
 
-	if (page && page.path === '/login') return;
 	let $token = get(token);
 
 	if (expired($token)) {
 		try {
-			await refreshToken();
-			await tick();
-		} catch (e) {}
+			$token = await refreshToken(refresh_token);
+		} catch (e) {
+			console.log(e);
+		}
 	}
-
-	$token = get(token);
 
 	if (expired($token)) {
 		goto('/login');
@@ -54,7 +55,7 @@ export const activate = async (code, email) => {
 export const login = async (email, password) => {
 	try {
 		err(undefined);
-		let { jwt_token: token } = await api
+		let { jwt_token: token, refresh_token } = await api
 			.url('/login')
 			.post({
 				email,
@@ -66,16 +67,15 @@ export const login = async (email, password) => {
 
 		let user = {
 			email,
+			refresh_token,
 			token
 		};
 
 		session.set({ user });
 
-    console.log("returning user", user);
-
 		return user;
 	} catch (e) {
-    console.log(e, e.stack);
+		console.log(e, e.stack);
 		err(e.message);
 	}
 };
@@ -84,6 +84,7 @@ export const logout = async (refresh_token) => {
 	try {
 		await auth.url('/logout').query({ refresh_token }).post().res();
 		session.set('user', undefined);
+    goto('/');
 	} catch (e) {
 		console.log(e);
 	}

@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page, session } from '$app/stores';
-	import { address, error, mnemonic, ws } from '$lib/stores';
+	import { address, error, mnemonic, player, ws } from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
@@ -14,7 +14,6 @@
 
 	import '../app.css';
 
-	let player;
 	let start = async () => {
 		let { p2pml } = window;
 
@@ -23,7 +22,7 @@
 			const intro = document.getElementById('intro-video');
 			const movieBanner = document.getElementById('movie-banner');
 
-			player = new Clappr.Player({
+			$player = new Clappr.Player({
 				parentId: '#player',
 				source: '/trailer/playlist.m3u8',
 				// source: '/static/silhouettes.mp4',
@@ -42,7 +41,7 @@
 				}
 			});
 
-			p2pml.hlsjs.initClapprPlayer(player);
+			p2pml.hlsjs.initClapprPlayer($player);
 		} else {
 			setTimeout(loadVideo, 100);
 		}
@@ -99,7 +98,7 @@
 
 			{#if $session.user}
 				<div class="container">
-					{$session.user.email}
+					Signed in as {$session.user.email}
 				</div>
 			{/if}
 

@@ -1,9 +1,11 @@
 <script>
-  import * as animateScroll from "svelte-scrollto";
-  import { requireLogin } from "$lib/auth";
-  import { page } from "$app/stores";
+  import { onMount } from "svelte";
+	import * as animateScroll from 'svelte-scrollto';
+	import { logout, requireLogin } from '$lib/auth';
+	import { page, session } from '$app/stores';
+	import { player } from '$lib/stores';
 
-  // page.subscribe(requireLogin);
+  onMount(() => requireLogin($session.user && $session.user.refresh_token));
 
 	let to;
 	let send;
@@ -12,11 +14,11 @@
 	let start = async () => {
 		let { p2pml } = window;
 
-    animateScroll.scrollToTop({ duration: 2000 })
+		animateScroll.scrollToTop({ duration: 2000 });
 
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine();
-			const intro = document.getElementById('intro-video');
+			const videoPlayer = document.getElementById('player');
 			const movieBanner = document.getElementById('movie-banner');
 			const soundToggle = document.getElementById('sound-toggle');
 			const videoOverlay = document.getElementById('video-overlay');
@@ -25,17 +27,14 @@
 			else return;
 
 			videoOverlay.remove();
-			intro.remove();
 
-			const videoPlayer = document.createElement('div');
-			videoPlayer.id = 'player';
 			videoPlayer.style.width = '100%';
 			videoPlayer.style.height = '100vh';
-			movieBanner.appendChild(videoPlayer);
-			var player = new Clappr.Player({
+
+			$player.destroy();
+			$player = new Clappr.Player({
 				parentId: '#player',
 				source: '/file/playlist.m3u8',
-        // source: '/static/silhouettes.mp4',
 				mute: false,
 				autoPlay: false,
 				width: '100%',
@@ -48,24 +47,19 @@
 				}
 			});
 
-			p2pml.hlsjs.initClapprPlayer(player);
+			p2pml.hlsjs.initClapprPlayer($player);
 		} else {
 			setTimeout(loadVideo, 100);
 		}
 	};
 </script>
 
-<svelte:head>
-	<script
-		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-core@latest/build/p2p-media-loader-core.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@latest/build/p2p-media-loader-hlsjs.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/clappr@latest"></script>
-</svelte:head>
+<svelte:head />
 
-	<div class="container">
-    <button on:click={start}>Watch Now</button>
-	</div>
+<div class="container">
+	<button on:click={start}>Watch Now</button>
+	<button on:click={logout}>Logout</button>
+</div>
 
 <div class="container column goodie">
 	<h2 class="nft-label">NFT Goodies</h2>
