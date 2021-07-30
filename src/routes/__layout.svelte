@@ -16,6 +16,7 @@
 
 	import '../app.css';
 
+
 	let trailer = () => {
 		let { p2pml } = window;
 
@@ -59,14 +60,40 @@
 	});
 
 	const year = new Date().getFullYear();
+	
 	onMount(async () => {
+		setupScrollFade();
 		await getToken();
 		trailer();
 		socket();
 		setup();
 		if (!$mnemonic) await createWallet();
-    $initialized = true;
+    	$initialized = true;
 	});
+
+	function setupScrollFade() {
+		const fadeElement = document.getElementById('movie-banner');
+		let scrollFadeHeight = fadeElement.offsetHeight;
+		console.log(scrollFadeHeight);
+		const resizeObserver = new ResizeObserver(entries => {
+			for ( let entry of entries) {
+				scrollFadeHeight = entry.contentRect.height;
+			}
+		});
+		resizeObserver.observe(fadeElement);
+		window.addEventListener('scroll', () => handleScrollFade(scrollFadeHeight, fadeElement));
+	}
+
+	function handleScrollFade(scrollFadeHeight, fadeElement) {
+		let opacity = 1;
+		const currentPosition = window.pageYOffset;
+		if (currentPosition <= scrollFadeHeight) {
+			opacity = 1 - currentPosition / scrollFadeHeight;
+		} else {
+			opacity = 0;
+		}
+		fadeElement.style.opacity = opacity;
+	}
 
 	let muted = true;
 	let toggle = () => {
