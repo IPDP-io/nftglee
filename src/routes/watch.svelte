@@ -1,11 +1,11 @@
 <script>
   import { onMount } from "svelte";
-	import * as animateScroll from 'svelte-scrollto';
+	// import * as animateScroll from 'svelte-scrollto';
 	import { logout, requireLogin } from '$lib/auth';
 	import { page, session } from '$app/stores';
 	import { player } from '$lib/stores';
 
-  onMount(() => requireLogin($session.user && $session.user.refresh_token));
+//   onMount(() => requireLogin($session.user && $session.user.refresh_token));
 
 	let to;
 	let send;
@@ -14,7 +14,7 @@
 	let start = async () => {
 		let { p2pml } = window;
 
-		animateScroll.scrollToTop({ duration: 2000 });
+		// animateScroll.scrollToTop({ duration: 2000 });
 
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine();
@@ -31,10 +31,14 @@
 			videoPlayer.style.width = '100%';
 			videoPlayer.style.height = '100vh';
 
+			const playerDiv = document.getElementById('player');
+			playerDiv.style.height = '100vh';
+
 			$player.destroy();
 			$player = new Clappr.Player({
 				parentId: '#player',
-				source: '/file/playlist.m3u8',
+				// source: '/file/playlist.m3u8',
+				source: '/static/girl.mp4',
 				mute: false,
 				autoPlay: false,
 				width: '100%',
@@ -46,6 +50,10 @@
 					}
 				}
 			});
+
+			const dataContainer = playerDiv.querySelector('[data-container]');
+			console.log(playerDiv, dataContainer);
+			dataContainer.style.height = '100vh';
 
 			p2pml.hlsjs.initClapprPlayer($player);
 		} else {
