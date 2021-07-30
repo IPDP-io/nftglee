@@ -3,17 +3,17 @@
 	import { address as invoiceAddress, amount, loading, mnemonic, unit, ws } from '$lib/stores';
 	import { go } from '$lib/utils';
 	import { p2wpkh } from '$lib/wallet';
-  import { send } from "$lib/socket";
+	import { send } from '$lib/socket';
 
 	let getInvoice = async (u) => {
-    $loading = true;
+		$loading = true;
 		$unit = u;
 
 		let {
 			address,
 			redeem: { pubkey }
 		} = p2wpkh();
-    pubkey = pubkey.toString('hex');
+		pubkey = pubkey.toString('hex');
 
 		let invoice = await api
 			.url('/' + u)
@@ -23,10 +23,9 @@
 		$invoiceAddress = invoice.address;
 		$amount = invoice.amount;
 
-    console.log("sending subscribe", invoice.address, $ws.readyState);
 		send('subscribe', invoice.address);
 
-    $loading = false;
+		$loading = false;
 		go('/invoice');
 	};
 </script>

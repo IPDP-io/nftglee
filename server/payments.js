@@ -2,16 +2,6 @@ const { binance, coinos, hasura } = require('./api');
 const { mint } = require('./wallet');
 const ticketPrice = 20;
 
-const getUser = (address) => {
-	let query = `query {
-    users(where: { address: { _eq: "${address}" }}) {
-      id
-    }
-  }`;
-
-	return hasura.post({ query }).json();
-};
-
 const getTicket = async () => {
 	let query = `query {
     nfts_aggregate {
