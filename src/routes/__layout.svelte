@@ -34,7 +34,7 @@
 				chromeless: true,
 				//controls: false,
 				width: '100%',
-				height: 'auto',
+				height: '100%',
 				playback: {
 					hlsjsConfig: {
 						liveSyncDurationCount: 7,
@@ -92,13 +92,14 @@
 				<p>Scroll to begin</p>
 				<Down />
 			</div>
-			<div id="player" />
-			<!-- svelte-ignore a11y-media-has-caption -->
-			<!--
-			<video id="intro-video" autoplay muted>
-        <source src="/trailer/playlist.m3u8" type="" />
-			</video>
-      -->
+			<div id="player">
+				<!-- svelte-ignore a11y-media-has-caption -->
+				<!--
+				<video id="intro-video" autoplay muted>
+					<source src="/trailer/playlist.m3u8" type="" />
+				</video> 
+				-->
+			</div>
 		</div>
 		<div id="watch-silhouettes" class="container column">
 			<div class="container page-block">
@@ -162,21 +163,6 @@
 		fill: white;
 	}
 
-	/* Fix the player container to take up 100% width and to calculate its height based on its children. */
-	[data-player] {
-		position: relative;
-		width: 100%;
-		height: auto;
-		margin: 0;
-	}
-
-	/* Fix the video container to take up 100% width and to calculate its height based on its children. */
-	[data-player] .container[data-container] {
-		width: 100%;
-		height: auto;
-		position: relative;
-	}
-
 	/* Fix the media-control element to take up the entire size of the player. */
 	[data-player] .media-control[data-media-control] {
 		top: 0;
@@ -185,16 +171,14 @@
 		left: 0;
 	}
 
-	/* Fix the video element to take up 100% width and to calculate its height based on its natural aspect ratio. */
-	[data-player] video {
+	#player {
+		width: 100vw;
+	}
+	[data-player] video, [data-player] .container[data-container] {
 		position: relative;
 		display: block;
 		width: 100%;
 		height: auto;
-	}
-
-	#player {
-		width: 100%;
 	}
 	#sound-toggle,
 	#video-overlay {

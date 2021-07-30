@@ -31,10 +31,14 @@
 			videoPlayer.style.width = '100%';
 			videoPlayer.style.height = '100vh';
 
+			const playerDiv = document.getElementById('player');
+			playerDiv.style.height = '100vh';
+
 			$player.destroy();
 			$player = new Clappr.Player({
 				parentId: '#player',
-				source: '/file/playlist.m3u8',
+				// source: '/file/playlist.m3u8',
+				source: '/static/girl.mp4',
 				mute: false,
 				autoPlay: false,
 				width: '100%',
@@ -46,6 +50,10 @@
 					}
 				}
 			});
+
+			const dataContainer = playerDiv.querySelector('[data-container]');
+			console.log(playerDiv, dataContainer);
+			dataContainer.style.height = '100vh';
 
 			p2pml.hlsjs.initClapprPlayer($player);
 		} else {

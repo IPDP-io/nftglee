@@ -28,7 +28,7 @@
 		<div>{error}</div>
 	{/if}
 
-	<form on:submit|preventDefault={submit} autocomplete="off">
+	<form on:submit|preventDefault={submit} class="small-form white-form" autocomplete="off">
 		<Fields bind:email bind:password />
 		<div class="container form-submit-controls">
 			<div class="container column">
@@ -37,28 +37,3 @@
 		</div>
 	</form>
 </div>
-
-<style>
-	button[type='submit']:hover {
-		background-color: #ffffffaa;
-		color: var(--main-blue);
-	}
-	form {
-		width: 33%;
-	}
-	@media screen and (max-width: 1025px) {
-		form {
-			width: 50%;
-		}
-	}
-	@media screen and (max-width: 769px) {
-		form {
-			width: 66%;
-		}
-	}
-	@media screen and (max-width: 480px) {
-		form {
-			width: 100%;
-		}
-	}
-</style>
