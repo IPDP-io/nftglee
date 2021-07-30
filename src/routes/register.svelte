@@ -26,7 +26,7 @@
 	<form on:submit|preventDefault={() => activate(code, $session.user.email)}>
 		<div class="form-field">
 			<div class="container" style="max-width: 200px; margin: 0 auto">
-				<input id="code" bind:value={code} autofocus autocapitalize="off" class="grow" use:focus />
+				<input id="code" bind:value={code} autocapitalize="off" class="grow" use:focus />
 			</div>
 		</div>
 		<div class="container">

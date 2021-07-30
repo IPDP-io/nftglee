@@ -19,7 +19,7 @@
 <form on:submit|preventDefault={verify}>
 	<div class="form-field">
 		<div class="container" style="max-width: 200px; margin: 0 auto">
-			<input id="word" bind:value={word} autofocus autocapitalize="off" class="grow" use:focus />
+			<input id="word" bind:value={word} autocapitalize="off" class="grow" use:focus />
 		</div>
 	</div>
 
