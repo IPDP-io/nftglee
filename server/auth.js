@@ -20,6 +20,8 @@ auth = {
 
 const login = async (req, res) => {
 	let { email, password } = req.body;
+
+  console.log(email, password);
 	let query = `query  users($email: String!) {
     users(where: {display_name: {_eq: $email}}, limit: 1) {
       display_name
@@ -28,12 +30,14 @@ const login = async (req, res) => {
 
 	try {
 		let user;
-		let { data } = await hasura.post({ query, variables: { email } }).json();
+		let oh = await hasura.post({ query, variables: { email } }).json();
+    let { data } = oh;
 
 		if (data && data.users && data.users.length) {
 			user = data.users[0];
 			email = data.users[0].display_name;
 		} else {
+      console.log(oh);
 			throw new Error();
 		}
 
@@ -41,6 +45,7 @@ const login = async (req, res) => {
 		Array.from(response.headers.entries()).forEach(([k, v]) => res.header(k, v));
 
 		let json = await response.json();
+    console.log(json, res.headers);
 		return res.send(json);
 	} catch (e) {
 		console.log(e);

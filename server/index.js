@@ -8,7 +8,6 @@ const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
 const fs = require('fs');
 
-
 const network = networks.litereg;
 
 invoices = {};
@@ -19,8 +18,9 @@ app = require('fastify')({
 	logger: true
 });
 
-require("./auth");
-require("./payments");
+require('./auth');
+require('./mail');
+require('./payments');
 
 app.get('/file/:name', function (request, reply) {
 	const { name } = request.params;
@@ -50,7 +50,7 @@ async function run() {
 				let { type, value } = JSON.parse(message);
 
 				if (type === 'subscribe') {
-          console.log("subscribing", value);
+					console.log('subscribing', value);
 					subscribers[value] = ws;
 				}
 

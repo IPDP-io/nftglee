@@ -14,18 +14,53 @@
 
 	import '../app.css';
 
+	let player;
+	let start = async () => {
+		let { p2pml } = window;
+
+		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
+			var engine = new p2pml.hlsjs.Engine();
+			const intro = document.getElementById('intro-video');
+			const movieBanner = document.getElementById('movie-banner');
+
+			player = new Clappr.Player({
+				parentId: '#player',
+				source: '/trailer/playlist.m3u8',
+				// source: '/static/silhouettes.mp4',
+				autoPlay: true,
+				mute: true,
+				hideMediaControl: true,
+				chromeless: true,
+				//controls: false,
+				width: '100%',
+				height: 'auto',
+				playback: {
+					hlsjsConfig: {
+						liveSyncDurationCount: 7,
+						loader: engine.createLoaderClass()
+					}
+				}
+			});
+
+			p2pml.hlsjs.initClapprPlayer(player);
+		} else {
+			setTimeout(loadVideo, 100);
+		}
+	};
+
 	const year = new Date().getFullYear();
 	onMount(async () => {
+		await start();
 		$ws = socket();
 		setup();
-    if (!$mnemonic) await createWallet();
-		const movieBanner = document.getElementById('movie-banner');
-		const introVideo = document.getElementById('intro-video');
-		movieBanner.addEventListener('click', () => {
-			introVideo.muted = !introVideo.muted;
-			document.querySelectorAll('.sound-icon').forEach((icon) => icon.classList.toggle('hidden'));
-		});
+		if (!$mnemonic) await createWallet();
 	});
+
+	let muted = true;
+	let toggle = () => {
+		muted = !muted;
+		muted ? player.mute() : player.unmute();
+	};
 
 	$: clear($page);
 	let clear = () => err(undefined);
@@ -33,19 +68,25 @@
 
 <main>
 	<section>
-		<div id="movie-banner" class="container">
+		<div id="movie-banner" class="container" on:click={toggle}>
 			<div id="sound-toggle">
-				<VolumeIconUp />
-				<VolumeIconMute />
+				{#if muted}
+					<VolumeIconMute />
+				{:else}
+					<VolumeIconUp />
+				{/if}
 			</div>
 			<div id="video-overlay">
 				<p>Scroll to begin</p>
 				<Down />
 			</div>
+			<div id="player" />
 			<!-- svelte-ignore a11y-media-has-caption -->
+			<!--
 			<video id="intro-video" autoplay muted>
-				<source src="/silhouettes.mp4" type="video/mp4" />
+        <source src="/trailer/playlist.m3u8" type="" />
 			</video>
+      -->
 		</div>
 		<div id="watch-silhouettes" class="container column">
 			<div class="container page-block">
@@ -104,5 +145,47 @@
 	}
 	input:hover {
 		border: 1px solid var(--main-blue);
+	}
+	.white {
+		fill: white;
+	}
+
+	/* Fix the player container to take up 100% width and to calculate its height based on its children. */
+	[data-player] {
+		position: relative;
+		width: 100%;
+		height: auto;
+		margin: 0;
+	}
+
+	/* Fix the video container to take up 100% width and to calculate its height based on its children. */
+	[data-player] .container[data-container] {
+		width: 100%;
+		height: auto;
+		position: relative;
+	}
+
+	/* Fix the media-control element to take up the entire size of the player. */
+	[data-player] .media-control[data-media-control] {
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+	}
+
+	/* Fix the video element to take up 100% width and to calculate its height based on its natural aspect ratio. */
+	[data-player] video {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	#player {
+		width: 100%;
+	}
+	#sound-toggle,
+	#video-overlay {
+		z-index: 9999;
 	}
 </style>

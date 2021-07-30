@@ -1,27 +1,38 @@
 <script>
 	import wretch from 'wretch';
-	let done, first, last, email, message;
+	import PendingIcon from '$icons/pending.svelte';
+
+	let done, first, last, email, message, subject, loading;
 
 	let submit = async () => {
+    loading = true;
 		await wretch()
 			.url('/api/contact')
 			.post({
 				first,
 				last,
 				email,
+				subject,
 				message
 			})
 			.json()
 			.catch(console.log);
 
+    loading = false;
 		done = true;
 	};
 </script>
 
 <form on:submit|preventDefault={submit}>
 	{#if done}
-    <h1>Thank you! </h1>
-    <p>We'll be in touch soon</p>
+		<h1>Thank you!</h1>
+		<p>We'll be in touch soon</p>
+	{:else if loading}
+		<div id="loading" class="container column">
+			<div class="container">
+				<PendingIcon size="medium" white={true} />
+			</div>
+		</div>
 	{:else}
 		<div class="form-field">
 			<div>
@@ -35,7 +46,7 @@
 		</div>
 		<div class="form-field">
 			<div>
-				<input id="suject" type="text" placeholder="Subject" bind:value={email} />
+				<input id="subject" type="text" placeholder="Subject" bind:value={subject} />
 			</div>
 		</div>
 		<div class="form-field">
@@ -45,16 +56,15 @@
 		</div>
 		<div class="form-field">
 			<div>
-				<button id="submit" type="submit">
-					Submit
-				</button>
+				<button id="submit" type="submit"> Submit </button>
 			</div>
 		</div>
 	{/if}
 </form>
 
 <style>
-	input, textarea {
+	input,
+	textarea {
 		background-color: transparent;
 		border-bottom: 1px solid white;
 		color: white;
@@ -66,13 +76,15 @@
 		color: var(--main-blue);
 	}
 
-	input::placeholder, textarea::placeholder {
+	input::placeholder,
+	textarea::placeholder {
 		color: white;
 	}
-	input:hover, textarea:hover {
+	input:hover,
+	textarea:hover {
 		border: 1px solid white;
 	}
-	button[type=submit]:hover {
+	button[type='submit']:hover {
 		background-color: #ffffffaa;
 		color: white;
 	}

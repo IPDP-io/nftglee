@@ -1,16 +1,13 @@
 <script>
   import * as animateScroll from "svelte-scrollto";
+  import { requireLogin } from "$lib/auth";
+  import { page } from "$app/stores";
+
+  // page.subscribe(requireLogin);
+
 	let to;
 	let send;
 	let asset;
-	let movieTitle = 'Silhouettes';
-	const fullDateOptions = { dateStyle: 'long', timeStyle: 'short' };
-	const shortDateOptions = { dateStyle: 'short', timeStyle: 'short' };
-	let date = new Date().toLocaleString('en-US', fullDateOptions);
-	let shortDate = new Date().toLocaleString('en-US', shortDateOptions);
-
-	let y;
-	let scroll;
 
 	let start = async () => {
 		let { p2pml } = window;
@@ -52,16 +49,11 @@
 			});
 
 			p2pml.hlsjs.initClapprPlayer(player);
-
-			console.log('scrolling');
-			await tick();
 		} else {
 			setTimeout(loadVideo, 100);
 		}
 	};
 </script>
-
-<svelte:window bind:scrollY={y} />
 
 <svelte:head>
 	<script
@@ -118,101 +110,8 @@
 </div>
 
 <style>
-	.movie-ticket,
 	.goodie {
 		padding: 1.5em 0;
-	}
-	.ticket {
-		border: 0.2em dashed white;
-		width: 50%;
-		height: calc(75vw * 0.3);
-		position: relative;
-		padding: 1em 2em;
-		background-color: #695a0f45;
-		color: #00000085;
-		font-size: 1.75vw;
-		margin: 1.5em;
-	}
-	.ticket-left {
-		justify-content: space-between;
-	}
-	.ticket-type {
-		white-space: nowrap;
-		padding: 0 1em;
-	}
-	.ticket-stub {
-		border-left: 0.1em dashed #3c3c3c40;
-		padding-left: 2em;
-		text-align: center;
-		justify-content: space-between;
-	}
-	.overlay {
-		position: absolute;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		top: 50%;
-		transform: translateY(-50%);
-		font-size: 7em;
-		color: #ffffff47;
-		font-family: 'Abril Fatface';
-	}
-	#ticket-overlay {
-		left: 0.3em;
-		font-size: 4em;
-		text-transform: uppercase;
-		font-family: 'Zen Tokyo Zoo';
-	}
-	#stub-overlay {
-		right: 0.5em;
-	}
-	.ticket-left:before {
-		content: '';
-		position: absolute;
-		display: block;
-		height: 2em;
-		width: 2em;
-		left: -1em;
-		top: -1em;
-		border-radius: 50%;
-		background-color: white;
-	}
-	.ticket-left:after {
-		content: '';
-		position: absolute;
-		display: block;
-		height: 2em;
-		width: 2em;
-		left: -1em;
-		bottom: -1em;
-		border-radius: 50%;
-		background-color: white;
-	}
-	.ticket-stub:before {
-		content: '';
-		position: absolute;
-		display: block;
-		height: 2em;
-		width: 2em;
-		right: -1em;
-		top: -1em;
-		border-radius: 50%;
-		background-color: white;
-	}
-	.ticket-stub:after {
-		content: '';
-		position: absolute;
-		display: block;
-		height: 2em;
-		width: 2em;
-		right: -1em;
-		bottom: -1em;
-		border-radius: 50%;
-		background-color: white;
-	}
-	.ticket-prop {
-		font-weight: 600;
-		width: 4em;
 	}
 	.nft-label {
 		margin-bottom: 1em;
@@ -268,27 +167,13 @@
 	}
 
 	@media screen and (max-width: 769px) {
-		.ticket {
-			font-size: 2vw;
-		}
-		.ticket,
 		.goodie-video {
 			width: 60%;
 		}
-		#ticket-overlay {
-			font-size: 4em;
-		}
-		.ticket-stub {
-			padding-left: 0;
-		}
 	}
 	@media screen and (max-width: 481px) {
-		.ticket,
 		.goodie-video {
 			width: 75%;
-		}
-		#ticket-overlay {
-			font-size: 2em;
 		}
 	}
 	@media screen and (orientation: landscape) and (max-height: 600px) {

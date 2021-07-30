@@ -23,7 +23,7 @@
 	<div class="form-field">
 		<div class="container">
 			<label for="first_name">Email: </label>
-			<input id="first_name" bind:value={email} autocapitalize="off" class="grow" autofocus use:focus />
+			<input id="first_name" bind:value={email} autocapitalize="off" class="grow" use:focus />
 		</div>
 	</div>
 	<div class="form-field">

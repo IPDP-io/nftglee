@@ -99,14 +99,4 @@
 		text-align: center;
 		margin: 0;
 	}
-	#payment-qr-code svg {
-		width: 35vh;
-		height: auto;
-	}
-	#loading {
-		text-align: center;
-	}
-	.hidden {
-		background: red;
-	}
 </style>
