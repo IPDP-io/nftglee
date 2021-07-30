@@ -76,7 +76,6 @@
 				{/if}
 			</div>
 			<div id="video-overlay">
-				<p>Scroll to begin</p>
 				<Down />
 			</div>
 			<div id="player">
