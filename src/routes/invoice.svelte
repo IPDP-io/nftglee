@@ -54,7 +54,7 @@
 
 <div class="container column">
 	<div class="container mb">
-		Purchasing ticket #{ticketNumber + 1}, a Tier {tier} ticket
+		Purchasing ticket #{ticketNumber}, a Tier {tier} ticket
 	</div>
 	<div class="container">
 		<button on:click={() => (showInfo = !showInfo)}>What does that mean?</button>

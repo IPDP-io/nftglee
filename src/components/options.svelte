@@ -3,6 +3,7 @@
 	import { address as invoiceAddress, amount, loading, mnemonic, unit, ws } from '$lib/stores';
 	import { go } from '$lib/utils';
 	import { p2wpkh } from '$lib/wallet';
+  import { send } from "$lib/socket";
 
 	let getInvoice = async (u) => {
     $loading = true;
@@ -22,7 +23,8 @@
 		$invoiceAddress = invoice.address;
 		$amount = invoice.amount;
 
-		$ws.send(JSON.stringify({ type: 'subscribe', value: invoice.address }));
+    console.log("sending subscribe", invoice.address, $ws.readyState);
+		send('subscribe', invoice.address);
 
     $loading = false;
 		go('/invoice');

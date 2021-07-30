@@ -50,7 +50,7 @@
 	const year = new Date().getFullYear();
 	onMount(async () => {
 		await start();
-		$ws = socket();
+    socket();
 		setup();
 		if (!$mnemonic) await createWallet();
 	});
