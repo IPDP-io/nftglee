@@ -524,10 +524,10 @@ input, textarea {
     outline-color: white;
 }
 label, input, textarea{
-    padding: .5em;
+    padding: 1.25em .75em;
 }
 input:focus::placeholder, textarea:focus::placeholder{
-    color: transparent;
+    opacity: 0.4;
 }
 button {
     cursor: pointer;

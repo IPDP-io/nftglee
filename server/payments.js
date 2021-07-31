@@ -1,5 +1,6 @@
 const { binance, coinos, hasura } = require('./api');
 const { mint } = require('./wallet');
+
 const ticketPrice = 20;
 
 const getTicket = async () => {
@@ -181,7 +182,7 @@ app.post('/LNBTC', async (req, res) => {
 	let { address, pubkey } = req.body;
 	let network = 'lightning';
 	let amount = await getAmount();
-	let text = await coinos.url('/lightning/invoice').post({ amount }).text().catch(console.log);
+	let text = await coinos.url('/lightning/invoice').post({ amount: Math.round(amount * 100000000) }).text().catch(console.log);
 	invoices[text] = { address, amount, pubkey };
 
 	await coinos

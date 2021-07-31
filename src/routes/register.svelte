@@ -6,10 +6,7 @@
 	import Fields from '$components/fields.svelte';
 	import { focus } from '$lib/utils';
 
-	let email;
-	let password = 'liquidart';
-	let code;
-	let loading;
+	let email, password, code, loading;
 
 	let submit = async () => {
 		loading = true;
@@ -23,22 +20,21 @@
 {#if $session.user}
 	<h2 class="container mb">Registered!</h2>
 	<div class="container mb">Check your email for an activation code</div>
-<div class="container">
-	<form
-		on:submit|preventDefault={() => activate(code, $session.user.email)}
-		class="small-form white-form"
-	>
-		<div class="form-field">
-			<div class="container" style="max-width: 200px; margin: 0 auto">
-				<input id="code" bind:value={code} autocapitalize="off" class="grow" use:focus />
+	<div class="container">
+		<form
+			on:submit|preventDefault={() => activate(code, $session.user.email)}
+			class="small-form white-form"
+		>
+			<div class="form-field">
+				<div class="container" style="max-width: 200px; margin: 0 auto">
+					<input id="code" bind:value={code} autocapitalize="off" class="grow" use:focus />
+				</div>
 			</div>
-		</div>
-		<div class="container">
-			<button>Submit</button>
-		</div>
-	</form>
-</div>
-
+			<div class="container">
+				<button>Submit</button>
+			</div>
+		</form>
+	</div>
 {:else if loading}
 	<div id="loading" class="container column">
 		<div class="container">
@@ -52,7 +48,7 @@
 	<h2 class="container">Almost there</h2>
 	<p class="container">We just need an email and password</p>
 	<div class="container">
-		<form on:submit|preventDefault={submit} autocomplete="off">
+		<form on:submit|preventDefault={submit} autocomplete="off" class="small-form white-form">
 			<Fields bind:email bind:password />
 			<div class="container form-submit-controls">
 				<div class="container column">

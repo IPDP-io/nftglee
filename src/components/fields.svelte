@@ -23,21 +23,19 @@
 <div id="login-fields">
 	<div class="form-field">
 		<div class="container">
-			<label for="first_name">Email: </label>
-			<input id="first_name" bind:value={email} autocapitalize="off" class="grow" use:focus />
+			<input id="first_name" bind:value={email} placeholder="Email" autocapitalize="off" class="grow" use:focus />
 		</div>
 	</div>
 	<div class="form-field">
 		<div>
 			<div id="password" class="container">
 				{#if show}
-					<label for="password-input">Password: </label>
-					<input id="password-input" bind:value={password} autocapitalize="off" class="grow" />
+					<input id="password-input" bind:value={password} placeholder="Password" autocapitalize="off" class="grow" />
 				{:else}
-					<label for="password-input">Password: </label>
 					<input
 						id="password-input"
 						type="password"
+            placeholder="Password"
 						bind:value={password}
 						autocapitalize="off"
 						class="grow"
@@ -70,9 +68,7 @@
 	label {
 		color: var(--main-blue);
 		border: 0;
-	}
-	label {
-		width: 7em;
+    margin: auto;
 	}
 	label:hover,
 	input:hover {
@@ -87,4 +83,5 @@
 	.form-field:hover {
 		border: 1px solid var(--main-blue);
 	}
+  
 </style>

@@ -6,8 +6,8 @@
 	import Fields from '$components/fields.svelte';
 	import { go } from '$lib/utils';
 
-	let email = 'test21@coinos.io';
-	let password = 'liquidart';
+	let email;
+	let password;
 	let error;
 	let err = (e) => (error = e);
 

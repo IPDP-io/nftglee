@@ -12,7 +12,7 @@ export const expired = (t) => !t || decode(t).exp * 1000 < Date.now();
 
 export const getToken = async () => {
 	let refresh_token = window.localStorage.getItem('refresh');
-	if (!refresh_token) return;
+	if (!refresh_token || refresh_token === 'undefined') return;
 	let result = await auth.url('/token/refresh').query({ refresh_token }).get().json();
 	let jwt_token;
 	({ jwt_token, refresh_token } = result);
