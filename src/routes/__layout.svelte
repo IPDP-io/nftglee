@@ -13,6 +13,7 @@
 	import { createWallet, setup } from '$lib/wallet';
 	import { api } from '$lib/api';
 	import { getToken } from '$lib/auth';
+	import * as animateScroll from 'svelte-scrollto';
 
 	import '../app.css';
 
@@ -102,19 +103,22 @@
 
 	$: clear($page);
 	let clear = () => err(undefined);
+  let scrollDown = () => {
+		animateScroll.scrollTo({ element: '#watch-silhouettes', duration: 800 });
+  } 
 </script>
 
 <main>
 	<section>
 		<div id="movie-banner" class="container" on:click={toggle}>
-			<div id="sound-toggle">
+			<div id="sound-toggle" style="cursor: pointer">
 				{#if muted}
 					<VolumeIconMute />
 				{:else}
 					<VolumeIconUp />
 				{/if}
 			</div>
-			<div id="video-overlay">
+			<div id="video-overlay" on:click|preventDefault|stopPropagation={scrollDown} style="cursor: pointer">
 				<Down />
 			</div>
 			<div id="player">
