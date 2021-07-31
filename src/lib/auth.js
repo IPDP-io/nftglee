@@ -21,21 +21,23 @@ export const getToken = async () => {
 	return jwt_token;
 };
 
-export const requireLogin = async () => {
-	if (!get(initialized)) return setTimeout(requireLogin, 500);
+export const requireLogin = () => {
+	initialized.subscribe(async (v) => {
+		if (!v) return;
+		await tick();
 
-	await tick();
+		let $token = get(token);
 
-	let $token = get(token);
-
-	if (expired($token)) {
-		try {
-			$token = await getToken();
-		} catch (e) {
-			console.log(e);
-			goto('/login');
+		if (expired($token)) {
+			try {
+				$token = await getToken();
+				if (!$token) throw new Error();
+			} catch (e) {
+				console.log(e);
+				goto('/login');
+			}
 		}
-	}
+	});
 };
 
 export const activate = async (code, email) => {
@@ -83,6 +85,7 @@ export const logout = async (refresh_token) => {
 	try {
 		await auth.url('/logout').query({ refresh_token }).post().res();
 		session.set('user', undefined);
+		window.localStorage.removeItem('refresh');
 		goto('/');
 	} catch (e) {
 		console.log(e);

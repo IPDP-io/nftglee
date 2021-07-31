@@ -16,7 +16,6 @@
 
 	import '../app.css';
 
-
 	let trailer = () => {
 		let { p2pml } = window;
 
@@ -28,12 +27,10 @@
 			$player = new Clappr.Player({
 				parentId: '#player',
 				source: '/trailer/playlist.m3u8',
-				// source: '/static/silhouettes.mp4',
 				autoPlay: true,
 				mute: true,
 				hideMediaControl: true,
 				chromeless: true,
-				//controls: false,
 				width: '100%',
 				height: '100%',
 				playback: {
@@ -44,6 +41,8 @@
 				}
 			});
 
+      $player.getPlugin('click_to_pause').disable()
+
 			p2pml.hlsjs.initClapprPlayer($player);
 		} else {
 			setTimeout(loadVideo, 100);
@@ -52,15 +51,15 @@
 
 	token.subscribe(async (t) => {
 		console.log('token changed', t);
-    if (t && !$session.user) {
-      console.log('getting user');
+		if (t && !$session.user) {
+			console.log('getting user');
 			$session.user = await api.auth(`Bearer ${t}`).url('/user').get().json();
-      console.log($session.user);
-    } 
+			console.log($session.user);
+		}
 	});
 
 	const year = new Date().getFullYear();
-	
+
 	onMount(async () => {
 		setupScrollFade();
 		await getToken();
@@ -68,15 +67,15 @@
 		socket();
 		setup();
 		if (!$mnemonic) await createWallet();
-    	$initialized = true;
+		$initialized = true;
 	});
 
 	function setupScrollFade() {
 		const fadeElement = document.getElementById('movie-banner');
 		let scrollFadeHeight = fadeElement.offsetHeight;
 		console.log(scrollFadeHeight);
-		const resizeObserver = new ResizeObserver(entries => {
-			for ( let entry of entries) {
+		const resizeObserver = new ResizeObserver((entries) => {
+			for (let entry of entries) {
 				scrollFadeHeight = entry.contentRect.height;
 			}
 		});
@@ -132,28 +131,30 @@
 				<h1 on:click={() => go('/')}>Silhouettes</h1>
 			</div>
 
-			{#if $error}
-				<div class="container" style="color: red">{$error}</div>
-			{/if}
+			{#if $initialized}
+				{#if $error}
+					<div class="container" style="color: red">{$error}</div>
+				{/if}
 
-			{#if $session.user}
-				<div class="container">
-					Signed in as {$session.user.email}
+				{#if $session.user}
+					<div class="container">
+						Signed in as {$session.user.email}
+					</div>
+				{/if}
+
+				<div style="min-height: 400px" class="page-block">
+					<slot />
+				</div>
+
+				<div id="lets-chat" class="container column page-block">
+					<div class="container">
+						<h2>Let's chat</h2>
+					</div>
+					<div class="container">
+						<Form />
+					</div>
 				</div>
 			{/if}
-
-			<div style="min-height: 400px" class="page-block">
-				<slot />
-			</div>
-
-			<div id="lets-chat" class="container column page-block">
-				<div class="container">
-					<h2>Let's chat</h2>
-				</div>
-				<div class="container">
-					<Form />
-				</div>
-			</div>
 		</div>
 	</section>
 </main>
@@ -200,7 +201,8 @@
 	#player {
 		width: 100vw;
 	}
-	[data-player] video, [data-player] .container[data-container] {
+	[data-player] video,
+	[data-player] .container[data-container] {
 		position: relative;
 		display: block;
 		width: 100%;
