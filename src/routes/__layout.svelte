@@ -98,7 +98,7 @@
 	let muted = true;
 	let toggle = () => {
 		muted = !muted;
-		muted ? player.mute() : player.unmute();
+		muted ? $player.mute() : $player.unmute();
 	};
 
 	$: clear($page);
