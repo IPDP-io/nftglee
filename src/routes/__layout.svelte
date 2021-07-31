@@ -204,7 +204,6 @@
 		position: relative;
 		display: block;
 		width: 100%;
-		height: auto;
 	}
 	#sound-toggle,
 	#video-overlay {

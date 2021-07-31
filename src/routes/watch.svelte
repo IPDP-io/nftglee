@@ -1,11 +1,11 @@
 <script>
   import { onMount } from "svelte";
-	import * as animateScroll from 'svelte-scrollto';
+	// import * as animateScroll from 'svelte-scrollto';
 	import { logout, requireLogin } from '$lib/auth';
 	import { page, session } from '$app/stores';
 	import { player } from '$lib/stores';
 
-  onMount(requireLogin);
+//   onMount(requireLogin);
 
 	let to;
 	let send;
@@ -14,7 +14,7 @@
 	let start = async () => {
 		let { p2pml } = window;
 
-		animateScroll.scrollToTop({ duration: 2000 });
+		// animateScroll.scrollToTop({ duration: 2000 });
 
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine();
