@@ -102,11 +102,11 @@ app.post('/boom', async (req, res) => {
 
 			await createNft('ticket', { address, pubkey, ticket });
 
-			if (ticket < 1000) {
+			if (ticket <= 1100) {
 				await createNft('poster', { address, pubkey, ticket });
 			}
 
-			if (ticket < 100) {
+			if (ticket <= 100) {
 				// await createNft('artwork', { address, pubkey, ticket });
 			}
 		}

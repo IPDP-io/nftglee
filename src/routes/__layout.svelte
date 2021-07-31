@@ -155,7 +155,7 @@
 					</div>
 				</div>
 				<div class="container wwwwwh">
-					<h1 class="mb" style="line-height: 1em">THE “WHO, WHAT, WHAT, WHERE, WHY &amp; HOW”</h1>
+					<h1 class="mb" style="line-height: 1em">THE “WHO, WHAT, WHEN, WHERE, WHY &amp; HOW”</h1>
 
 					<h2 class="mb">WHO</h2>
 
