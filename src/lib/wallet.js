@@ -105,12 +105,8 @@ export const keypair = (user) => {
 };
 
 export const withdraw = async ({ asset, txid, vout }, from, to) => {
-	console.log('withdrawing', asset, txid, vout, from, to);
 	let hex = await api.auth(`Bearer ${from.token}`).url(`/hex/${txid}`).get().text();
-	console.log('hex', hex);
-
-	let redeemScript = p2wpkh(from).redeem.output;
-	console.log(redeemScript, p2wpkh(from));
+	let sighashType = Transaction.SIGHASH_SINGLE | Transaction.SIGHASH_ANYONECANPAY;
 
 	let p = new Psbt()
 		.addInput({
@@ -118,22 +114,22 @@ export const withdraw = async ({ asset, txid, vout }, from, to) => {
 			index: vout,
 			redeemScript: p2wpkh(from).redeem.output,
 			nonWitnessUtxo: Buffer.from(hex, 'hex'),
-			sighashType: Transaction.SIGHASH_SINGLE | Transaction.SIGHASH_ANYONECANPAY
+			sighashType
 		})
 		.addOutput({
 			asset,
 			nonce: Buffer.alloc(1),
 			script: Address.toOutputScript(to, network),
 			value: 1
-		});
+		})
+		.signInput(0, ECPair.fromPrivateKey(keypair(from).privkey), [sighashType])
+		.finalizeInput(0);
 
 	let result = await api
 		.url('/taxi')
 		.auth(`Bearer ${from.token}`)
 		.post({ psbt: p.toBase64() })
 		.json();
-
-	console.log(result);
 
 	return p;
 };
