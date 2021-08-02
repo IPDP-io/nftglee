@@ -1,4 +1,4 @@
-const { binance, coinos, hasura } = require('./api');
+const { binance, coinos, electrs, hasura } = require('./api');
 const { mint } = require('./wallet');
 
 const ticketPrice = 20;
@@ -199,4 +199,13 @@ app.post('/LNBTC', async (req, res) => {
 		.json();
 
 	return { address: text, amount };
+});
+
+app.get('/hex/:txid', auth, async (req, res) => {
+  let { txid } = req.params;
+	return electrs.url(`/tx/${txid}/hex`).get().text();
+});
+
+app.post('/taxi', auth, async (req, res) => {
+	return coinos.url('/taxi').post(req.body).json();
 });

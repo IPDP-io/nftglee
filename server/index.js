@@ -34,21 +34,21 @@ app.get('/goodies', auth, async (req, res) => {
 	let utxos = await electrs.url(`/address/${req.user.address}/utxo`).get().json();
 	let result = await hasura.post({ query }).json();
 	let { nfts } = result.data;
-  let arr = [];
+	let arr = [];
 	utxos.map((tx) => {
 		let nft = nfts.find((t) => t.asset === tx.asset);
 		if (nft) {
 			nft.confirmed = tx.status.confirmed;
 			nft.txid = tx.txid;
-      arr.push(nft);
+			nft.vout = tx.vout;
+			arr.push(nft);
 		}
 	});
 	return arr;
 });
 
 app.get('/user', auth, async (req, res) => {
-	console.log('returning user', req.user);
-	res.send(req.user);
+	return req.user;
 });
 
 app.get('/file/:name', (req, res) => {

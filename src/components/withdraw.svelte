@@ -1,29 +1,42 @@
-<div id="withdraw" class="container column">
-	<h2 class="nft-label">Withdraw to Liquid Address</h2>
-	<h3 class="nft-item">
-		You can use any Liquid wallet such as
-		<a href="https://blockstream.com/green/" class="blockstream-green" target="_blank">
-			Blockstream Green
-		</a>
-		or
-		<a href="https://blockstream.com/aqua/" class="blockstream-aqua" target="_blank"> Aqua </a>
-	</h3>
-	<form on:submit|preventDefault>
-		<div id="withdraw-form" class="container">
-			<div class="container grow">
-				<div class="grow">
-					<input class="withdraw" type="text" bind:value={to} placeholder="Withdraw Address" />
-				</div>
-				<div>
-					<button class="withdraw" on:click={send}>Withdraw</button>
+<script>
+	import { withdraw } from '$lib/wallet';
+  import { session } from "$app/stores";
+	export let goodie;
+
+	let to = 'XJSqSVokNnEduakJsSEd5TM6fQgR3pXqA5';
+	let from = $session.user;
+	let withdrawing;
+</script>
+
+{#if withdrawing}
+	<div id="withdraw" class="container column">
+		<h2 class="nft-label">Withdraw to Liquid Address</h2>
+		<h3 class="nft-item">
+			You can use any Liquid wallet such as
+			<a href="https://blockstream.com/green/" class="blockstream-green" target="_blank">
+				Blockstream Green
+			</a>
+			or
+			<a href="https://blockstream.com/aqua/" class="blockstream-aqua" target="_blank"> Aqua </a>
+		</h3>
+		<form on:submit|preventDefault>
+			<div id="withdraw-form" class="container">
+				<div class="container column">
+					<div class="grow">
+						<input class="withdraw" type="text" bind:value={to} placeholder="Withdraw Address" style="min-width: 36em" />
+					</div>
+					<div>
+						<button class="withdraw" on:click={() => withdraw(goodie, from, to)}>Withdraw</button>
+					</div>
 				</div>
 			</div>
-		</div>
-	</form>
-</div>
+		</form>
+	</div>
+{:else}
+	<button on:click={() => (withdrawing = true)}>Send</button>
+{/if}
 
-  <style>
-
+<style>
 	#withdraw {
 		align-items: center;
 		margin-top: 1.5em;
@@ -52,4 +65,14 @@
 	a.blockstream-aqua:hover {
 		color: #13cdc2;
 	}
-  </style>
+	@media screen and (orientation: landscape) and (max-height: 600px) {
+		.withdraw {
+			height: 3vw;
+		}
+	}
+	@media screen and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (max-width: 769px) {
+		.withdraw {
+			height: 6vw;
+		}
+	}
+</style>

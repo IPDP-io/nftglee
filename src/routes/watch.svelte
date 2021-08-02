@@ -6,6 +6,7 @@
 	import { page, session } from '$app/stores';
 	import { player, token } from '$lib/stores';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
+  import Withdraw from "$components/withdraw.svelte";
 
 	let nfts = {
 		ticket: {
@@ -32,10 +33,6 @@
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
 		console.log('goodies', goodies);
 	};
-
-	let to;
-	let send;
-	let asset;
 
 	let toggle = (e) => {
 		e.target.muted = !e.target.muted;
@@ -106,6 +103,8 @@
 			<source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
 			Your browser does not support HTML5 video.
 		</video>
+
+    <Withdraw {goodie} />
 	</div>
 {/each}
 
@@ -146,16 +145,6 @@
 	@media screen and (max-width: 481px) {
 		.goodie-video {
 			width: 75%;
-		}
-	}
-	@media screen and (orientation: landscape) and (max-height: 600px) {
-		.withdraw {
-			height: 3vw;
-		}
-	}
-	@media screen and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) and (max-width: 769px) {
-		.withdraw {
-			height: 6vw;
 		}
 	}
 </style>

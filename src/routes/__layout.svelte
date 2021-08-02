@@ -54,6 +54,7 @@
 	token.subscribe(async (t) => {
 		if (t && !$session.user) {
 			let user = await api.auth(`Bearer ${t}`).url('/user').get().json();
+      user.token = t;
 			if (user.mnemonic) $session.user = user;
 		}
 	});
