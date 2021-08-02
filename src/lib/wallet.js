@@ -1,6 +1,5 @@
 import { api } from '$lib/api';
 import { Buffer } from 'buffer';
-
 import cryptojs from 'crypto-js';
 
 const parseVal = (v) => parseInt(v.slice(1).toString('hex'), 16);
@@ -57,7 +56,7 @@ export const setup = () => {
 		networks,
 		Transaction
 	} = liquidjs);
-	network = networks.regtest;
+	network = networks[import.meta.env.VITE_NETWORK];
 	({ generateMnemonic, mnemonicToSeedSync } = bip39);
 	({ fromSeed } = bip32);
 };
@@ -107,6 +106,7 @@ export const keypair = (user) => {
 export const withdraw = async ({ asset, txid, vout }, from, to) => {
 	let hex = await api.auth(`Bearer ${from.token}`).url(`/hex/${txid}`).get().text();
 	let sighashType = Transaction.SIGHASH_SINGLE | Transaction.SIGHASH_ANYONECANPAY;
+	let key = ECPair.fromPrivateKey(keypair(from).privkey);
 
 	let p = new Psbt()
 		.addInput({
@@ -122,7 +122,7 @@ export const withdraw = async ({ asset, txid, vout }, from, to) => {
 			script: Address.toOutputScript(to, network),
 			value: 1
 		})
-		.signInput(0, ECPair.fromPrivateKey(keypair(from).privkey), [sighashType])
+		.signInput(0, key, [sighashType])
 		.finalizeInput(0);
 
 	let result = await api

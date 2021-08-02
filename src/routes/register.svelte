@@ -1,7 +1,6 @@
 <script>
 	import PendingIcon from '$icons/pending.svelte';
 	import { session } from '$app/stores';
-	import { mnemonic } from '$lib/stores';
 	import { activate, register } from '$lib/auth';
 	import Fields from '$components/fields.svelte';
 	import { focus } from '$lib/utils';
@@ -10,7 +9,8 @@
 
 	let submit = async () => {
 		loading = true;
-		registered = await register(email, password, $mnemonic);
+    console.log($session.user.mnemonic);
+		registered = await register(email, password, $session.user.mnemonic);
 		loading = false;
 	};
 

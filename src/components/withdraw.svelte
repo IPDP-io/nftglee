@@ -1,11 +1,22 @@
 <script>
 	import { withdraw } from '$lib/wallet';
-  import { session } from "$app/stores";
-	export let goodie;
+	import { session } from '$app/stores';
+	import { err } from '$lib/utils';
 
-	let to = 'XJSqSVokNnEduakJsSEd5TM6fQgR3pXqA5';
+	export let goodie;
+	export let goodies;
+
+	let to;
 	let from = $session.user;
 	let withdrawing;
+	let submit = async () => {
+		try {
+			await withdraw(goodie, from, to);
+			goodies = goodies.filter((g) => g.txid !== goodie.txid);
+		} catch (e) {
+			err(e);
+		}
+	};
 </script>
 
 {#if withdrawing}
@@ -19,14 +30,20 @@
 			or
 			<a href="https://blockstream.com/aqua/" class="blockstream-aqua" target="_blank"> Aqua </a>
 		</h3>
-		<form on:submit|preventDefault>
+		<form on:submit|preventDefault={submit}>
 			<div id="withdraw-form" class="container">
 				<div class="container column">
 					<div class="grow">
-						<input class="withdraw" type="text" bind:value={to} placeholder="Withdraw Address" style="min-width: 36em" />
+						<input
+							class="withdraw"
+							type="text"
+							bind:value={to}
+							placeholder="Withdraw Address"
+							style="min-width: 36em"
+						/>
 					</div>
 					<div>
-						<button class="withdraw" on:click={() => withdraw(goodie, from, to)}>Withdraw</button>
+						<button class="withdraw" type="submit">Withdraw</button>
 					</div>
 				</div>
 			</div>

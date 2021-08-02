@@ -104,7 +104,7 @@
 			Your browser does not support HTML5 video.
 		</video>
 
-    <Withdraw {goodie} />
+    <Withdraw {goodie} bind:goodies />
 	</div>
 {/each}
 

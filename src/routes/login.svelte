@@ -4,7 +4,6 @@
 	import { session } from '$app/stores';
 	import { mnemonic } from '$lib/stores';
 	import Fields from '$components/fields.svelte';
-	import { go } from '$lib/utils';
 
 	let email;
 	let password;
@@ -15,7 +14,6 @@
 		try {
 			let res = await login(email, password);
 			if (!res) throw new Error('login failed');
-			go('/watch');
 		} catch (e) {
 			console.log('boom', e);
 		}

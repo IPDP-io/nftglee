@@ -1,13 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
-	import { mnemonic } from '$lib/stores';
 	import { focus, err, go } from '$lib/utils';
+	import { session } from '$app/stores';
 
 	let word;
 
 	let verify = () => {
-		console.log($mnemonic);
-		if (word === $mnemonic.split(' ')[6]) go('/register');
+		if (word === $session.user.mnemonic.split(' ')[6]) go('/register');
 		else err('Nope');
 	};
 

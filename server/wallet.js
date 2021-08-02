@@ -13,7 +13,7 @@ const {
 } = require('@asoltys/liquidjs-lib');
 const { Buffer } = require('buffer');
 const reverse = require('buffer-reverse');
-const network = networks.regtest;
+const network = networks[process.env.NETWORK];
 const { electrs } = require('./api');
 
 const nonce = Buffer.from('00', 'hex');

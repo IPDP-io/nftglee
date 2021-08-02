@@ -10,20 +10,20 @@ import { p2wpkh } from '$lib/wallet';
 export const expired = (t) => !t || decode(t).exp * 1000 < Date.now();
 
 export const getToken = async () => {
-  try {
-	let refresh_token = window.localStorage.getItem('refresh');
-	if (!refresh_token || refresh_token === 'undefined') return;
-	let result = await auth.url('/token/refresh').query({ refresh_token }).get().json();
-	let jwt_token;
-	({ jwt_token, refresh_token } = result);
-	window.localStorage.setItem('refresh', refresh_token);
-	token.set(jwt_token);
-  await tick();
-	return jwt_token;
-  } catch(e) {
-    console.log(e);
-    return e;
-  } 
+	try {
+		let refresh_token = window.localStorage.getItem('refresh');
+		if (!refresh_token || refresh_token === 'undefined') return;
+		let result = await auth.url('/token/refresh').query({ refresh_token }).get().json();
+		let jwt_token;
+		({ jwt_token, refresh_token } = result);
+		window.localStorage.setItem('refresh', refresh_token);
+		token.set(jwt_token);
+		await tick();
+		return jwt_token;
+	} catch (e) {
+		console.log(e);
+		return e;
+	}
 };
 
 export const requireLogin = () => {
@@ -37,7 +37,7 @@ export const requireLogin = () => {
 			if (expired($token)) {
 				try {
 					$token = await getToken();
-					if (!$token) throw new Error("invalid token");
+					if (!$token) throw new Error('invalid token');
 					resolve($token);
 				} catch (e) {
 					console.log(e);
@@ -54,7 +54,7 @@ export const activate = async (code, email, password) => {
 	try {
 		err(undefined);
 		await api.url('/activate').post({ code, email }).unauthorized(err).badRequest(err).json();
-    await login(email, password);
+		await login(email, password);
 	} catch (e) {
 		err(e.message);
 	}
@@ -81,7 +81,8 @@ export const login = async (email, password) => {
 		};
 
 		session.set({ user });
-    token.set(jwt_token);
+		token.set(jwt_token);
+    go('/watch');
 
 		return user;
 	} catch (e) {
@@ -109,7 +110,7 @@ export const register = async (email, password, mnemonic) => {
 		let {
 			address,
 			redeem: { pubkey }
-		} = p2wpkh();
+		} = p2wpkh({ mnemonic });
 		pubkey = pubkey.toString('hex');
 
 		let { jwt_token, refresh_token } = await api
@@ -125,10 +126,10 @@ export const register = async (email, password, mnemonic) => {
 			.badRequest(err)
 			.json();
 
-    return true;
+		return true;
 	} catch (e) {
 		console.log(e.stack);
 		err(e.message);
-    return false;
+		return false;
 	}
 };

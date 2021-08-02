@@ -74,7 +74,7 @@ let createNft = async (type, { address, pubkey, ticket }) => {
 	let nft = {
 		asset,
 		ticket,
-    type
+		type
 	};
 
 	result = await hasura.post({ query, variables: { nft } }).json();
@@ -105,10 +105,12 @@ app.post('/boom', async (req, res) => {
 			await createNft('ticket', { address, pubkey, ticket });
 
 			if (ticket <= 1100) {
+				await new Promise((r) => setTimeout(r, 2000));
 				await createNft('poster', { address, pubkey, ticket });
 			}
 
 			if (ticket <= 100) {
+				await new Promise((r) => setTimeout(r, 2000));
 				await createNft('artwork', { address, pubkey, ticket });
 			}
 		}
@@ -183,7 +185,11 @@ app.post('/LNBTC', async (req, res) => {
 	let { address, pubkey } = req.body;
 	let network = 'lightning';
 	let amount = await getAmount();
-	let text = await coinos.url('/lightning/invoice').post({ amount: Math.round(amount * 100000000) }).text().catch(console.log);
+	let text = await coinos
+		.url('/lightning/invoice')
+		.post({ amount: Math.round(amount * 100000000) })
+		.text()
+		.catch(console.log);
 	invoices[text] = { address, amount, pubkey };
 
 	await coinos
@@ -202,7 +208,7 @@ app.post('/LNBTC', async (req, res) => {
 });
 
 app.get('/hex/:txid', auth, async (req, res) => {
-  let { txid } = req.params;
+	let { txid } = req.params;
 	return electrs.url(`/tx/${txid}/hex`).get().text();
 });
 
