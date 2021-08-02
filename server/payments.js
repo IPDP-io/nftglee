@@ -33,14 +33,14 @@ const getTicket = async () => {
 let nfts = {
 	ticket: {
 		filename: 'QmSmQduTPXamJBQLTxVs2nZAkVYdRWk7K1gqtQyqsBmNo8',
-		name: 'Silhouettes Constellation Poster'
+		name: 'Silhouettes Ticket Stub'
 	},
 	poster: {
 		filename: 'QmdkU6rYPwHX5u3nq2omFKDUhoF3vhuaVqptWdwtAmB72d',
 		name: 'Silhouettes Constellation Poster'
 	},
 	artwork: {
-		filename: 'tbd',
+		filename: 'QmPnGapuS63Vy5J7K1CupGaoUVPM493jyhqZkDRYoNY7e2',
 		name: 'Silhouettes Special Edition Artwork'
 	}
 };
@@ -73,7 +73,8 @@ let createNft = async (type, { address, pubkey, ticket }) => {
 
 	let nft = {
 		asset,
-		ticket
+		ticket,
+    type
 	};
 
 	result = await hasura.post({ query, variables: { nft } }).json();
@@ -108,7 +109,7 @@ app.post('/boom', async (req, res) => {
 			}
 
 			if (ticket <= 100) {
-				// await createNft('artwork', { address, pubkey, ticket });
+				await createNft('artwork', { address, pubkey, ticket });
 			}
 		}
 
@@ -116,7 +117,7 @@ app.post('/boom', async (req, res) => {
 
 		res.send(req.body);
 	} catch (e) {
-		console.log(e);
+		console.log(e, e.stack);
 		res.code(500).send(e.message);
 	}
 });

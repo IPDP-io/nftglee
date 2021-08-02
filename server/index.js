@@ -1,4 +1,4 @@
-const { electrs, userApi } = require('./api');
+const { electrs, userApi, hasura } = require('./api');
 const path = require('path');
 const zmq = require('zeromq');
 const WebSocket = require('ws');
@@ -26,17 +26,28 @@ app.get('/goodies', auth, async (req, res) => {
 	let query = `query {
     nfts {
       asset,
-      ticket
+      ticket,
+      type
     }
   }`;
 
 	let utxos = await electrs.url(`/address/${req.user.address}/utxo`).get().json();
-	let result = await userApi(req.headers).post({ query }).json();
-  console.log(result);
-	res.send(true);
+	let result = await hasura.post({ query }).json();
+	let { nfts } = result.data;
+  let arr = [];
+	utxos.map((tx) => {
+		let nft = nfts.find((t) => t.asset === tx.asset);
+		if (nft) {
+			nft.confirmed = tx.status.confirmed;
+			nft.txid = tx.txid;
+      arr.push(nft);
+		}
+	});
+	return arr;
 });
 
 app.get('/user', auth, async (req, res) => {
+	console.log('returning user', req.user);
 	res.send(req.user);
 });
 

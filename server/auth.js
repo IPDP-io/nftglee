@@ -3,7 +3,7 @@ const { userApi, hasura, hbp } = require('./api');
 const { HASURA_JWT } = process.env;
 
 auth = {
-	async preValidation(req, res, done) {
+	async preValidation(req, res) {
 		let fail = () => res.code(401).send('Unauthorized');
 		if (!req.headers.authorization) fail();
 		let token = req.headers.authorization.split(' ')[1];
@@ -24,7 +24,6 @@ auth = {
 			let user = result.data.currentuser[0];
 			user.email = user.display_name;
 			req.user = user;
-			done();
 		} catch (e) {
 			console.log(e.message);
 			fail();

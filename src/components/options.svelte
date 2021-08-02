@@ -1,5 +1,6 @@
 <script>
 	import { api } from '$lib/api';
+	import { session } from '$app/stores';
 	import { address as invoiceAddress, amount, loading, mnemonic, unit, ws } from '$lib/stores';
 	import { go } from '$lib/utils';
 	import { p2wpkh } from '$lib/wallet';
@@ -12,8 +13,10 @@
 		let {
 			address,
 			redeem: { pubkey }
-		} = p2wpkh();
+		} = p2wpkh($session.user);
 		pubkey = pubkey.toString('hex');
+
+		console.log('address, pk', address, pubkey);
 
 		let invoice = await api
 			.url('/' + u)
@@ -33,34 +36,39 @@
 <div id="payment-options" class="container">
 	<div class="container column">
 		{#if $unit}
-			<h3>Payment options:</h3>
+			<h3>Other payment options:</h3>
+
+				<div class="container space-evenly">
+          {#if $unit !== 'BTC'}
+					<button
+						on:click={() => getInvoice('BTC')}
+						class:active={$unit === 'BTC'}>Bitcoin</button
+					>
+          {/if}
+          {#if $unit !== 'LBTC'}
+					<button
+						on:click={() => getInvoice('LBTC')}
+						class:active={$unit === 'LBTC'}>Liquid</button
+					>
+          {/if}
+          {#if $unit !== 'LNBTC'}
+					<button
+						on:click={() => getInvoice('LNBTC')}
+						class:active={$unit === 'LNBTC'}>Lightning</button
+					>
+          {/if}
+          {#if $unit !== 'LTC'}
+          <button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}> Litecoin </button>
+          {/if}
+				</div>
 		{:else}
 			<h3>Choose a payment option:</h3>
-		{/if}
 		<div class="container space-evenly mb">
 			<button on:click={() => getInvoice('BTC')} class:active={$unit && $unit.includes('BTC')}>
 				Bitcoin
 			</button>
 			<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}> Litecoin </button>
 		</div>
-		{#if $unit && $unit.includes('B')}
-			<div class="container space-evenly">
-				<button
-					class="secondary-btn"
-					on:click={() => getInvoice('BTC')}
-					class:active={$unit === 'BTC'}>On-chain</button
-				>
-				<button
-					class="secondary-btn"
-					on:click={() => getInvoice('LBTC')}
-					class:active={$unit === 'LBTC'}>Liquid</button
-				>
-				<button
-					class="secondary-btn"
-					on:click={() => getInvoice('LNBTC')}
-					class:active={$unit === 'LNBTC'}>Lightning</button
-				>
-			</div>
 		{/if}
 	</div>
 </div>

@@ -10,6 +10,7 @@ import { p2wpkh } from '$lib/wallet';
 export const expired = (t) => !t || decode(t).exp * 1000 < Date.now();
 
 export const getToken = async () => {
+  try {
 	let refresh_token = window.localStorage.getItem('refresh');
 	if (!refresh_token || refresh_token === 'undefined') return;
 	let result = await auth.url('/token/refresh').query({ refresh_token }).get().json();
@@ -17,7 +18,12 @@ export const getToken = async () => {
 	({ jwt_token, refresh_token } = result);
 	window.localStorage.setItem('refresh', refresh_token);
 	token.set(jwt_token);
+  await tick();
 	return jwt_token;
+  } catch(e) {
+    console.log(e);
+    return e;
+  } 
 };
 
 export const requireLogin = () => {

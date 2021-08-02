@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-  import { page, session } from '$app/stores';
+	import { page, session } from '$app/stores';
 	import { address, error, mnemonic, initialized, player, token, ws } from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
@@ -53,7 +53,8 @@
 
 	token.subscribe(async (t) => {
 		if (t && !$session.user) {
-			$session.user = await api.auth(`Bearer ${t}`).url('/user').get().json();
+			let user = await api.auth(`Bearer ${t}`).url('/user').get().json();
+			if (user.mnemonic) $session.user = user;
 		}
 	});
 
@@ -65,7 +66,7 @@
 		trailer();
 		socket();
 		setup();
-		if (!$mnemonic) await createWallet();
+		if (!$session.user) $session.user = await createWallet();
 		$initialized = true;
 	});
 
@@ -98,8 +99,8 @@
 		muted ? $player.mute() : $player.unmute();
 	};
 
-  $: clear($page);
-  let clear = () => err(undefined);
+	$: clear($page);
+	let clear = () => err(undefined);
 	let scrollDown = () => {
 		animateScroll.scrollTo({ element: '#watch-silhouettes', duration: 800 });
 	};
@@ -135,7 +136,7 @@
 					<div class="container" style="color: red">{$error}</div>
 				{/if}
 
-				{#if $session.user}
+				{#if $session.user.email}
 					<div class="container">
 						Signed in as {$session.user.email}
 					</div>

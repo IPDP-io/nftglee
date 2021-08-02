@@ -5,20 +5,41 @@
 	import { logout, requireLogin } from '$lib/auth';
 	import { page, session } from '$app/stores';
 	import { player, token } from '$lib/stores';
+	import VolumeIconMute from '$icons/volume-mute.svelte';
+
+	let nfts = {
+		ticket: {
+			filename: 'QmSmQduTPXamJBQLTxVs2nZAkVYdRWk7K1gqtQyqsBmNo8',
+			name: 'Silhouettes Ticket Stub'
+		},
+		poster: {
+			filename: 'QmdkU6rYPwHX5u3nq2omFKDUhoF3vhuaVqptWdwtAmB72d',
+			name: 'Silhouettes Constellation Poster'
+		},
+		artwork: {
+			filename: 'QmPnGapuS63Vy5J7K1CupGaoUVPM493jyhqZkDRYoNY7e2',
+			name: 'Silhouettes Special Edition Artwork'
+		}
+	};
 
 	onMount(async () => {
 		await requireLogin();
 		getGoodies();
 	});
 
-	let goodies;
+	let goodies = [];
 	let getGoodies = async () => {
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
+		console.log('goodies', goodies);
 	};
 
 	let to;
 	let send;
 	let asset;
+
+	let toggle = (e) => {
+		e.target.muted = !e.target.muted;
+	};
 
 	let watch = async () => {
 		let { p2pml } = window;
@@ -78,21 +99,15 @@
 	<button on:click={logout}>Logout</button>
 </div>
 
-<div class="container column goodie">
-	<h3 class="nft-item">Silhouettes Ticket Stub</h3>
-	<video class="goodie-video" muted playsinline autoplay loop type="application/x-mpegURL">
-		<source src={'/static/ticket.mp4'} />
-		Your browser does not support HTML5 video.
-	</video>
-</div>
-
-<div class="container column goodie">
-	<h3 class="nft-item">Constellation Poster</h3>
-	<video class="goodie-video" muted playsinline autoplay loop type="application/x-mpegURL">
-		<source src={'/static/girl.mp4'} />
-		Your browser does not support HTML5 video.
-	</video>
-</div>
+{#each goodies as goodie}
+	<div class="container column goodie">
+		<h3 class="nft-item">{nfts[goodie.type].name}</h3>
+		<video class="goodie-video" muted playsinline autoplay loop type="video/mp4" on:click={toggle}>
+			<source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
+			Your browser does not support HTML5 video.
+		</video>
+	</div>
+{/each}
 
 <style>
 	.goodie {
@@ -119,36 +134,8 @@
 	.goodie-video {
 		width: 50%;
 	}
-	#withdraw {
-		align-items: center;
-		margin-top: 1.5em;
-	}
-	#withdraw-form {
-		flex-wrap: wrap;
-		align-items: center;
-	}
-	.withdraw {
-		border: 2px solid var(--main-blue);
-		height: 2rem;
-		height: 5vh;
-		margin: 1.5rem 0;
-	}
-	button.withdraw {
-		transform: translateX(-1px);
-		background-color: var(--main-blue);
-		color: white;
-	}
 	input {
 		outline-color: var(--main-blue);
-	}
-	button.withdraw:hover {
-		background-color: var(--secondary-blue);
-	}
-	a.blockstream-green:hover {
-		color: #00b45a;
-	}
-	a.blockstream-aqua:hover {
-		color: #13cdc2;
 	}
 
 	@media screen and (max-width: 769px) {

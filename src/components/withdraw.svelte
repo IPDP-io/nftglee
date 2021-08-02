@@ -21,3 +21,35 @@
 		</div>
 	</form>
 </div>
+
+  <style>
+
+	#withdraw {
+		align-items: center;
+		margin-top: 1.5em;
+	}
+	#withdraw-form {
+		flex-wrap: wrap;
+		align-items: center;
+	}
+	.withdraw {
+		border: 2px solid var(--main-blue);
+		height: 2rem;
+		height: 5vh;
+		margin: 1.5rem 0;
+	}
+	button.withdraw {
+		transform: translateX(-1px);
+		background-color: var(--main-blue);
+		color: white;
+	}
+	button.withdraw:hover {
+		background-color: var(--secondary-blue);
+	}
+	a.blockstream-green:hover {
+		color: #00b45a;
+	}
+	a.blockstream-aqua:hover {
+		color: #13cdc2;
+	}
+  </style>

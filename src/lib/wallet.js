@@ -1,7 +1,5 @@
 import { Buffer } from 'buffer';
 import wretch from 'wretch';
-import { get } from 'svelte/store';
-import { mnemonic } from '$lib/stores';
 
 import cryptojs from 'crypto-js';
 
@@ -60,8 +58,8 @@ export const setup = () => {
 	({ fromSeed } = bip32);
 };
 
-export const p2wpkh = () => {
-	let { pubkey } = keypair();
+export const p2wpkh = (user) => {
+	let { pubkey } = keypair(user);
 
 	let redeem = payments.p2wpkh({
 		pubkey,
@@ -76,10 +74,10 @@ export const p2wpkh = () => {
 
 export const createWallet = () => {
 	try {
-		mnemonic.set(generateMnemonic());
+		let mnemonic = generateMnemonic();
 
 		return {
-			address: p2wpkh().address,
+			address: p2wpkh({ mnemonic }).address,
 			mnemonic
 		};
 	} catch (e) {
@@ -88,9 +86,9 @@ export const createWallet = () => {
 	}
 };
 
-export const keypair = () => {
+export const keypair = (user) => {
 	try {
-		let seed = mnemonicToSeedSync(get(mnemonic));
+		let seed = mnemonicToSeedSync(user.mnemonic);
 		let key = fromSeed(seed, network).derivePath(`m/84'/0'/0'/0/0`);
 		let { publicKey: pubkey, privateKey: privkey } = key;
 		let base58 = key.neutered().toBase58();
