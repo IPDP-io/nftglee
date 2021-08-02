@@ -1,17 +1,26 @@
 <script>
-  import { onMount } from "svelte";
+	import { onMount } from 'svelte';
+	import { api } from '$lib/api';
 	import * as animateScroll from 'svelte-scrollto';
 	import { logout, requireLogin } from '$lib/auth';
 	import { page, session } from '$app/stores';
-	import { player } from '$lib/stores';
+	import { player, token } from '$lib/stores';
 
-  onMount(requireLogin);
+	onMount(async () => {
+		await requireLogin();
+		getGoodies();
+	});
+
+	let goodies;
+	let getGoodies = async () => {
+		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
+	};
 
 	let to;
 	let send;
 	let asset;
 
-	let start = async () => {
+	let watch = async () => {
 		let { p2pml } = window;
 
 		animateScroll.scrollToTop({ duration: 2000 });
@@ -38,7 +47,7 @@
 			$player = new Clappr.Player({
 				parentId: '#player',
 				source: '/file/playlist.m3u8',
-        // source: '/static/girl.mp4',
+				// source: '/static/girl.mp4',
 				mute: false,
 				autoPlay: false,
 				width: '100%',
@@ -65,12 +74,11 @@
 <svelte:head />
 
 <div class="container">
-	<button on:click={start}>Watch Now</button>
+	<button on:click={watch}>Watch Now</button>
 	<button on:click={logout}>Logout</button>
 </div>
 
 <div class="container column goodie">
-	<h2 class="nft-label">NFT Goodies</h2>
 	<h3 class="nft-item">Silhouettes Ticket Stub</h3>
 	<video class="goodie-video" muted playsinline autoplay loop type="application/x-mpegURL">
 		<source src={'/static/ticket.mp4'} />
@@ -79,36 +87,11 @@
 </div>
 
 <div class="container column goodie">
-	<h2 class="nft-label">Extra NFT goodies</h2>
 	<h3 class="nft-item">Constellation Poster</h3>
 	<video class="goodie-video" muted playsinline autoplay loop type="application/x-mpegURL">
 		<source src={'/static/girl.mp4'} />
 		Your browser does not support HTML5 video.
 	</video>
-</div>
-
-<div id="withdraw" class="container column">
-	<h2 class="nft-label">Withdraw to Liquid Address</h2>
-	<h3 class="nft-item">
-		You can use any Liquid wallet such as
-		<a href="https://blockstream.com/green/" class="blockstream-green" target="_blank">
-			Blockstream Green
-		</a>
-		or
-		<a href="https://blockstream.com/aqua/" class="blockstream-aqua" target="_blank"> Aqua </a>
-	</h3>
-	<form on:submit|preventDefault>
-		<div id="withdraw-form" class="container">
-			<div class="container grow">
-				<div class="grow">
-					<input class="withdraw" type="text" bind:value={to} placeholder="Withdraw Address" />
-				</div>
-				<div>
-					<button class="withdraw" on:click={send}>Withdraw</button>
-				</div>
-			</div>
-		</div>
-	</form>
 </div>
 
 <style>

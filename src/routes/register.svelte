@@ -6,23 +6,23 @@
 	import Fields from '$components/fields.svelte';
 	import { focus } from '$lib/utils';
 
-	let email, password, code, loading;
+	let email, password, code, loading, registered;
 
 	let submit = async () => {
 		loading = true;
-		await register(email, password, $mnemonic);
+		registered = await register(email, password, $mnemonic);
 		loading = false;
 	};
 
-	$: if (code && code.length >= 6) activate(code, $session.user.email);
+	$: if (code && code.length >= 6) activate(code, email, password);
 </script>
 
-{#if $session.user}
+{#if registered}
 	<h2 class="container mb">Registered!</h2>
 	<div class="container mb">Check your email for an activation code</div>
 	<div class="container">
 		<form
-			on:submit|preventDefault={() => activate(code, $session.user.email)}
+			on:submit|preventDefault={() => activate(code, email, password)}
 			class="small-form white-form"
 		>
 			<div class="form-field">
@@ -45,8 +45,7 @@
 		</div>
 	</div>
 {:else}
-	<h2 class="container">Almost there</h2>
-	<p class="container">We just need an email and password</p>
+	<h2 class="container">Register an account</h2>
 	<div class="container">
 		<form on:submit|preventDefault={submit} autocomplete="off" class="small-form white-form">
 			<Fields bind:email bind:password />

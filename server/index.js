@@ -1,4 +1,4 @@
-const { userApi } = require('./api');
+const { electrs, userApi } = require('./api');
 const path = require('path');
 const zmq = require('zeromq');
 const WebSocket = require('ws');
@@ -22,34 +22,36 @@ require('./auth');
 require('./mail');
 require('./payments');
 
-app.get('/user', auth, async function (request, reply) {
+app.get('/goodies', auth, async (req, res) => {
 	let query = `query {
-    currentuser {
-      address,
-      pubkey,
-      mnemonic,
-      display_name
+    nfts {
+      asset,
+      ticket
     }
   }`;
 
-	let result = await userApi(request.headers).post({ query }).json();
-	let user = result.data.currentuser[0];
-	user.email = user.display_name;
-	reply.send(user);
+	let utxos = await electrs.url(`/address/${req.user.address}/utxo`).get().json();
+	let result = await userApi(req.headers).post({ query }).json();
+  console.log(result);
+	res.send(true);
 });
 
-app.get('/file/:name', function (request, reply) {
-	const { name } = request.params;
+app.get('/user', auth, async (req, res) => {
+	res.send(req.user);
+});
+
+app.get('/file/:name', (req, res) => {
+	const { name } = req.params;
 	const stream = fs.createReadStream(`file/${name}`);
 
 	let type;
 	if (name.includes('m3u8')) type = 'application/vnd.apple.mpegurl';
 	if (name.includes('ts')) type = 'video/MP2T';
 
-	reply.header('Content-Type', type).send(stream);
+	res.header('Content-Type', type).send(stream);
 });
 
-app.listen(8091, '0.0.0.0', function (err, address) {
+app.listen(8091, '0.0.0.0', (err, address) => {
 	if (err) {
 		app.log.error(err);
 		process.exit(1);
@@ -57,7 +59,7 @@ app.listen(8091, '0.0.0.0', function (err, address) {
 	app.log.info(`server listening on ${address}`);
 });
 
-async function run() {
+let run = async () => {
 	wss = new WebSocket.Server({ port: 9090 });
 
 	wss.on('connection', function connection(ws) {
@@ -113,6 +115,6 @@ async function run() {
 			// console.log(e);
 		}
 	}
-}
+};
 
 run();

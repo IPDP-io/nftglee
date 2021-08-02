@@ -14,7 +14,6 @@
 	let submit = async () => {
 		try {
 			let res = await login(email, password);
-      console.log('res', res);
 			if (!res) throw new Error('login failed');
 			go('/watch');
 		} catch (e) {
@@ -33,6 +32,9 @@
 		<div class="container form-submit-controls">
 			<div class="container column">
 				<button type="submit">Sign in</button>
+				<div class="mb">
+					<a href="/register" style="text-decoration: underline">Register an account</a>
+				</div>
 			</div>
 		</div>
 	</form>

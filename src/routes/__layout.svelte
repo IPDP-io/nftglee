@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import { page, session } from '$app/stores';
+  import { page, session } from '$app/stores';
 	import { address, error, mnemonic, initialized, player, token, ws } from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
@@ -61,7 +61,7 @@
 
 	onMount(async () => {
 		setupScrollFade();
-    await getToken();
+		await getToken();
 		trailer();
 		socket();
 		setup();
@@ -98,8 +98,8 @@
 		muted ? $player.mute() : $player.unmute();
 	};
 
-	$: clear($page);
-	let clear = () => err(undefined);
+  $: clear($page);
+  let clear = () => err(undefined);
 	let scrollDown = () => {
 		animateScroll.scrollTo({ element: '#watch-silhouettes', duration: 800 });
 	};

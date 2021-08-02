@@ -2,8 +2,7 @@ import decode from 'jwt-decode';
 import { tick } from 'svelte';
 import { api, auth } from '$lib/api';
 import { session } from '$app/stores';
-import { goto } from '$app/navigation';
-import { err } from '$lib/utils';
+import { err, go } from '$lib/utils';
 import { get } from 'svelte/store';
 import { initialized, token } from '$lib/stores';
 import { p2wpkh } from '$lib/wallet';
@@ -22,31 +21,34 @@ export const getToken = async () => {
 };
 
 export const requireLogin = () => {
-	initialized.subscribe(async (v) => {
-		if (!v) return;
-		await tick();
+	return new Promise((resolve) => {
+		initialized.subscribe(async (v) => {
+			if (!v) return;
+			await tick();
 
-		let $token = get(token);
+			let $token = get(token);
 
-		if (expired($token)) {
-			try {
-				$token = await getToken();
-				if (!$token) throw new Error();
-			} catch (e) {
-				console.log(e);
-				goto('/login');
+			if (expired($token)) {
+				try {
+					$token = await getToken();
+					if (!$token) throw new Error("invalid token");
+					resolve($token);
+				} catch (e) {
+					console.log(e);
+					go('/login');
+				}
 			}
-		}
+
+			resolve($token);
+		});
 	});
 };
 
-export const activate = async (code, email) => {
+export const activate = async (code, email, password) => {
 	try {
 		err(undefined);
-
 		await api.url('/activate').post({ code, email }).unauthorized(err).badRequest(err).json();
-
-		goto('/watch', { noscroll: true });
+    await login(email, password);
 	} catch (e) {
 		err(e.message);
 	}
@@ -55,7 +57,7 @@ export const activate = async (code, email) => {
 export const login = async (email, password) => {
 	try {
 		err(undefined);
-		let { jwt_token: token, refresh_token } = await api
+		let { jwt_token, refresh_token } = await api
 			.url('/login')
 			.post({
 				email,
@@ -69,10 +71,11 @@ export const login = async (email, password) => {
 
 		let user = {
 			email,
-			token
+			token: jwt_token
 		};
 
 		session.set({ user });
+    token.set(jwt_token);
 
 		return user;
 	} catch (e) {
@@ -86,7 +89,8 @@ export const logout = async (refresh_token) => {
 		await auth.url('/logout').query({ refresh_token }).post().res();
 		session.set('user', undefined);
 		window.localStorage.removeItem('refresh');
-		goto('/');
+		go('/');
+		window.location.reload();
 	} catch (e) {
 		console.log(e);
 	}
@@ -102,7 +106,7 @@ export const register = async (email, password, mnemonic) => {
 		} = p2wpkh();
 		pubkey = pubkey.toString('hex');
 
-		let { jwt_token: token, refresh_token } = await api
+		let { jwt_token, refresh_token } = await api
 			.url('/register')
 			.post({
 				email,
@@ -115,16 +119,10 @@ export const register = async (email, password, mnemonic) => {
 			.badRequest(err)
 			.json();
 
-		window.localStorage.setItem('refresh', refresh_token);
-
-		session.set({
-			user: {
-				email,
-				token
-			}
-		});
+    return true;
 	} catch (e) {
 		console.log(e.stack);
 		err(e.message);
+    return false;
 	}
 };

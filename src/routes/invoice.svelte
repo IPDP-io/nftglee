@@ -26,7 +26,6 @@
 
 	onMount(async () => {
 		ticketNumber = await api.url('/ticket').get().json();
-
 	});
 
   $: updateQr($address, $amount)
@@ -81,7 +80,7 @@
 		</div>
 		<div class="container column">
 			<a href={qrData} target="_blank">
-				<p id="payment-url" style="word-wrap: break-word; max-width: 80%; margin: 0 auto;">{$address}</p>
+				<p id="payment-url" style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;">{$address}</p>
 			</a>
 		</div>
 		<div class="container mb">
