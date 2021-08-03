@@ -78,12 +78,6 @@
 		outline: none;
 	}
 	input,
-	label {
-		color: var(--main-blue);
-		border: 0;
-		margin: auto;
-	}
-	label:hover,
 	input:hover {
 		border: 0;
 	}

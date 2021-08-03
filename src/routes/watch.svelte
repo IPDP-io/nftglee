@@ -136,13 +136,9 @@
 	.goodie {
 		padding: 1.5em 0;
 	}
-	.nft-label {
-		margin-bottom: 1em;
-	}
 	.nft-item {
 		margin-bottom: 0.25em;
 	}
-	.nft-label,
 	.nft-item {
 		text-align: center;
 	}
@@ -156,9 +152,6 @@
 	}
 	.goodie-video {
 		width: 50%;
-	}
-	input {
-		outline-color: var(--main-blue);
 	}
 
 	@media screen and (max-width: 769px) {
