@@ -1,6 +1,6 @@
 <script>
-	import { focus } from "$lib/utils";
-	import { onMount } from "svelte";
+	import { focus } from '$lib/utils';
+	import { onMount } from 'svelte';
 	import Eye from '../icons/eye.svelte';
 	export let email, password;
 	let show;
@@ -19,31 +19,52 @@
 		}
 	});
 </script>
+
 <div id="login-fields">
 	<div class="form-field">
 		<div class="container">
-			<label for="first_name">Email: </label>
-			<input id="first_name" bind:value={email} autocapitalize="off" class="grow" autofocus use:focus />
+			<input
+				id="first_name"
+				bind:value={email}
+				placeholder="Email"
+				autocapitalize="off"
+				class="grow"
+				use:focus
+			/>
 		</div>
 	</div>
 	<div class="form-field">
 		<div>
 			<div id="password" class="container">
 				{#if show}
-					<label for="password-input">Password: </label>
-					<input id="password-input" bind:value={password} autocapitalize="off" class="grow" />
+					<input
+						id="password-input"
+						bind:value={password}
+						placeholder="Password"
+						autocapitalize="off"
+						class="grow"
+					/>
 				{:else}
-					<label for="password-input">Password: </label>
-					<input id="password-input" type="password" bind:value={password} autocapitalize="off" class="grow" />
+					<input
+						id="password-input"
+						type="password"
+						placeholder="Password"
+						bind:value={password}
+						autocapitalize="off"
+						class="grow"
+					/>
 				{/if}
-				<div id="show-password" on:click|preventDefault|stopPropagation={() => (show = !show)} style="height: 100%">
+				<div
+					id="show-password"
+					on:click|preventDefault|stopPropagation={() => (show = !show)}
+					style="height: 100%"
+				>
 					<Eye size={'100%'} />
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
 
 <style>
 	#show-password {
@@ -56,14 +77,8 @@
 	input {
 		outline: none;
 	}
-	input, label {
-		color: var(--main-blue);
-		border: 0;
-	}
-	label {
-		width: 7em;
-	}
-	label:hover, input:hover {
+	input,
+	input:hover {
 		border: 0;
 	}
 	input::placeholder {

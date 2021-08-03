@@ -8,7 +8,7 @@
 	import FacebookIcon from '$icons/facebook.svelte';
 	import TwitterIcon from '$icons/twitter.svelte';
 	import LinkedInIcon from '$icons/linkedin.svelte';
-	import Form from '$components/form.svelte';
+	import Contact from '$components/contact.svelte';
 	import { goto } from '$app/navigation';
 
   import '../../app.css';
@@ -46,7 +46,7 @@
 					<h2>Let's chat</h2>
 				</div>
 				<div class="container">
-					<Form />
+					<Contact />
 				</div>
 			</div>
 		</div>

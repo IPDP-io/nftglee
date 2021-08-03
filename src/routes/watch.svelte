@@ -1,19 +1,63 @@
 <script>
-  import { onMount } from "svelte";
-  import * as animateScroll from "svelte-scrollto";
+	import { onMount } from 'svelte';
+	import { api } from '$lib/api';
+	import * as animateScroll from 'svelte-scrollto';
+	import { logout, requireLogin } from '$lib/auth';
+	import { page, session } from '$app/stores';
+	import { full, player, token } from '$lib/stores';
+	import VolumeIconMute from '$icons/volume-mute.svelte';
+	import Deposit from '$components/deposit.svelte';
+	import Withdraw from '$components/withdraw.svelte';
 
-	let y;
-	let scroll;
+	let nfts = {
+		ticket: {
+			filename: 'QmSmQduTPXamJBQLTxVs2nZAkVYdRWk7K1gqtQyqsBmNo8',
+			name: 'Silhouettes Ticket Stub'
+		},
+		poster: {
+			filename: 'QmdkU6rYPwHX5u3nq2omFKDUhoF3vhuaVqptWdwtAmB72d',
+			name: 'Silhouettes Constellation Poster'
+		},
+		artwork: {
+			filename: 'QmPnGapuS63Vy5J7K1CupGaoUVPM493jyhqZkDRYoNY7e2',
+			name: 'Silhouettes Special Edition Artwork'
+		}
+	};
 
-	let loadVideo = async () => {
+	onMount(async () => {
+		await requireLogin();
+		getGoodies();
+	});
+
+	let goodies = [];
+	let getGoodies = async () => {
+		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
+	};
+
+	let toggle = (e) => {
+		e.target.muted = !e.target.muted;
+	};
+
+	let depositing;
+	let deposit = () => {
+		depositing = true;
+	};
+
+	let watch = async () => {
 		let { p2pml } = window;
+		$full = true;
 
-    animateScroll.scrollToTop({ duration: 2000 })
+		animateScroll.scrollToTop({ duration: 2000 });
 
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
-			var engine = new p2pml.hlsjs.Engine();
-			const intro = document.getElementById('intro-video');
-			const movieBanner = document.getElementById('movie-banner');
+			var engine = new p2pml.hlsjs.Engine({
+				loader: {
+					xhrSetup: (xhr) => {
+						xhr.setRequestHeader('Authorization', `Bearer ${$token}`);
+					}
+				}
+			});
+			const videoPlayer = document.getElementById('player');
 			const soundToggle = document.getElementById('sound-toggle');
 			const videoOverlay = document.getElementById('video-overlay');
 
@@ -21,17 +65,17 @@
 			else return;
 
 			videoOverlay.remove();
-			intro.remove();
 
-			const videoPlayer = document.createElement('div');
-			videoPlayer.id = 'player';
 			videoPlayer.style.width = '100%';
 			videoPlayer.style.height = '100vh';
-			movieBanner.appendChild(videoPlayer);
-			var player = new Clappr.Player({
+
+			const playerDiv = document.getElementById('player');
+			playerDiv.style.height = '100vh';
+
+			$player.destroy();
+			$player = new Clappr.Player({
 				parentId: '#player',
-				// source: '/file/playlist.m3u8',
-				source: '/static/silhouettes.mp4',
+				source: '/file/playlist.m3u8',
 				mute: false,
 				autoPlay: false,
 				width: '100%',
@@ -44,32 +88,80 @@
 				}
 			});
 
-			p2pml.hlsjs.initClapprPlayer(player);
+			const dataContainer = playerDiv.querySelector('[data-container]');
+			dataContainer.style.height = '100vh';
 
-			console.log('scrolling');
-			await tick();
+			p2pml.hlsjs.initClapprPlayer($player);
 		} else {
 			setTimeout(loadVideo, 100);
 		}
 	};
-
-	onMount(loadVideo);
 </script>
 
-<svelte:window bind:scrollY={y} />
+<svelte:head />
 
-<svelte:head>
-	<script
-		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-core@latest/build/p2p-media-loader-core.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/p2p-media-loader-hlsjs@latest/build/p2p-media-loader-hlsjs.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/clappr@latest"></script>
-</svelte:head>
+<!--
+<div style="word-break: break-all; max-width: 600px; margin: 0 auto">
+	{$token}
+</div>
+-->
 
-<!-- <div id="player"></div> -->
+<div class="container">
+	{#if goodies.find((g) => g.type === 'ticket')}
+		<button on:click={watch}>Watch Now</button>
+	{:else}
+		<button on:click={deposit}>Deposit a Ticket</button>
+	{/if}
+
+	<button on:click={logout}>Logout</button>
+</div>
+
+{#if depositing}
+	<Deposit />
+{/if}
+
+{#each goodies as goodie (goodie.asset)}
+	<div class="container column goodie">
+		<h3 class="nft-item">{nfts[goodie.type].name}</h3>
+		<video class="goodie-video" muted playsinline autoplay loop type="video/mp4" on:click={toggle} key={goodie.asset}>
+			<source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
+			Your browser does not support HTML5 video.
+		</video>
+
+		<Withdraw {goodie} bind:goodies />
+	</div>
+{/each}
+
 <style>
-	/* #player {
-		width: 100%;
-		height: 100vh;
-	} */
+	.goodie {
+		padding: 1.5em 0;
+	}
+	.nft-item {
+		margin-bottom: 0.25em;
+	}
+	.nft-item {
+		text-align: center;
+	}
+	.goodie {
+		align-items: center;
+		border-bottom: 1px solid var(--main-blue);
+		padding-bottom: 4em;
+	}
+	.goodie:nth-child(odd) {
+		background-color: #eeeeee;
+	}
+	.goodie-video {
+		width: 50%;
+	}
+
+	@media screen and (max-width: 769px) {
+		.goodie-video {
+			width: 60%;
+		}
+	}
+	@media screen and (max-width: 481px) {
+		.goodie-video {
+			width: 75%;
+		}
+	}
 </style>

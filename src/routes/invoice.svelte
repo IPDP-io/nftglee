@@ -5,6 +5,7 @@
 	import PendingIcon from '$icons/pending.svelte';
 	import { address, amount, unit } from '$lib/stores';
 	import { copy as copyToClipboard } from '$lib/utils';
+  import Options from "$components/options.svelte";
 
 	let copied;
 	let copy = () => {
@@ -25,7 +26,10 @@
 
 	onMount(async () => {
 		ticketNumber = await api.url('/ticket').get().json();
+	});
 
+  $: updateQr($address, $amount)
+  let updateQr = () => {
 		QRCode.toString(
 			`${
 				$unit === 'LTC' ? 'litecoin' : 'bitcoin'
@@ -47,22 +51,22 @@
 				qrCode = string;
 			}
 		);
-	});
+  } 
 
 	let showInfo;
 </script>
 
 <div class="container column">
 	<div class="container mb">
-		Purchasing ticket #{ticketNumber + 1}, a Tier {tier} ticket
+    Purchasing ticket #{ticketNumber} - Tier {tier}
 	</div>
 	<div class="container">
-		<button on:click={() => (showInfo = !showInfo)}>What does that mean?</button>
+		<button on:click={() => (showInfo = !showInfo)}>What Are The Tiers?</button>
 	</div>
 	{#if showInfo}
 		<img src="/static/tiers.png" alt="Silhouette Tiers" style="max-width: 600px; margin: 0 auto;" />
     <div class="container mb">
-		<button on:click={() => (showInfo = !showInfo)}>Got it</button>
+		<button on:click={() => (showInfo = !showInfo)}>Got it!</button>
   </div>
 	{/if}
 
@@ -76,7 +80,7 @@
 		</div>
 		<div class="container column">
 			<a href={qrData} target="_blank">
-				<p id="payment-url">{$address}</p>
+				<p id="payment-url" style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;">{$address}</p>
 			</a>
 		</div>
 		<div class="container mb">
@@ -88,6 +92,7 @@
 				{/if}
 			</button>
 		</div>
+    <Options />
 	</div>
 </div>
 
@@ -98,15 +103,5 @@
 	#payment-qr-code p {
 		text-align: center;
 		margin: 0;
-	}
-	#payment-qr-code svg {
-		width: 35vh;
-		height: auto;
-	}
-	#loading {
-		text-align: center;
-	}
-	.hidden {
-		background: red;
 	}
 </style>

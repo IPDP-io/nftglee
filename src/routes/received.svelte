@@ -1,5 +1,6 @@
 <script>
-	import { mnemonic, received, unit } from '$lib/stores';
+	import { received, unit } from '$lib/stores';
+	import { session } from '$app/stores';
 	import { btc, go } from '$lib/utils';
 
 	let words;
@@ -12,9 +13,9 @@
 	</p>
 </div>
 
-  <h2 class="container">Write this down and keep it a secret!</h2>
+<h2 class="container">Write this down and keep it a secret!</h2>
 
-{#if $mnemonic}
+{#if $session.user.mnemonic}
 	<!-- columns
 	<div class="container">
 		{#each [0, 1, 2] as i}
@@ -31,7 +32,7 @@
   -->
 
 	<div class="container mb">
-		{$mnemonic}
+		{$session.user.mnemonic}
 	</div>
 
 	<div class="container mb">

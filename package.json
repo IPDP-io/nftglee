@@ -18,16 +18,16 @@
     "postcss-preset-env": "^6.7.0",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
+    "qrcode": "^1.4.4",
     "svelte": "^3.34.0",
     "svelte-preprocess": "^4.7.3",
-    "tailwindcss": "^2.1.4",
-    "qrcode": "^1.4.4"
+    "tailwindcss": "^2.1.4"
   },
   "type": "module",
   "dependencies": {
     "buffer": "^6.0.3",
     "crypto-js": "^4.0.0",
-    "normalize.css": "^8.0.1",
+    "jwt-decode": "^3.1.2",
     "svelte-scrollto": "^0.2.0",
     "wretch": "^1.7.4"
   }
