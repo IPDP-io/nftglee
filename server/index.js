@@ -22,18 +22,30 @@ require('./auth');
 require('./mail');
 require('./payments');
 
-app.get('/goodies', auth, async (req, res) => {
-	let query = `query {
-    nfts {
-      asset,
-      ticket,
-      type
-    }
-  }`;
+nfts = [];
+last = undefined;
 
+getNfts = async () => {
+	if (!last || new Date() - last > 30000) {
+		let query = `query {
+      nfts {
+        asset,
+        ticket,
+        type
+      }
+    }`;
+
+		let result = await hasura.post({ query }).json();
+		({ nfts } = result.data);
+
+		last = new Date();
+	}
+};
+
+app.get('/goodies', auth(), async (req, res) => {
 	let utxos = await electrs.url(`/address/${req.user.address}/utxo`).get().json();
-	let result = await hasura.post({ query }).json();
-	let { nfts } = result.data;
+	await getNfts();
+
 	let arr = [];
 	utxos.map((tx) => {
 		let nft = nfts.find((t) => t.asset === tx.asset);
@@ -47,11 +59,11 @@ app.get('/goodies', auth, async (req, res) => {
 	return arr;
 });
 
-app.get('/user', auth, async (req, res) => {
+app.get('/user', auth(), async (req, res) => {
 	return req.user;
 });
 
-app.get('/file/:name', (req, res) => {
+app.get('/file/:name', auth([loggedIn, checkTicket]), (req, res) => {
 	const { name } = req.params;
 	const stream = fs.createReadStream(`file/${name}`);
 

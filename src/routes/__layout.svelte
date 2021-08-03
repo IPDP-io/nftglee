@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page, session } from '$app/stores';
-	import { address, error, mnemonic, initialized, player, token, ws } from '$lib/stores';
+	import { address, full, error, mnemonic, initialized, player, token, ws } from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
@@ -23,8 +23,6 @@
 
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine();
-			const intro = document.getElementById('intro-video');
-			const movieBanner = document.getElementById('movie-banner');
 
 			$player = new Clappr.Player({
 				parentId: '#player',
@@ -96,6 +94,7 @@
 
 	let muted = true;
 	let toggle = () => {
+    if ($full) return;
 		muted = !muted;
 		muted ? $player.mute() : $player.unmute();
 	};

@@ -9,7 +9,6 @@
 
 	let submit = async () => {
 		loading = true;
-    console.log($session.user.mnemonic);
 		registered = await register(email, password, $session.user.mnemonic);
 		loading = false;
 	};

@@ -207,11 +207,11 @@ app.post('/LNBTC', async (req, res) => {
 	return { address: text, amount };
 });
 
-app.get('/hex/:txid', auth, async (req, res) => {
+app.get('/hex/:txid', auth(), async (req, res) => {
 	let { txid } = req.params;
 	return electrs.url(`/tx/${txid}/hex`).get().text();
 });
 
-app.post('/taxi', auth, async (req, res) => {
+app.post('/taxi', auth(), async (req, res) => {
 	return coinos.url('/taxi').post(req.body).json();
 });

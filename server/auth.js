@@ -1,34 +1,69 @@
 const jwt = require('jsonwebtoken');
-const { userApi, hasura, hbp } = require('./api');
+const { electrs, userApi, hasura, hbp } = require('./api');
 const { HASURA_JWT } = process.env;
+const fs = require('fs');
 
-auth = {
-	async preValidation(req, res) {
-		let fail = () => res.code(401).send('Unauthorized');
-		if (!req.headers.authorization) fail();
-		let token = req.headers.authorization.split(' ')[1];
-		if (!token) fail();
-		let { key } = JSON.parse(HASURA_JWT);
-		try {
-			req.token = jwt.verify(token, key);
+const parseCookie = (str) =>
+	str
+		.split(';')
+		.map((v) => v.split('='))
+		.reduce((acc, v) => {
+			acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+			return acc;
+		}, {});
+
+let users = {};
+
+loggedIn = async (req, res) => {
+	let fail = () => res.code(401).send('Unauthorized');
+	let { authorization } = req.headers;
+	let token;
+
+	if (authorization) token = authorization.split(' ')[1];
+	else fail();
+
+	let { key } = JSON.parse(HASURA_JWT);
+
+	try {
+		req.token = jwt.verify(token, key);
+		let id = jwt.decode(token, key).sub;
+
+		if (users[id]) req.user = users[id];
+		else {
 			let query = `query {
-        currentuser {
-          address,
-          pubkey,
-          mnemonic,
-          display_name
-        }
-      }`;
+          currentuser {
+            address,
+            pubkey,
+            mnemonic,
+            display_name
+          }
+        }`;
 
 			let result = await userApi(req.headers).post({ query }).json();
 			let user = result.data.currentuser[0];
 			user.email = user.display_name;
+			users[user.id] = user;
 			req.user = user;
-		} catch (e) {
-			console.log(e.message);
-			fail();
 		}
+	} catch (e) {
+		console.log(e.message);
+		fail();
 	}
+};
+
+auth = (preValidation = loggedIn) => ({ preValidation });
+
+checkTicket = async (req, res) => {
+	let fail = () => res.code(401).send('Unauthorized');
+
+	if (req.user.ticket && new Date() - req.user.ticket.lastChecked < 3000) {
+		return;
+	}
+
+	let utxos = await electrs.url(`/address/${req.user.address}/utxo`).get().json();
+	let tickets = nfts.map((t) => t.type === 'ticket' && t.asset).filter((t) => t);
+	let assets = utxos.map((tx) => tx.asset);
+	if (!assets.find((a) => tickets.includes(a))) fail();
 };
 
 const login = async (req, res) => {
@@ -49,7 +84,7 @@ const login = async (req, res) => {
 			user = data.users[0];
 			email = data.users[0].display_name;
 		} else {
-			throw new Error("user not found");
+			throw new Error('user not found');
 		}
 
 		let response = await hbp.url('/auth/login').post({ email, password }).res();

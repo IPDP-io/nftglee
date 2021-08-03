@@ -4,9 +4,10 @@
 	import * as animateScroll from 'svelte-scrollto';
 	import { logout, requireLogin } from '$lib/auth';
 	import { page, session } from '$app/stores';
-	import { player, token } from '$lib/stores';
+	import { full, player, token } from '$lib/stores';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
-  import Withdraw from "$components/withdraw.svelte";
+	import Deposit from '$components/deposit.svelte';
+	import Withdraw from '$components/withdraw.svelte';
 
 	let nfts = {
 		ticket: {
@@ -31,22 +32,32 @@
 	let goodies = [];
 	let getGoodies = async () => {
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
-		console.log('goodies', goodies);
 	};
 
 	let toggle = (e) => {
 		e.target.muted = !e.target.muted;
 	};
 
+	let depositing;
+	let deposit = () => {
+		depositing = true;
+	};
+
 	let watch = async () => {
 		let { p2pml } = window;
+		$full = true;
 
 		animateScroll.scrollToTop({ duration: 2000 });
 
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
-			var engine = new p2pml.hlsjs.Engine();
+			var engine = new p2pml.hlsjs.Engine({
+				loader: {
+					xhrSetup: (xhr) => {
+						xhr.setRequestHeader('Authorization', `Bearer ${$token}`);
+					}
+				}
+			});
 			const videoPlayer = document.getElementById('player');
-			const movieBanner = document.getElementById('movie-banner');
 			const soundToggle = document.getElementById('sound-toggle');
 			const videoOverlay = document.getElementById('video-overlay');
 
@@ -65,7 +76,6 @@
 			$player = new Clappr.Player({
 				parentId: '#player',
 				source: '/file/playlist.m3u8',
-				// source: '/static/girl.mp4',
 				mute: false,
 				autoPlay: false,
 				width: '100%',
@@ -79,7 +89,6 @@
 			});
 
 			const dataContainer = playerDiv.querySelector('[data-container]');
-			console.log(playerDiv, dataContainer);
 			dataContainer.style.height = '100vh';
 
 			p2pml.hlsjs.initClapprPlayer($player);
@@ -91,20 +100,35 @@
 
 <svelte:head />
 
+<!--
+<div style="word-break: break-all; max-width: 600px; margin: 0 auto">
+	{$token}
+</div>
+-->
+
 <div class="container">
-	<button on:click={watch}>Watch Now</button>
+	{#if goodies.find((g) => g.type === 'ticket')}
+		<button on:click={watch}>Watch Now</button>
+	{:else}
+		<button on:click={deposit}>Deposit a Ticket</button>
+	{/if}
+
 	<button on:click={logout}>Logout</button>
 </div>
 
-{#each goodies as goodie}
+{#if depositing}
+	<Deposit />
+{/if}
+
+{#each goodies as goodie (goodie.asset)}
 	<div class="container column goodie">
 		<h3 class="nft-item">{nfts[goodie.type].name}</h3>
-		<video class="goodie-video" muted playsinline autoplay loop type="video/mp4" on:click={toggle}>
+		<video class="goodie-video" muted playsinline autoplay loop type="video/mp4" on:click={toggle} key={goodie.asset}>
 			<source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
 			Your browser does not support HTML5 video.
 		</video>
 
-    <Withdraw {goodie} bind:goodies />
+		<Withdraw {goodie} bind:goodies />
 	</div>
 {/each}
 

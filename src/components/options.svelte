@@ -16,8 +16,6 @@
 		} = p2wpkh($session.user);
 		pubkey = pubkey.toString('hex');
 
-		console.log('address, pk', address, pubkey);
-
 		let invoice = await api
 			.url('/' + u)
 			.post({ address, pubkey })
