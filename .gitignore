@@ -7,5 +7,7 @@ server/liquid
 server/data
 server/file
 server/.env
+server/.env.prod
 server/trailer
+server/db
 deploy.sh

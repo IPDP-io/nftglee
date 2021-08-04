@@ -28,19 +28,9 @@ services:
     volumes:
       - ./:/app
     network_mode: host
-  postgres:
-    container_name: silpostgres
-    image: postgres:12
-    restart: always
-    environment:
-      POSTGRES_PASSWORD: postgrespassword
-    volumes:
-      - ${DATA_DIR}:/var/lib/postgresql/data
-    ports:
-      - '5433:5432'
   hasura:
     container_name: silhasura
-    image: hasura/graphql-engine:v1.3.3
+    image: hasura/graphql-engine:v2.0.4.cli-migrations-v3
     ports:
       - '8080:8080'
     depends_on:
@@ -50,19 +40,21 @@ services:
       - ./migrations:/hasura-migrations
       - ./metadata:/hasura-metadata
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:pgpassword@postgres:5432/postgres
       HASURA_GRAPHQL_ADMIN_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
       HASURA_GRAPHQL_JWT_SECRET: '${HASURA_GRAPHQL_JWT_SECRET}'
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
   hbp:
     container_name: silhbp
-    image: asoltys/hbp:latest
+    image: nhost/hasura-backend-plus:latest
     depends_on:
       - 'hasura'
     ports:
       - '3400:3000'
     environment:
+      HOST: 0.0.0.0
+      PORT: 3000
       HASURA_ENDPOINT: '${HASURA_ENDPOINT}'
       HASURA_GRAPHQL_ADMIN_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
       JWT_ALGORITHM: '${JWT_ALGORITHM}'
@@ -70,7 +62,7 @@ services:
       AUTO_MIGRATE: "true"
       STORAGE_ENABLED: "false"
       SERVER_URL: http://localhost:3000
-      DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/postgres
+      DATABASE_URL: postgres://postgres:pgpassword@postgres:5432/postgres
       REDIRECT_URL_ERROR: http://localhost:3000
       REDIRECT_URL_SUCCESS: http://localhost:3000
       AUTO_ACTIVATE_NEW_USERS: "false"
@@ -83,3 +75,14 @@ services:
       SMTP_PASS: '${SMTP_PASS}'
       SMTP_SENDER: '${SMTP_SENDER}'
       SMTP_SECURE: "true"
+    volumes:
+      - ./custom:/app/custom
+  postgres:
+    container_name: postgres
+    image: "nhost/postgres:12-v0.0.6"
+    restart: always
+    volumes:
+      - "./db:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD: pgpassword
+      POSTGRES_DB: postgres
