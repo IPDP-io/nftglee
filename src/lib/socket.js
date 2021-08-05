@@ -1,13 +1,14 @@
 import { go } from '$lib/utils';
-import { pending, received, ws } from '$lib/stores';
+import { address, pending, received, ws } from '$lib/stores';
 import { get } from 'svelte/store';
 
 let timeout = 50;
 let socket = () => {
 	let s = new WebSocket(import.meta.env.VITE_SOCKET);
 
-  s.onopen = () => get(address) && s.send(JSON.stringify({ type: 'subscribe', value: get(address) }))
-  
+  s.onopen = () => s.readyState === 1 &&
+    get(address) &&
+    s.send(JSON.stringify({ type: 'subscribe', value: get(address) }));
 
 	s.onmessage = ({ data }) => {
 		try {
