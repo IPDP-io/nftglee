@@ -15,7 +15,6 @@ const getTicket = async () => {
   }`;
 
 	let result = await hasura.post({ query }).json();
-  console.log(result);
 
 	let {
 		data: {

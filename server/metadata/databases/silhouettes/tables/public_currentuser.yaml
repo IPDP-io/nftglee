@@ -1,0 +1,18 @@
+table:
+  name: currentuser
+  schema: public
+select_permissions:
+- permission:
+    columns:
+    - address
+    - avatar_url
+    - display_name
+    - mnemonic
+    - pubkey
+    - created_at
+    - updated_at
+    - id
+    filter:
+      id:
+        _eq: X-Hasura-User-Id
+  role: user
