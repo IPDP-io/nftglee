@@ -49,15 +49,18 @@
 
 	token.subscribe(async (t) => {
 		if (t && !$session.user) {
-			let user = await api.auth(`Bearer ${t}`).url('/user').get().json();
-			user.token = t;
-			if (user.mnemonic) $session.user = user;
+			try {
+				let user = await api.auth(`Bearer ${t}`).url('/user').get().json();
+				user.token = t;
+				if (user.mnemonic) $session.user = user;
+			} catch (e) {}
 		}
 	});
 
 	const year = new Date().getFullYear();
 
 	onMount(async () => {
+		password = window.sessionStorage.getItem('password');
 		setupScrollFade();
 		await getToken();
 		trailer();
@@ -104,6 +107,7 @@
 	};
 
 	let password;
+	$: if (password === 'liquidart') window.sessionStorage.setItem('password', 'liquidart');
 </script>
 
 <div class:hide={password === 'liquidart'}>
