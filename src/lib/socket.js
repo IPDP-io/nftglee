@@ -4,7 +4,7 @@ import { get } from 'svelte/store';
 
 let timeout = 50;
 let socket = () => {
-	let s = new WebSocket(`ws://localhost:9090/ws`);
+	let s = new WebSocket(import.meta.env.VITE_SOCKET);
 
 	s.onmessage = ({ data }) => {
 		try {
@@ -29,23 +29,23 @@ let socket = () => {
 	};
 
 	s.onclose = (e) => {
-    timeout = Math.min(10000, (timeout += timeout))
+		timeout = Math.min(10000, (timeout += timeout));
 		console.log('socket reconnect in', timeout);
 		setTimeout(socket, timeout);
 	};
-  
-  ws.set(s);
+
+	ws.set(s);
 };
 
 export let send = (type, value) => {
-  let s = get(ws);
- 
-  if (s.readyState !== 1) {
-    socket();
-    return setTimeout(() => send(type, value), 500)
-  } 
+	let s = get(ws);
 
-  s.send(JSON.stringify({ type, value }));
-} 
+	if (s.readyState !== 1) {
+		socket();
+		return setTimeout(() => send(type, value), 500);
+	}
+
+	s.send(JSON.stringify({ type, value }));
+};
 
 export default socket;
