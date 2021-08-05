@@ -50,7 +50,7 @@
 	token.subscribe(async (t) => {
 		if (t && !$session.user) {
 			let user = await api.auth(`Bearer ${t}`).url('/user').get().json();
-      user.token = t;
+			user.token = t;
 			if (user.mnemonic) $session.user = user;
 		}
 	});
@@ -92,7 +92,7 @@
 
 	let muted = true;
 	let toggle = () => {
-    if ($full) return;
+		if ($full) return;
 		muted = !muted;
 		muted ? $player.mute() : $player.unmute();
 	};
@@ -102,9 +102,19 @@
 	let scrollDown = () => {
 		animateScroll.scrollTo({ element: '#watch-silhouettes', duration: 800 });
 	};
+
+	let password;
 </script>
 
-<main>
+<div class:hide={password === 'liquidart'}>
+	<input
+		placeholder="Enter"
+		bind:value={password}
+		style="display: block; max-width: 400px; margin: 5em auto;"
+	/>
+</div>
+
+<main class:hidden={password !== 'liquidart'}>
 	<section>
 		<div id="movie-banner" class="container" on:click={toggle}>
 			<div id="sound-toggle" style="cursor: pointer">
@@ -164,7 +174,7 @@
 </footer>
 
 <style global>
-  @import "../app.css";
+	@import '../app.css';
 
 	input,
 	label {
@@ -216,5 +226,12 @@
 	}
 	.wwwwwh h3 {
 		margin-top: 2em;
+	}
+
+	.hide {
+		display: none;
+	}
+	.hidden {
+		visibility: hidden;
 	}
 </style>

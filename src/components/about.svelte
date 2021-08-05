@@ -22,9 +22,9 @@
 	<h3>ADAM SOLTYS</h3>
 
 	<p>
-		CTO of coinos, an open source bitcoin web wallet and exchange platform, and creator of
-		Raretoshi, an art marketplace for digital patronage that brings NFTs to Bitcoin and the Liquid
-		Network.
+		Adam Soltys is the CTO of coinos, an open source bitcoin web wallet and exchange platform, and
+		creator of Raretoshi, an art marketplace for digital patronage that brings NFTs to Bitcoin and
+		the Liquid Network.
 	</p>
 
 	<h3>SHIV RAJAGOPAL</h3>

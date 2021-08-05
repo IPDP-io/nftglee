@@ -100,7 +100,7 @@ app.post('/boom', async (req, res) => {
 
 		let ticket = await getTicket();
 
-		if (confirmed && value >= amount) {
+		if (confirmed && value >= Math.round(amount * 100000000)) {
 			invoices[text].paid = true;
 
 			await createNft('ticket', { address, pubkey, ticket });
@@ -141,34 +141,11 @@ app.post('/BTC', async (req, res) => {
 		.json();
 	invoices[text] = { address, pubkey, amount };
 
-	await coinos.url('/invoice').post({ invoice: {
-		address: text,
-		network,
-		text,
-		amount,
-		webhook
-	}}).json();
-
-	return { address: text, amount };
-});
-
-app.post('/LBTC', async (req, res) => {
-	let { address, pubkey } = req.body;
-	let network = 'liquid';
-	let amount = await getAmount();
-	let { address: text, confidentialAddress } = await coinos
-		.url('/address')
-		.query({ network })
-		.get()
-		.json();
-	invoices[text] = { address, amount, pubkey };
-
 	await coinos
 		.url('/invoice')
 		.post({
 			invoice: {
-				address: confidentialAddress,
-				unconfidential: address,
+				address: text,
 				network,
 				text,
 				amount,
@@ -178,6 +155,34 @@ app.post('/LBTC', async (req, res) => {
 		.json();
 
 	return { address: text, amount };
+});
+
+app.post('/LBTC', async (req, res) => {
+	let { address, pubkey } = req.body;
+	let network = 'liquid';
+	let amount = await getAmount();
+	let { address: unconfidential, confidentialAddress } = await coinos
+		.url('/address')
+		.query({ network })
+		.get()
+		.json();
+	invoices[confidentialAddress] = { address, amount, pubkey };
+
+	await coinos
+		.url('/invoice')
+		.post({
+			invoice: {
+				address: confidentialAddress,
+				unconfidential,
+				network,
+				text: confidentialAddress,
+				amount,
+				webhook
+			}
+		})
+		.json();
+
+	return { address: confidentialAddress, amount };
 });
 
 app.post('/LNBTC', async (req, res) => {
