@@ -1,6 +1,5 @@
 import { api } from '$lib/api';
 import { Buffer } from 'buffer';
-import cryptojs from 'crypto-js';
 
 const parseVal = (v) => parseInt(v.slice(1).toString('hex'), 16);
 const parseAsset = (v) => v.slice(1).toString('hex');
