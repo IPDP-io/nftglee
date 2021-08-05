@@ -16,8 +16,6 @@
 	import { getToken } from '$lib/auth';
 	import * as animateScroll from 'svelte-scrollto';
 
-	import '../app.css';
-
 	let trailer = () => {
 		let { p2pml } = window;
 
@@ -166,6 +164,8 @@
 </footer>
 
 <style global>
+  @import "../app.css";
+
 	input,
 	label {
 		border-bottom: 1px solid var(--main-blue);
