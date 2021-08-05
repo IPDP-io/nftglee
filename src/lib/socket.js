@@ -6,6 +6,9 @@ let timeout = 50;
 let socket = () => {
 	let s = new WebSocket(import.meta.env.VITE_SOCKET);
 
+  s.onopen = () => get(address) && s.send(JSON.stringify({ type: 'subscribe', value: get(address) }))
+  
+
 	s.onmessage = ({ data }) => {
 		try {
 			let { type, value } = JSON.parse(data);
