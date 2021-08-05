@@ -5,7 +5,7 @@
 	import PendingIcon from '$icons/pending.svelte';
 	import { address, amount, unit } from '$lib/stores';
 	import { copy as copyToClipboard } from '$lib/utils';
-  import Options from "$components/options.svelte";
+	import Options from '$components/options.svelte';
 
 	let copied;
 	let copy = () => {
@@ -20,6 +20,12 @@
 	let ticketNumber;
 
 	$: tier = ticketNumber < 100 ? 1 : ticketNumber < 1000 ? 2 : 3;
+	$: prefix = {
+		BTC: 'bitcoin',
+		LTC: 'litecoin',
+		LBTC: 'liquidnetwork',
+    LNBTC: ''
+	}[$unit];
 
 	const paymentLabel = 'Silhouettes';
 	const paymentMessage = 'Movie ticket';
@@ -28,12 +34,12 @@
 		ticketNumber = await api.url('/ticket').get().json();
 	});
 
-  $: updateQr($address, $amount)
-  let updateQr = () => {
+	$: updateQr($address, $amount);
+	let updateQr = () => {
 		QRCode.toString(
-			`${
-				$unit === 'LTC' ? 'litecoin' : 'bitcoin'
-			}:${$address}?amount=${$amount}&label=Silhouettes&message=Movie%20ticket`,
+			$unit === 'LNBTC'
+				? $address
+				: `${prefix}:${$address}?amount=${$amount}&label=Silhouettes&message=Movie%20ticket`,
 			{
 				errorCorrectionLevel: 'H',
 				type: 'svg',
@@ -51,23 +57,23 @@
 				qrCode = string;
 			}
 		);
-  } 
+	};
 
 	let showInfo;
 </script>
 
 <div class="container column">
 	<div class="container mb">
-    Purchasing ticket #{ticketNumber} - Tier {tier}
+		Purchasing ticket #{ticketNumber} - Tier {tier}
 	</div>
 	<div class="container">
 		<button on:click={() => (showInfo = !showInfo)}>What Are The Tiers?</button>
 	</div>
 	{#if showInfo}
 		<img src="/static/tiers.png" alt="Silhouette Tiers" style="max-width: 600px; margin: 0 auto;" />
-    <div class="container mb">
-		<button on:click={() => (showInfo = !showInfo)}>Got it!</button>
-  </div>
+		<div class="container mb">
+			<button on:click={() => (showInfo = !showInfo)}>Got it!</button>
+		</div>
 	{/if}
 
 	<div class="container">Send {$amount} {$unit} ($20) to:</div>
@@ -80,7 +86,12 @@
 		</div>
 		<div class="container column">
 			<a href={qrData} target="_blank">
-				<p id="payment-url" style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;">{$address}</p>
+				<p
+					id="payment-url"
+					style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;"
+				>
+					{$address}
+				</p>
 			</a>
 		</div>
 		<div class="container mb">
@@ -92,7 +103,7 @@
 				{/if}
 			</button>
 		</div>
-    <Options />
+		<Options />
 	</div>
 </div>
 
