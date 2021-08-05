@@ -11,12 +11,8 @@ export const expired = (t) => !t || decode(t).exp * 1000 < Date.now();
 
 export const getToken = async () => {
 	try {
-		let refresh_token = window.localStorage.getItem('refresh');
-		if (!refresh_token || refresh_token === 'undefined') return;
-		let result = await auth.url('/token/refresh').query({ refresh_token }).get().json();
-		let jwt_token;
-		({ jwt_token, refresh_token } = result);
-		window.localStorage.setItem('refresh', refresh_token);
+		let result = await auth.url('/token/refresh').get().json();
+		let { jwt_token } = result;
 		token.set(jwt_token);
 		await tick();
 		return jwt_token;
@@ -63,7 +59,7 @@ export const activate = async (code, email, password) => {
 export const login = async (email, password) => {
 	try {
 		err(undefined);
-		let { jwt_token, refresh_token } = await api
+		let result = await api
 			.url('/login')
 			.post({
 				email,
@@ -73,7 +69,10 @@ export const login = async (email, password) => {
 			.badRequest(err)
 			.json();
 
-		window.localStorage.setItem('refresh', refresh_token);
+		let { jwt_token } = result;
+		result = await auth.auth(`Bearer ${jwt_token}`).url('/token/refresh').get().json();
+
+		let { refresh_token } = result;
 
 		let user = {
 			email,
@@ -82,7 +81,7 @@ export const login = async (email, password) => {
 
 		session.set({ user });
 		token.set(jwt_token);
-    go('/watch');
+		go('/watch');
 
 		return user;
 	} catch (e) {
@@ -91,11 +90,10 @@ export const login = async (email, password) => {
 	}
 };
 
-export const logout = async (refresh_token) => {
+export const logout = async () => {
 	try {
-		await auth.url('/logout').query({ refresh_token }).post().res();
+		await auth.url('/logout').post().res();
 		session.set('user', undefined);
-		window.localStorage.removeItem('refresh');
 		go('/');
 		window.location.reload();
 	} catch (e) {
@@ -113,7 +111,7 @@ export const register = async (email, password, mnemonic) => {
 		} = p2wpkh({ mnemonic });
 		pubkey = pubkey.toString('hex');
 
-		let { jwt_token, refresh_token } = await api
+		let { jwt_token } = await api
 			.url('/register')
 			.post({
 				email,
