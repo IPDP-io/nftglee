@@ -2,6 +2,7 @@ const { binance, coinos, electrs, hasura } = require('./api');
 const { mint } = require('./wallet');
 
 const ticketPrice = 20;
+const { WEBHOOK_URL: webhook } = process.env;
 
 const getTicket = async () => {
 	let query = `query {
@@ -140,15 +141,13 @@ app.post('/BTC', async (req, res) => {
 		.json();
 	invoices[text] = { address, pubkey, amount };
 
-	let invoice = {
+	await coinos.url('/invoice').post({ invoice: {
 		address: text,
 		network,
 		text,
 		amount,
-		webhook: 'http://172.17.0.1:8091/boom'
-	};
-
-	await coinos.url('/invoice').post({ invoice }).json();
+		webhook
+	}}).json();
 
 	return { address: text, amount };
 });
@@ -173,7 +172,7 @@ app.post('/LBTC', async (req, res) => {
 				network,
 				text,
 				amount,
-				webhook: 'http://172.17.0.1:8091/boom'
+				webhook
 			}
 		})
 		.json();
@@ -199,7 +198,7 @@ app.post('/LNBTC', async (req, res) => {
 				network,
 				text,
 				amount,
-				webhook: 'http://172.17.0.1:8091/boom'
+				webhook
 			}
 		})
 		.json();

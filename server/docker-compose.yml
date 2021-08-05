@@ -13,6 +13,7 @@ services:
     image: asoltys/silhouettes-server
     restart: on-failure
     environment:
+      WEBHOOK_URL: '${WEBHOOK_URL}'
       HASURA_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
       COINOS_URL: '${COINOS_URL}'
       COINOS_TOKEN: '${COINOS_TOKEN}'
