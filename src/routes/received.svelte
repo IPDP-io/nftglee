@@ -41,3 +41,9 @@
 		<button on:click={() => go('/verify')}>I wrote it down</button>
 	</div>
 {/if}
+
+<style>
+	.mnemonic {
+		word-spacing: 1.5em;
+	}
+</style>

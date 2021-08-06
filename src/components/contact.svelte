@@ -76,6 +76,9 @@
 		border-bottom: 1px solid white;
 		color: white;
 	}
+	textarea#message {
+		height: 10em;
+	}
 	#submit {
 		width: 100%;
 		margin: 0;

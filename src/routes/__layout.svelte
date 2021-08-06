@@ -14,7 +14,7 @@
 	import { createWallet, setup } from '$lib/wallet';
 	import { api } from '$lib/api';
 	import { getToken } from '$lib/auth';
-	import * as animateScroll from 'svelte-scrollto';
+	// import * as animateScroll from 'svelte-scrollto';
 
 	let trailer = () => {
 		let { p2pml } = window;
@@ -140,7 +140,7 @@
 
 		<div id="watch-silhouettes" class="container column">
 			<div class="container page-block">
-				<h1 on:click={() => go('/')}>Silhouettes</h1>
+				<img src="silhouettes_logo.png" on:click={() => go('/')}>
 			</div>
 
 			{#if $initialized}
