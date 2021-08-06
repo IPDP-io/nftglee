@@ -38,32 +38,34 @@
 	};
 </script>
 
-<div class="container column">
-	<div class="container">Send to:</div>
+{#if $session.user && $session.user.address}
+	<div class="container column">
+		<div class="container">Send to:</div>
 
-	<div id="payment-qr-code" class="container column">
-		<div class="container">
-      {@html qrCode}
-		</div>
-		<div class="container column">
-      <p
-        id="payment-url"
-        style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;"
-      >
-        {$session.user.address}
-      </p>
-		</div>
-		<div class="container mb">
-			<button on:click={copy}>
-				{#if copied}
-					Copied!
-				{:else}
-					Copy
-				{/if}
-			</button>
+		<div id="payment-qr-code" class="container column">
+			<div class="container">
+				{@html qrCode}
+			</div>
+			<div class="container column">
+				<p
+					id="payment-url"
+					style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;"
+				>
+					{$session.user.address}
+				</p>
+			</div>
+			<div class="container mb">
+				<button on:click={copy}>
+					{#if copied}
+						Copied!
+					{:else}
+						Copy
+					{/if}
+				</button>
+			</div>
 		</div>
 	</div>
-</div>
+{/if}
 
 <style>
 	#payment-qr-code {

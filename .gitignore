@@ -10,4 +10,5 @@ server/.env
 server/.env.prod
 server/trailer
 server/db
+server/litecoin
 deploy.sh

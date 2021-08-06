@@ -21,6 +21,7 @@
 			.post({ address, pubkey })
 			.json();
 
+    window.localStorage.setItem('address', invoice.address);
 		$invoiceAddress = invoice.address;
 		$amount = invoice.amount;
 

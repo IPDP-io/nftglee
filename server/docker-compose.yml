@@ -9,6 +9,7 @@ services:
   app:
     depends_on:
       - hbp
+      - litecoin
     container_name: silapp
     image: asoltys/silhouettes-server
     restart: on-failure
@@ -87,3 +88,9 @@ services:
     environment:
       POSTGRES_PASSWORD: pgpassword
       POSTGRES_DB: postgres
+  litecoin:
+    image: asoltys/litecoin:latest
+    container_name: litecoin 
+    volumes:
+      - ./litecoin:/config
+    restart: unless-stopped

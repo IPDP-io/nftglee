@@ -69,12 +69,14 @@ export const login = async (email, password) => {
 			.badRequest(err)
 			.json();
 
-		let { jwt_token } = result;
+    if (!result) return err("Login failed");
+		let { address, jwt_token } = result;
 		result = await auth.auth(`Bearer ${jwt_token}`).url('/token/refresh').get().json();
 
 		let { refresh_token } = result;
 
 		let user = {
+      address,
 			email,
 			token: jwt_token
 		};
