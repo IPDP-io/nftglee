@@ -140,7 +140,7 @@
 
 		<div id="watch-silhouettes" class="container column">
 			<div class="container page-block">
-				<h1 on:click={() => go('/')}>Silhouettes</h1>
+				<img src="silhouettes_logo.png" on:click={() => go('/')}>
 			</div>
 
 			{#if $initialized}
