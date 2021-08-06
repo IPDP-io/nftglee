@@ -5,6 +5,7 @@
 	import { go } from '$lib/utils';
 	import { p2wpkh } from '$lib/wallet';
 	import { send } from '$lib/socket';
+	import * as animateScroll from 'svelte-scrollto';
 
 	let getInvoice = async (u) => {
 		$loading = true;
@@ -21,7 +22,7 @@
 			.post({ address, pubkey })
 			.json();
 
-    window.localStorage.setItem('address', invoice.address);
+		window.localStorage.setItem('address', invoice.address);
 		$invoiceAddress = invoice.address;
 		$amount = invoice.amount;
 
@@ -29,6 +30,7 @@
 
 		$loading = false;
 		go('/invoice');
+		animateScroll.scrollTo({ element: '#logo' });
 	};
 </script>
 
@@ -37,37 +39,35 @@
 		{#if $unit}
 			<h3>Other payment options:</h3>
 
-				<div class="container space-evenly">
-          {#if $unit !== 'BTC'}
-					<button
-						on:click={() => getInvoice('BTC')}
-						class:active={$unit === 'BTC'}>Bitcoin</button
+			<div class="container space-evenly">
+				{#if $unit !== 'BTC'}
+					<button on:click={() => getInvoice('BTC')} class:active={$unit === 'BTC'}>Bitcoin</button>
+				{/if}
+				{#if $unit !== 'LBTC'}
+					<button on:click={() => getInvoice('LBTC')} class:active={$unit === 'LBTC'}>Liquid</button
 					>
-          {/if}
-          {#if $unit !== 'LBTC'}
-					<button
-						on:click={() => getInvoice('LBTC')}
-						class:active={$unit === 'LBTC'}>Liquid</button
+				{/if}
+				{#if $unit !== 'LNBTC'}
+					<button on:click={() => getInvoice('LNBTC')} class:active={$unit === 'LNBTC'}
+						>Lightning</button
 					>
-          {/if}
-          {#if $unit !== 'LNBTC'}
-					<button
-						on:click={() => getInvoice('LNBTC')}
-						class:active={$unit === 'LNBTC'}>Lightning</button
-					>
-          {/if}
-          {#if $unit !== 'LTC'}
-          <button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}> Litecoin </button>
-          {/if}
-				</div>
+				{/if}
+				{#if $unit !== 'LTC'}
+					<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}>
+						Litecoin
+					</button>
+				{/if}
+			</div>
 		{:else}
 			<h3>Choose a payment option:</h3>
-		<div class="container space-evenly mb">
-			<button on:click={() => getInvoice('BTC')} class:active={$unit && $unit.includes('BTC')}>
-				Bitcoin
-			</button>
-			<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}> Litecoin </button>
-		</div>
+			<div class="container space-evenly mb">
+				<button on:click={() => getInvoice('BTC')} class:active={$unit && $unit.includes('BTC')}>
+					Bitcoin
+				</button>
+				<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}>
+					Litecoin
+				</button>
+			</div>
 		{/if}
 	</div>
 </div>

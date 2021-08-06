@@ -42,4 +42,4 @@ export const err = (e) => {
 
 export const focus = (el) => setTimeout(() => el.focus(), 50);
 
-export const go = (r) => goto(r, { noscroll: true });
+export const go = (r, options = { noscroll: true }) => goto(r, options);

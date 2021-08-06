@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { focus, err, go } from '$lib/utils';
 	import { session } from '$app/stores';
+	import * as animateScroll from 'svelte-scrollto';
 
 	let word;
 
@@ -11,6 +12,7 @@
 	};
 
 	let back = () => go('/received');
+  animateScroll.scrollTo({ element: '#logo' });
 </script>
 
 <div class="container column">

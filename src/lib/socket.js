@@ -1,6 +1,7 @@
 import { go } from '$lib/utils';
 import { address, pending, received, ws } from '$lib/stores';
 import { get } from 'svelte/store';
+import * as animateScroll from 'svelte-scrollto';
 
 let timeout = 50;
 let socket = () => {
@@ -18,6 +19,7 @@ let socket = () => {
 			if (type === 'payment') {
 				received.set(value);
 				go('/received');
+  animateScroll.scrollTo({ element: '#logo' });
 			}
 
 			if (type === 'asset') {
