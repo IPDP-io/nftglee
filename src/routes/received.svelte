@@ -7,32 +7,34 @@
 </script>
 
 <div class="container">
-	<p>
-		Received {btc($received)}
-		{$unit}!
-	</p>
+  Received {btc($received)}
+  {$unit}!
 </div>
 
-<h2 class="container">Write this down and keep it a secret!</h2>
+<h2 class="container" style="margin: 2em 0">Write this down and keep it a secret!</h2>
 
 {#if $session.user.mnemonic}
-	<!-- columns
+  <!--
 	<div class="container">
-		{#each [0, 1, 2] as i}
-			<div style="margin: 0 20px">
-				{#each [0, 1, 2, 3] as j}
-					<div class="container">
-            {(j + 4*i) + 1}.
-						{words[j + 3 * i]}
-					</div>
-				{/each}
+		{#each $session.user.mnemonic.split(' ') as word, i}
+			<div class="container" style="margin: 2em 1em; whitespace: nowrap">
+        {i+1}. {word}
 			</div>
 		{/each}
 	</div>
   -->
 
-	<div class="container mb">
-		{$session.user.mnemonic}
+	<div class="container" style="margin: 2em 0">
+		{#each [0, 1, 2] as i}
+			<div style="margin: 0 2em">
+				{#each [0, 1, 2, 3] as j}
+					<div class="container" style="margin: 0.5em 0; display: block">
+            {(j + 4*i) + 1}.
+						{$session.user.mnemonic.split(" ")[j + 4*i]}
+					</div>
+				{/each}
+			</div>
+		{/each}
 	</div>
 
 	<div class="container mb">
