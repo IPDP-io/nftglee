@@ -14,7 +14,7 @@
 	import { createWallet, setup } from '$lib/wallet';
 	import { api } from '$lib/api';
 	import { getToken } from '$lib/auth';
-	import * as animateScroll from 'svelte-scrollto';
+	// import * as animateScroll from 'svelte-scrollto';
 
 	let trailer = () => {
 		let { p2pml } = window;

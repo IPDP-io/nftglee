@@ -515,6 +515,7 @@ textarea {
     height: 4rem;
     height: 15vh;
     resize : vertical;
+    overflow: auto;
 }
 input, textarea {
     background-color: transparent;

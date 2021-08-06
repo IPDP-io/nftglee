@@ -31,7 +31,7 @@
 	</div>
   -->
 
-	<div class="container mb">
+	<div class="container mnemonic mb">
 		{$session.user.mnemonic}
 	</div>
 
@@ -39,3 +39,9 @@
 		<button on:click={() => go('/verify')}>I wrote it down</button>
 	</div>
 {/if}
+
+<style>
+	.mnemonic {
+		word-spacing: 1.5em;
+	}
+</style>
