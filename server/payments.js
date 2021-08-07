@@ -100,7 +100,7 @@ app.post('/boom', async (req, res) => {
 
 		let ticket = await getTicket();
 
-		if (confirmed && value >= Math.round(amount * 100000000)) {
+		if (confirmed && value >= Math.round(amount * 100000000 * 0.97)) {
 			invoices[text].paid = true;
 
 			await createNft('ticket', { address, pubkey, ticket });
@@ -114,9 +114,9 @@ app.post('/boom', async (req, res) => {
 				await new Promise((r) => setTimeout(r, 2000));
 				await createNft('artwork', { address, pubkey, ticket });
 			}
-		}
-
-		subscribers[text].send(JSON.stringify({ type: 'payment', value }));
+		} else {
+      subscribers[text].send(JSON.stringify({ type: 'payment', value }));
+    }
 
 		res.send(req.body);
 	} catch (e) {
@@ -134,11 +134,13 @@ app.post('/BTC', async (req, res) => {
 	let { address, pubkey } = req.body;
 	let network = 'bitcoin';
 	let amount = await getAmount();
+
 	let { address: text } = await coinos
 		.url('/address')
 		.query({ network, type: 'bech32' })
 		.get()
 		.json();
+
 	invoices[text] = { address, pubkey, amount };
 
 	await coinos
@@ -166,6 +168,7 @@ app.post('/LBTC', async (req, res) => {
 		.query({ network })
 		.get()
 		.json();
+
 	invoices[confidentialAddress] = { address, amount, pubkey };
 
 	await coinos
@@ -194,6 +197,7 @@ app.post('/LNBTC', async (req, res) => {
 		.post({ amount: Math.round(amount * 100000000) })
 		.text()
 		.catch(console.log);
+
 	invoices[text] = { address, amount, pubkey };
 
 	await coinos

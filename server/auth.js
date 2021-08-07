@@ -73,6 +73,7 @@ const login = async (req, res) => {
     users(where: {display_name: {_eq: $email}}, limit: 1) {
       address
       display_name
+      mnemonic
     }
   }`;
 
@@ -91,8 +92,7 @@ const login = async (req, res) => {
 		let response = await hbp.url('/auth/login').post({ email, password }).res();
 		Array.from(response.headers.entries()).forEach(([k, v]) => res.header(k, v));
 
-		let json = await response.json();
-    json.address = user.address;
+		let json = { ...(await response.json()), ...user };
 
 		return res.send(json);
 	} catch (e) {

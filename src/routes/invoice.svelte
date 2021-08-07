@@ -63,48 +63,56 @@
 </script>
 
 <div class="container column">
-	<div class="container mb">
-		Purchasing ticket #{ticketNumber} - Tier {tier}
-	</div>
-	<div class="container">
-		<button on:click={() => (showInfo = !showInfo)}>What Are The Tiers?</button>
-	</div>
-	{#if showInfo}
-		<img src="/static/tiers.png" alt="Silhouette Tiers" style="max-width: 600px; margin: 0 auto;" />
+	{#if $amount}
 		<div class="container mb">
-			<button on:click={() => (showInfo = !showInfo)}>Got it!</button>
+			Purchasing ticket #{ticketNumber} - Tier {tier}
+		</div>
+
+		<div class="container">
+			<button on:click={() => (showInfo = !showInfo)}>What Are The Tiers?</button>
+		</div>
+
+		{#if showInfo}
+			<img
+				src="/static/tiers.png"
+				alt="Silhouette Tiers"
+				style="max-width: 600px; margin: 0 auto;"
+			/>
+			<div class="container mb">
+				<button on:click={() => (showInfo = !showInfo)}>Got it!</button>
+			</div>
+		{/if}
+
+		<div class="container">Send {$amount} {$unit} ($20) to:</div>
+
+		<div id="payment-qr-code" class="container column">
+			<div class="container">
+				<a href={qrData} target="_blank">
+					{@html qrCode}
+				</a>
+			</div>
+			<div class="container column">
+				<a href={qrData} target="_blank">
+					<p
+						id="payment-url"
+						style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;"
+					>
+						{$address}
+					</p>
+				</a>
+			</div>
+			<div class="container mb">
+				<button on:click={copy}>
+					{#if copied}
+						Copied!
+					{:else}
+						Copy
+					{/if}
+				</button>
+			</div>
 		</div>
 	{/if}
-
-	<div class="container">Send {$amount} {$unit} ($20) to:</div>
-
-	<div id="payment-qr-code" class="container column">
-		<div class="container">
-			<a href={qrData} target="_blank">
-				{@html qrCode}
-			</a>
-		</div>
-		<div class="container column">
-			<a href={qrData} target="_blank">
-				<p
-					id="payment-url"
-					style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;"
-				>
-					{$address}
-				</p>
-			</a>
-		</div>
-		<div class="container mb">
-			<button on:click={copy}>
-				{#if copied}
-					Copied!
-				{:else}
-					Copy
-				{/if}
-			</button>
-		</div>
-		<Options />
-	</div>
+	<Options />
 </div>
 
 <style>

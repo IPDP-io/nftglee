@@ -7,10 +7,11 @@ const { address: Address, networks, Transaction } = require('litecoinjs-lib');
 const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
 const fs = require('fs');
+const persist = require('./persist')
 
 const network = networks.litereg;
 
-invoices = {};
+invoices = persist('invoices.json');
 subscribers = {};
 
 let asset;

@@ -59,7 +59,7 @@ export const activate = async (code, email, password) => {
 export const login = async (email, password) => {
 	try {
 		err(undefined);
-		let result = await api
+		let user = await api
 			.url('/login')
 			.post({
 				email,
@@ -69,20 +69,10 @@ export const login = async (email, password) => {
 			.badRequest(err)
 			.json();
 
-    if (!result) return err("Login failed");
-		let { address, jwt_token } = result;
-		result = await auth.auth(`Bearer ${jwt_token}`).url('/token/refresh').get().json();
-
-		let { refresh_token } = result;
-
-		let user = {
-      address,
-			email,
-			token: jwt_token
-		};
-
+		if (!user) return err('Login failed');
+		user.token = user.jwt_token;
 		session.set({ user });
-		token.set(jwt_token);
+		token.set(user.token);
 		go('/watch');
 
 		return user;
@@ -96,6 +86,7 @@ export const logout = async () => {
 	try {
 		await auth.url('/logout').post().res();
 		session.set('user', undefined);
+		window.localStorage.removeItem('user');
 		go('/');
 		window.location.reload();
 	} catch (e) {

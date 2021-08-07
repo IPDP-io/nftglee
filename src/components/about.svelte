@@ -78,9 +78,3 @@
 		assets.
 	</p>
 </div>
-
-<style>
-	h1 {
-		font-size: 5em;
-	}
-</style>

@@ -100,20 +100,14 @@
 
 <svelte:head />
 
-<!--
-<div style="word-break: break-all; max-width: 600px; margin: 0 auto">
-	{$token}
-</div>
--->
-
-<div class="container">
+<div class="container" style="max-width: 40em; margin: 0 auto">
 	{#if goodies.find((g) => g.type === 'ticket')}
-		<button on:click={watch}>Watch Now</button>
+		<button on:click={watch} style="flex-grow: 1">Watch Now</button>
 	{:else}
-		<button on:click={deposit}>Deposit a Ticket</button>
+		<button on:click={deposit} style="flex-grow: 1">Deposit a Ticket</button>
 	{/if}
 
-	<button on:click={logout}>Logout</button>
+	<button on:click={logout} style="flex-grow: 1">Logout</button>
 </div>
 
 {#if depositing}
@@ -123,7 +117,16 @@
 {#each goodies as goodie (goodie.asset)}
 	<div class="container column goodie">
 		<h3 class="nft-item">{nfts[goodie.type].name}</h3>
-		<video class="goodie-video" muted playsinline autoplay loop type="video/mp4" on:click={toggle} key={goodie.asset}>
+		<video
+			class="goodie-video"
+			muted
+			playsinline
+			autoplay
+			loop
+			type="video/mp4"
+			on:click={toggle}
+			key={goodie.asset}
+		>
 			<source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
 			Your browser does not support HTML5 video.
 		</video>

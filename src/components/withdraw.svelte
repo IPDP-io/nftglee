@@ -7,11 +7,10 @@
 	export let goodies;
 
 	let to;
-	let from = $session.user;
 	let withdrawing;
 	let submit = async () => {
 		try {
-			await withdraw(goodie, from, to);
+			await withdraw(goodie, $session.user, to);
 			goodies = goodies.filter((g) => g.txid !== goodie.txid);
 		} catch (e) {
 			err(e);

@@ -7,30 +7,20 @@
 </script>
 
 <div class="container">
-  Received {btc($received)}
-  {$unit}!
+	Detected payment of {btc($received)}
+	{$unit}!
 </div>
 
-<h2 class="container" style="margin: 2em 0">Write this down and keep it a secret!</h2>
-
 {#if $session.user.mnemonic}
-  <!--
-	<div class="container">
-		{#each $session.user.mnemonic.split(' ') as word, i}
-			<div class="container" style="margin: 2em 1em; whitespace: nowrap">
-        {i+1}. {word}
-			</div>
-		{/each}
-	</div>
-  -->
+	<h3 class="container" style="margin: 1em 0">Write these words down and keep them a secret!</h3>
 
-	<div class="container" style="margin: 2em 0">
+	<div class="container" style="margin: 1em 0">
 		{#each [0, 1, 2] as i}
 			<div style="margin: 0 2em">
 				{#each [0, 1, 2, 3] as j}
 					<div class="container" style="margin: 0.5em 0; display: block">
-            {(j + 4*i) + 1}.
-						{$session.user.mnemonic.split(" ")[j + 4*i]}
+						{j + 4 * i + 1}.
+						{$session.user.mnemonic.split(' ')[j + 4 * i]}
 					</div>
 				{/each}
 			</div>
@@ -38,7 +28,7 @@
 	</div>
 
 	<div class="container mb">
-		<button on:click={() => go('/verify')}>I wrote it down</button>
+		<button on:click={() => go('/verify')}>I wrote them down</button>
 	</div>
 {/if}
 

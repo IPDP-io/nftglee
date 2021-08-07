@@ -19,7 +19,7 @@ let socket = () => {
 			if (type === 'payment') {
 				received.set(value);
 				go('/received');
-  animateScroll.scrollTo({ element: '#logo' });
+				animateScroll.scrollTo({ element: '#logo' });
 			}
 
 			if (type === 'asset') {

@@ -5,7 +5,6 @@
 	import { go } from '$lib/utils';
 	import { p2wpkh } from '$lib/wallet';
 	import { send } from '$lib/socket';
-	import * as animateScroll from 'svelte-scrollto';
 
 	let getInvoice = async (u) => {
 		$loading = true;
@@ -22,7 +21,8 @@
 			.post({ address, pubkey })
 			.json();
 
-		window.localStorage.setItem('address', invoice.address);
+    window.localStorage.setItem('address', invoice.address);
+
 		$invoiceAddress = invoice.address;
 		$amount = invoice.amount;
 
@@ -30,7 +30,6 @@
 
 		$loading = false;
 		go('/invoice');
-		animateScroll.scrollTo({ element: '#logo' });
 	};
 </script>
 

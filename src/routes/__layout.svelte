@@ -1,7 +1,18 @@
 <script>
 	import { onMount } from 'svelte';
 	import { page, session } from '$app/stores';
-	import { address, full, error, mnemonic, initialized, player, token, ws } from '$lib/stores';
+	import {
+		amount,
+		unit,
+		address,
+		full,
+		error,
+		mnemonic,
+		initialized,
+		player,
+		token,
+		ws
+	} from '$lib/stores';
 	import Down from '$icons/down.svelte';
 	import VolumeIconUp from '$icons/volume-up.svelte';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
@@ -16,6 +27,11 @@
 	import { getToken } from '$lib/auth';
 	import * as animateScroll from 'svelte-scrollto';
 
+	let reset = () => {
+		$amount = $unit = undefined;
+		go('/');
+	};
+
 	let trailer = () => {
 		let { p2pml } = window;
 
@@ -26,6 +42,7 @@
 				parentId: '#player',
 				source: '/trailer/playlist.m3u8',
 				autoPlay: true,
+				loop: true,
 				mute: true,
 				hideMediaControl: true,
 				chromeless: true,
@@ -66,7 +83,16 @@
 		trailer();
 		socket();
 		setup();
-		if (!$session.user) $session.user = await createWallet();
+		if (!$session.user) {
+			let user = window.localStorage.getItem('user');
+			try {
+				if (user) $session.user = JSON.parse(user);
+				else $session.user = createWallet();
+				window.localStorage.setItem('user', JSON.stringify($session.user));
+      } catch {
+        window.localStorage.removeItem('user');
+      }
+		}
 		$initialized = true;
 	});
 
@@ -139,27 +165,47 @@
 		</div>
 
 		<div id="watch-silhouettes" class="container column">
-			<div class="container page-block">
-				<img id="logo" src="silhouettes_logo.png" on:click={() => go('/')}>
-			</div>
+			<div class="page-block">
+				<div class="container">
+					<img
+						id="logo"
+						src="silhouettes_logo.png"
+						on:click={reset}
+						alt="Silhouettes"
+						style="max-width: 80%"
+					/>
+				</div>
 
-			{#if $initialized}
-				{#if $error}
-					<div class="container" style="color: red">{$error}</div>
-				{/if}
+				{#if $initialized}
+					{#if $error}
+						<div class="container" style="color: red">{$error}</div>
+					{/if}
 
-				{#if $session.user.email}
-					<div class="container">
-						Signed in as {$session.user.email}
+					{#if $session.user.email}
+						<div class="page-block">
+							<div class="container">
+								Signed in as {$session.user.email}
+							</div>
+
+							{#if $page.path !== '/watch'}
+								<div class="container">
+									<button on:click={() => go('/watch')}>Account Home</button>
+								</div>
+							{/if}
+						</div>
+					{/if}
+
+					<slot />
+
+					<div class="page-block">
+						<Contact />
+					</div>
+
+					<div class="page-block">
+						<About />
 					</div>
 				{/if}
-
-				<div style="min-height: 400px" class="page-block">
-					<slot />
-					<Contact />
-					<About />
-				</div>
-			{/if}
+			</div>
 		</div>
 	</section>
 </main>
@@ -221,13 +267,9 @@
 		display: block;
 		max-width: 1024px;
 		margin: auto;
-		padding: 4em;
 		line-height: 1.5em;
 	}
 
-	.wwwwwh h2 {
-		margin-top: 2em;
-	}
 	.wwwwwh h3 {
 		margin-top: 2em;
 	}
