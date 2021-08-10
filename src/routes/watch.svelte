@@ -4,7 +4,7 @@
 	import * as animateScroll from 'svelte-scrollto';
 	import { logout, requireLogin } from '$lib/auth';
 	import { page, session } from '$app/stores';
-	import { full, player, token } from '$lib/stores';
+	import { full, player, token, ticket } from '$lib/stores';
 	import VolumeIconUp from '$icons/volume-up.svelte';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
 	import Deposit from '$components/deposit.svelte';
@@ -40,6 +40,7 @@
 	let getGoodies = async () => {
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
 		goodies.sort((a, b) => (a.type === 'ticket' ? -1 : a.type === 'poster' ? -1 : 1));
+    $ticket = goodies.find((g) => g.type === 'ticket')
 	};
 
 	let toggle = (e) => {

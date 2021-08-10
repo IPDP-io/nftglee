@@ -10,6 +10,7 @@
 		mnemonic,
 		initialized,
 		player,
+    ticket,
 		token,
 		ws
 	} from '$lib/stores';
@@ -93,7 +94,7 @@
 				window.localStorage.removeItem('user');
 			}
 
-      if (!$session.user.email && window.localStorage.getItem('address')) go('/received');
+			if (!$session.user.email && window.localStorage.getItem('address')) go('/received');
 		}
 		$initialized = true;
 	});
@@ -156,6 +157,9 @@
 					<VolumeIconUp />
 				{/if}
 			</div>
+			{#if !$ticket}
+				<div id="ticket-warning">Ticket not found, deposit a ticket to continue watching</div>
+			{/if}
 			<div
 				id="video-overlay"
 				on:click|preventDefault|stopPropagation={scrollDown}
@@ -260,9 +264,20 @@
 		display: block;
 		width: 100%;
 	}
+	#ticket-warning,
 	#sound-toggle,
 	#video-overlay {
 		z-index: 9999;
+	}
+
+	#ticket-warning {
+		background: white;
+		opacity: 0.85;
+		padding: 2em;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 
 	.wwwwwh {

@@ -10,6 +10,7 @@ export const player = writable();
 export const received = writable(0);
 export const error = writable();
 export const mnemonic = writable();
+export const ticket = writable();
 export const token = writable();
 export const unit = writable();
 export const ws = writable();
