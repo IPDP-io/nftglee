@@ -17,3 +17,6 @@ services:
       - '3000:3000'
     volumes:
       - ${HOME}/silhouettes:/silhouettes
+  litecoin:
+    volumes:
+      - /mnt/disks/ltc/.litecoin:/config
