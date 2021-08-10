@@ -21,14 +21,20 @@
 {#if withdrawing}
 	<div id="withdraw" class="container column">
 		<h2 class="nft-label">Withdraw to Liquid Address</h2>
-		<h3 class="nft-item">
+		<p class="nft-item">
 			You can use any Liquid wallet such as
-			<a href="https://blockstream.com/green/" class="blockstream-green" target="_blank">
-				Blockstream Green
-			</a>
-			or
-			<a href="https://blockstream.com/aqua/" class="blockstream-aqua" target="_blank"> Aqua </a>
-		</h3>
+			<a href="https://blockstream.com/green/" class="blockstream-green" target="_blank"
+				>Blockstream Green</a
+			>,
+			<a href="https://blockstream.com/aqua/" class="blockstream-aqua" target="_blank">Aqua</a>, or
+			<a href="https://coinos.io" class="coinos" target="_blank"> Coinos </a>
+		</p>
+		{#if goodie.type === 'ticket'}
+			<p>
+				CAUTION: If you withdraw this ticket, you won't be able to continue watching the film until
+				you re-deposit it into your account or buy a new one
+			</p>
+		{/if}
 		<form on:submit|preventDefault={submit}>
 			<div id="withdraw-form" class="container">
 				<div class="container column">
@@ -42,7 +48,7 @@
 						/>
 					</div>
 					<div>
-						<button class="withdraw" type="submit">Withdraw</button>
+						<button class="withdraw" type="submit" style="margin: 0 auto">Withdraw</button>
 					</div>
 				</div>
 			</div>
@@ -80,6 +86,9 @@
 	}
 	a.blockstream-aqua:hover {
 		color: #13cdc2;
+	}
+	a.coinos:hover {
+		color: #faf601;
 	}
 	@media screen and (orientation: landscape) and (max-height: 600px) {
 		.withdraw {
