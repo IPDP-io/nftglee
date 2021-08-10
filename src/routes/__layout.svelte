@@ -171,7 +171,7 @@
 				<div class="container page-block" style="padding-top: 0">
 					<img
 						id="logo"
-						src="silhouettes_logo.png"
+						src="silhouettes.png"
 						on:click={reset}
 						alt="Silhouettes"
 						style="max-width: 80%"
