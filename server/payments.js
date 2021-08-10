@@ -3,6 +3,7 @@ const { mint } = require('./wallet');
 
 const ticketPrice = 20;
 const { WEBHOOK_URL: webhook } = process.env;
+const sats = (n) => Math.round(n * 100000000);
 
 const getTicket = async () => {
 	let query = `query {
@@ -105,10 +106,14 @@ boom = async ({ amount: value, confirmed, hash, text }) => {
 	let { amount, address, pubkey, paid } = invoices[text];
 	if (paid) throw new Error('already paid');
 
-	let ticket = await getTicket();
+	if (!invoices[text].received) {
+		invoices[text].received = value;
+		invoices[text].hash = hash;
+		subscribers[text].send(JSON.stringify({ type: 'payment', value }));
+	}
 
-	if (confirmed && value >= Math.round(amount * 100000000 * 0.97)) {
-		invoices[text].paid = true;
+	if (confirmed && value >= sats(amount * 0.97)) {
+		let ticket = await getTicket();
 
 		await createNft('ticket', { address, pubkey, ticket });
 
@@ -121,12 +126,12 @@ boom = async ({ amount: value, confirmed, hash, text }) => {
 			await new Promise((r) => setTimeout(r, 2000));
 			await createNft('artwork', { address, pubkey, ticket });
 		}
-	} else {
-		invoices[text].received = value;
-		invoices[text].hash = hash;
-		invoices[text] = invoices[text];
-		subscribers[text].send(JSON.stringify({ type: 'payment', value }));
+
+		invoices[text].paid = true;
 	}
+
+	// assign to self to persist to file
+	invoices[text] = invoices[text];
 };
 
 app.post('/boom', async (req, res) => {
@@ -174,7 +179,7 @@ app.post('/BTC', async (req, res) => {
 				address: text,
 				network,
 				text,
-				amount,
+				amount: sats(amount),
 				webhook
 			}
 		})
@@ -218,7 +223,7 @@ app.post('/LNBTC', async (req, res) => {
 	let amount = await getAmount();
 	let text = await coinos
 		.url('/lightning/invoice')
-		.post({ amount: Math.round(amount * 100000000) })
+		.post({ amount: sats(amount) })
 		.text()
 		.catch(console.log);
 
