@@ -20,3 +20,7 @@ services:
   litecoin:
     volumes:
       - /mnt/disks/ltc/.litecoin:/config
+    ports:
+      - '9333:9333'
+      - '19506:18506'
+      - '19507:18507'
