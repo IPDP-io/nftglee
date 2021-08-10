@@ -11,6 +11,7 @@
 		loading = true;
 		registered = await register(email, password, $session.user.mnemonic);
     window.localStorage.removeItem(window.localStorage.getItem('address'));
+    window.localStorage.removeItem('address');
 		loading = false;
 	};
 

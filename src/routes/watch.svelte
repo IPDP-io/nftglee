@@ -5,6 +5,7 @@
 	import { logout, requireLogin } from '$lib/auth';
 	import { page, session } from '$app/stores';
 	import { full, player, token } from '$lib/stores';
+	import VolumeIconUp from '$icons/volume-up.svelte';
 	import VolumeIconMute from '$icons/volume-mute.svelte';
 	import Deposit from '$components/deposit.svelte';
 	import Withdraw from '$components/withdraw.svelte';
@@ -24,6 +25,8 @@
 		}
 	};
 
+  let muted = true;
+
 	let interval;
 	onMount(async () => {
 		await requireLogin();
@@ -40,6 +43,7 @@
 	};
 
 	let toggle = (e) => {
+		muted = !muted;
 		e.target.muted = !e.target.muted;
 	};
 
@@ -122,19 +126,29 @@
 {#each goodies as goodie (goodie.asset)}
 	<div class="container column goodie">
 		<h3 class="nft-item">{nfts[goodie.type].name}</h3>
-		<video
-			class="goodie-video"
-			muted
-			playsinline
-			autoplay
-			loop
-			type="video/mp4"
-			on:click={toggle}
-			key={goodie.asset}
-		>
-			<source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
-			Your browser does not support HTML5 video.
-		</video>
+    <div style="position: relative" class="goodie-video">
+      <div id="sound-toggle" style="cursor: pointer">
+        {#if muted}
+          <VolumeIconMute />
+        {:else}
+          <VolumeIconUp />
+        {/if}
+      </div>
+      <video
+        style="display: block; width: 100%"
+        muted
+        playsinline
+        autoplay
+        loop
+        type="video/mp4"
+        on:click={toggle}
+        key={goodie.asset}
+      >
+        <source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
+        Your browser does not support HTML5 video.
+      </video>
+
+  </div>
 
 		<Withdraw {goodie} bind:goodies />
 	</div>
@@ -158,6 +172,7 @@
 	.goodie:nth-child(odd) {
 		background-color: #eeeeee;
 	}
+
 	.goodie-video {
 		width: 50%;
 	}
@@ -171,5 +186,9 @@
 		.goodie-video {
 			width: 75%;
 		}
+	}
+	#sound-toggle,
+	#video-overlay {
+		z-index: 9999;
 	}
 </style>

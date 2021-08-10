@@ -86,6 +86,7 @@ export const logout = async () => {
 	try {
 		await auth.url('/logout').post().res();
 		session.set('user', undefined);
+    window.localStorage.removeItem('address');
 		window.localStorage.removeItem('user');
 		go('/');
 		window.location.reload();
