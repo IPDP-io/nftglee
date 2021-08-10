@@ -11,7 +11,7 @@ const ltc = new Core({
 	username: 'admin1',
 	password: '123',
 	network: NETWORK === 'regtest' ? 'regtest' : 'mainnet',
-	port: NETWORK === 'regtest' ? 19443 : 9333,
+	port: NETWORK === 'regtest' ? 19443 : 9332,
 	zmqrawblock: 'tcp://127.0.0.1:18506',
 	zmqrawtx: 'tcp://127.0.0.1:18507'
 });
