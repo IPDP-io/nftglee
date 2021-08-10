@@ -78,7 +78,6 @@
 	const year = new Date().getFullYear();
 
 	onMount(async () => {
-		password = window.sessionStorage.getItem('password');
 		setupScrollFade();
 		await getToken();
 		trailer();
@@ -134,20 +133,9 @@
 	let scrollDown = () => {
 		animateScroll.scrollTo({ element: '#watch-silhouettes', duration: 800 });
 	};
-
-	let password;
-	$: if (password === 'liquidart') window.sessionStorage.setItem('password', 'liquidart');
 </script>
 
-<div class:hide={password === 'liquidart'}>
-	<input
-		placeholder="Enter"
-		bind:value={password}
-		style="display: block; max-width: 400px; margin: 5em auto;"
-	/>
-</div>
-
-<main class:hidden={password !== 'liquidart'}>
+<main>
 	<section>
 		<div id="movie-banner" class="container" on:click={toggle}>
 			<div id="sound-toggle" style="cursor: pointer">
