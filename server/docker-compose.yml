@@ -65,10 +65,10 @@ services:
       JWT_KEY: '${JWT_KEY}'
       AUTO_MIGRATE: "true"
       STORAGE_ENABLED: "false"
-      SERVER_URL: http://localhost:3000
+      SERVER_URL: '${SERVER_URL}'
       DATABASE_URL: postgres://postgres:pgpassword@postgres:5432/postgres
-      REDIRECT_URL_ERROR: http://localhost:3000
-      REDIRECT_URL_SUCCESS: http://localhost:3000
+      REDIRECT_URL_ERROR: '${SERVER_URL}'
+      REDIRECT_URL_SUCCESS: '${SERVER_URL}'
       AUTO_ACTIVATE_NEW_USERS: "false"
       EMAILS_ENABLED: "true"
       VERIFY_EMAILS: "true"
