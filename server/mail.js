@@ -15,11 +15,23 @@ let transport = nodemailer.createTransport({
 
 app.post('/contact', async (req, res) => {
 	try {
+		let { name, email, subject, message } = req.body;
 		await transport.sendMail({
 			from: 'adam@coinos.io',
-			to: 'asoltys@gmail.com',
+			to: 'asoltys@gmail.com; test@coinos.io',
 			subject: 'Silhouettes contact',
-			text: JSON.stringify(req.body)
+			html: `
+        <p>Name: ${name}</p>
+				<p>Email: ${email}</p>
+        <p>Subject: ${subject}</p>
+        <p>Message: ${message}</p>
+      `,
+			text: `
+        Name: ${name}
+				Email: ${email}
+        Subject: ${subject}
+        Message: ${message}
+      `
 		});
 	} catch (err) {
 		console.error('Unable to send email');

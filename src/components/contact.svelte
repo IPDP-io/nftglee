@@ -2,15 +2,14 @@
 	import wretch from 'wretch';
 	import PendingIcon from '$icons/pending.svelte';
 
-	let done, first, last, email, message, subject, loading;
+	let done, name, email, message, subject, loading;
 
 	let submit = async () => {
 		loading = true;
 		await wretch()
 			.url('/api/contact')
 			.post({
-				first,
-				last,
+				name,
 				email,
 				subject,
 				message
@@ -41,7 +40,7 @@
 				</div>
 				<div class="form-field">
 					<div>
-						<input id="grid-first-name" type="text" placeholder="Name" bind:value={first} />
+						<input id="grid-name-name" type="text" placeholder="Name" bind:value={name} />
 					</div>
 				</div>
 				<div class="form-field">
