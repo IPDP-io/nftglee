@@ -89,10 +89,11 @@
 				if (user) $session.user = JSON.parse(user);
 				else $session.user = createWallet();
 				window.localStorage.setItem('user', JSON.stringify($session.user));
-      } catch {
-        window.localStorage.removeItem('user');
-      }
+			} catch {
+				window.localStorage.removeItem('user');
+			}
 		}
+		if (window.localStorage.getItem('address')) go('/received');
 		$initialized = true;
 	});
 
@@ -166,7 +167,7 @@
 
 		<div id="watch-silhouettes" class="container column">
 			<div class="page-block">
-				<div class="container">
+				<div class="container page-block" style="padding-top: 0">
 					<img
 						id="logo"
 						src="silhouettes_logo.png"

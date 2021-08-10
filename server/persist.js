@@ -3,7 +3,7 @@ const fs = require('fs');
 module.exports = (path, initial = {}) => {
 	if (!initial || !Object.keys(initial).length) {
 		try {
-			initial = require('../' + path);
+			initial = require('./' + path);
 		} catch (e) {}
 	}
 

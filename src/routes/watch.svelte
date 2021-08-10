@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { api } from '$lib/api';
 	import * as animateScroll from 'svelte-scrollto';
 	import { logout, requireLogin } from '$lib/auth';
@@ -24,14 +24,19 @@
 		}
 	};
 
+	let interval;
 	onMount(async () => {
 		await requireLogin();
-		getGoodies();
+		await getGoodies();
+		interval = setInterval(getGoodies, 5000);
 	});
+
+	onDestroy(() => clearInterval(interval));
 
 	let goodies = [];
 	let getGoodies = async () => {
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
+		goodies.sort((a, b) => (a.type === 'ticket' ? -1 : a.type === 'poster' ? -1 : 1));
 	};
 
 	let toggle = (e) => {

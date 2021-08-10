@@ -1,9 +1,28 @@
 <script>
+	import { onMount } from 'svelte';
 	import { received, unit } from '$lib/stores';
 	import { session } from '$app/stores';
 	import { btc, go } from '$lib/utils';
+	import { api } from '$lib/api';
 
 	let words;
+
+	onMount(async () => {
+		if (!$received) {
+			let invoice = await api
+				.url('/invoice')
+				.post({ address: window.localStorage.getItem('address') })
+				.json();
+
+			if (invoice.received) {
+				$received = invoice.received;
+				$unit = invoice.unit;
+			} else {
+				window.localStorage.removeItem('address');
+				go('/');
+			}
+		}
+	});
 </script>
 
 <div class="container">
@@ -31,9 +50,3 @@
 		<button on:click={() => go('/verify')}>I wrote them down</button>
 	</div>
 {/if}
-
-<style>
-	.mnemonic {
-		word-spacing: 1.5em;
-	}
-</style>

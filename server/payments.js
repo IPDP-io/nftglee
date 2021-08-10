@@ -81,6 +81,15 @@ let createNft = async (type, { address, pubkey, ticket }) => {
 	result = await hasura.post({ query, variables: { nft } }).json();
 };
 
+app.post('/invoice', async (req, res) => {
+	try {
+		res.send(invoices[req.body.address])
+	} catch (e) {
+		console.log(e);
+		res.send(false);
+	}
+});
+
 app.get('/ticket', async (req, res) => {
 	try {
 		res.send(await getTicket());
@@ -92,7 +101,7 @@ app.get('/ticket', async (req, res) => {
 
 app.post('/boom', async (req, res) => {
 	try {
-		let { amount: value, confirmed, text } = req.body;
+		let { amount: value, confirmed, hash, text } = req.body;
 		if (!subscribers[text]) throw new Error('no subscribers');
 
 		let { amount, address, pubkey, paid } = invoices[text];
@@ -115,8 +124,11 @@ app.post('/boom', async (req, res) => {
 				await createNft('artwork', { address, pubkey, ticket });
 			}
 		} else {
-      subscribers[text].send(JSON.stringify({ type: 'payment', value }));
-    }
+			invoices[text].received = value;
+			invoices[text].hash = hash;
+      invoices[text] = invoices[text];
+			subscribers[text].send(JSON.stringify({ type: 'payment', value }));
+		}
 
 		res.send(req.body);
 	} catch (e) {
@@ -141,7 +153,7 @@ app.post('/BTC', async (req, res) => {
 		.get()
 		.json();
 
-	invoices[text] = { address, pubkey, amount };
+	invoices[text] = { address, pubkey, amount, unit: 'BTC' };
 
 	await coinos
 		.url('/invoice')
@@ -169,7 +181,7 @@ app.post('/LBTC', async (req, res) => {
 		.get()
 		.json();
 
-	invoices[confidentialAddress] = { address, amount, pubkey };
+	invoices[confidentialAddress] = { address, amount, pubkey, unit: 'LBTC' };
 
 	await coinos
 		.url('/invoice')
@@ -198,7 +210,7 @@ app.post('/LNBTC', async (req, res) => {
 		.text()
 		.catch(console.log);
 
-	invoices[text] = { address, amount, pubkey };
+	invoices[text] = { address, amount, pubkey, unit: 'LNBTC' };
 
 	await coinos
 		.url('/invoice')
