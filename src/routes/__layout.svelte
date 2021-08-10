@@ -92,8 +92,9 @@
 			} catch {
 				window.localStorage.removeItem('user');
 			}
+
+      if (!$session.user.email && window.localStorage.getItem('address')) go('/received');
 		}
-		if (window.localStorage.getItem('address')) go('/received');
 		$initialized = true;
 	});
 

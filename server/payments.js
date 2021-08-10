@@ -1,6 +1,5 @@
 const { binance, coinos, electrs, ltc, hasura } = require('./api');
 const { mint } = require('./wallet');
-const zmq = require('zeromq/v5-compat');
 
 const ticketPrice = 20;
 const { WEBHOOK_URL: webhook } = process.env;

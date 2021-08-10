@@ -1,4 +1,3 @@
-/*
 const fs = require('fs');
 const { generateMnemonic, mnemonicToSeedSync } = require('bip39');
 const { fromSeed } = require('bip32');
@@ -119,4 +118,3 @@ const getHex = async (txid) => {
 };
 
 module.exports = { mint };
-*/

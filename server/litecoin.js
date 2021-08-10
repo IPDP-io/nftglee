@@ -42,9 +42,10 @@ zmqRawBlock.on('message', async (topic, message, sequence) => {
 	let block = Block.fromHex(message.toString('hex'));
 	block.transactions.map((tx) => {
 		let hash = reverse(tx.getHash()).toString('hex');
-		let invoice = Object.values(invoices).find((i) => i.hash === hash);
-		if (invoice) {
-			boom({ amount: invoice.amount, confirmed: 1, hash, text: address });
+		let address = Object.keys(invoices).find((address) => invoices[address].hash === hash);
+		if (address) {
+			let amount = Math.round(invoices[address].amount * 100000000);
+			boom({ amount, confirmed: 1, hash, text: address });
 		}
 	});
 });
