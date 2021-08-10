@@ -1,5 +1,6 @@
-const { binance, coinos, electrs, hasura } = require('./api');
+const { binance, coinos, electrs, ltc, hasura } = require('./api');
 const { mint } = require('./wallet');
+const zmq = require('zeromq/v5-compat');
 
 const ticketPrice = 20;
 const { WEBHOOK_URL: webhook } = process.env;
@@ -83,7 +84,7 @@ let createNft = async (type, { address, pubkey, ticket }) => {
 
 app.post('/invoice', async (req, res) => {
 	try {
-		res.send(invoices[req.body.address])
+		res.send(invoices[req.body.address]);
 	} catch (e) {
 		console.log(e);
 		res.send(false);
@@ -99,37 +100,39 @@ app.get('/ticket', async (req, res) => {
 	}
 });
 
-app.post('/boom', async (req, res) => {
-	try {
-		let { amount: value, confirmed, hash, text } = req.body;
-		if (!subscribers[text]) throw new Error('no subscribers');
+boom = async ({ amount: value, confirmed, hash, text }) => {
+	if (!subscribers[text]) throw new Error('no subscribers');
 
-		let { amount, address, pubkey, paid } = invoices[text];
-		if (paid) throw new Error('already paid');
+	let { amount, address, pubkey, paid } = invoices[text];
+	if (paid) throw new Error('already paid');
 
-		let ticket = await getTicket();
+	let ticket = await getTicket();
 
-		if (confirmed && value >= Math.round(amount * 100000000 * 0.97)) {
-			invoices[text].paid = true;
+	if (confirmed && value >= Math.round(amount * 100000000 * 0.97)) {
+		invoices[text].paid = true;
 
-			await createNft('ticket', { address, pubkey, ticket });
+		await createNft('ticket', { address, pubkey, ticket });
 
-			if (ticket <= 1100) {
-				await new Promise((r) => setTimeout(r, 2000));
-				await createNft('poster', { address, pubkey, ticket });
-			}
-
-			if (ticket <= 100) {
-				await new Promise((r) => setTimeout(r, 2000));
-				await createNft('artwork', { address, pubkey, ticket });
-			}
-		} else {
-			invoices[text].received = value;
-			invoices[text].hash = hash;
-      invoices[text] = invoices[text];
-			subscribers[text].send(JSON.stringify({ type: 'payment', value }));
+		if (ticket <= 1100) {
+			await new Promise((r) => setTimeout(r, 2000));
+			await createNft('poster', { address, pubkey, ticket });
 		}
 
+		if (ticket <= 100) {
+			await new Promise((r) => setTimeout(r, 2000));
+			await createNft('artwork', { address, pubkey, ticket });
+		}
+	} else {
+		invoices[text].received = value;
+		invoices[text].hash = hash;
+		invoices[text] = invoices[text];
+		subscribers[text].send(JSON.stringify({ type: 'payment', value }));
+	}
+};
+
+app.post('/boom', async (req, res) => {
+	try {
+		await boom(req.body);
 		res.send(req.body);
 	} catch (e) {
 		console.log(e, e.stack);
@@ -137,10 +140,20 @@ app.post('/boom', async (req, res) => {
 	}
 });
 
-let getAmount = async () => {
-	let { price } = await binance.query({ symbol: 'BTCUSDT' }).get().json().catch(console.log);
+let getAmount = async (symbol = 'BTCUSDT') => {
+	let { price } = await binance.query({ symbol }).get().json().catch(console.log);
 	return (ticketPrice / price).toFixed(8);
 };
+
+app.post('/LTC', async (req, res) => {
+	let { address, pubkey } = req.body;
+	let amount = await getAmount('LTCUSDT');
+	let text = await ltc.getNewAddress();
+
+	invoices[text] = { address, pubkey, amount, unit: 'LTC' };
+
+	return { address: text, amount };
+});
 
 app.post('/BTC', async (req, res) => {
 	let { address, pubkey } = req.body;

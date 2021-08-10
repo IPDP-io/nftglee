@@ -20,6 +20,8 @@ services:
       COINOS_TOKEN: '${COINOS_TOKEN}'
       HASURA_JWT: '${HASURA_GRAPHQL_JWT_SECRET}'
       LIQUID_ELECTRS_URL: '${LIQUID_ELECTRS_URL}'
+      LITECOIN_BLOCK: '${LITECOIN_BLOCK}'
+      LITECOIN_TX: '${LITECOIN_TX}'
       NETWORK: '${NETWORK}'
       SMTP_HOST: '${SMTP_HOST}'
       SMTP_PORT: '${SMTP_PORT}'
@@ -94,3 +96,7 @@ services:
     volumes:
       - ./litecoin:/config
     restart: unless-stopped
+    ports:
+      - '19443:19443'
+      - '19506:18506'
+      - '19507:18507'

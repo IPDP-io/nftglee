@@ -1,15 +1,11 @@
 const { electrs, userApi, hasura } = require('./api');
 const path = require('path');
-const zmq = require('zeromq');
 const WebSocket = require('ws');
 
-const { address: Address, networks, Transaction } = require('litecoinjs-lib');
 const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
 const fs = require('fs');
-const persist = require('./persist')
-
-const network = networks.litereg;
+const persist = require('./persist');
 
 invoices = persist('invoices.json');
 subscribers = {};
@@ -22,6 +18,7 @@ app = require('fastify')({
 require('./auth');
 require('./mail');
 require('./payments');
+require('./litecoin');
 
 nfts = [];
 last = undefined;
@@ -115,30 +112,6 @@ let run = async () => {
 			}
 		});
 	});
-
-	const sock = new zmq.Subscriber();
-
-	sock.connect('tcp://127.0.0.1:18703');
-	sock.subscribe('rawtx');
-
-	for await (const [topic, msg] of sock) {
-		try {
-			let hex = msg.toString('hex');
-
-			let tx = Transaction.fromHex(hex);
-			for (let i = 0; i < tx.outs.length; i++) {
-				let { script, value } = tx.outs[i];
-				if (!script) continue;
-				let address = Address.fromOutputScript(script, network);
-
-				if (subscribers[address]) {
-					subscribers[address].send(JSON.stringify({ type: 'payment', value }));
-				}
-			}
-		} catch (e) {
-			// console.log(e);
-		}
-	}
 };
 
 run();
