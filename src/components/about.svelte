@@ -83,3 +83,9 @@
 		purchased using BTC, BTC Liquid, Lightning and Litecoin.
 	</p>
 </div>
+
+<style>
+	h2 {
+		margin: 1em 0;
+	}
+</style>
