@@ -3,18 +3,18 @@ const fetch = require('node-fetch');
 wretch().polyfills({ fetch });
 const Core = require('@asoltys/bitcoin-core');
 
+const { COINOS_URL, COINOS_TOKEN, HASURA_SECRET, LIQUID_ELECTRS_URL, LITECOIN_TX, LITECOIN_BLOCK, NETWORK } = process.env;
+
 const ltc = new Core({
 	host: '127.0.0.1',
 	wallet: 'coinos',
 	username: 'admin1',
 	password: '123',
-	network: 'regtest',
-	port: 19443,
+	network: NETWORK === 'regtest' ? 'regtest' : 'mainnet',
+	port: NETWORK === 'regtest' ? 19443 : 9333,
 	zmqrawblock: 'tcp://127.0.0.1:18506',
 	zmqrawtx: 'tcp://127.0.0.1:18507'
 });
-
-const { COINOS_URL, COINOS_TOKEN, HASURA_SECRET, LIQUID_ELECTRS_URL, LITECOIN_TX, LITECOIN_BLOCK } = process.env;
 
 const coinos = wretch().url(COINOS_URL).auth(`Bearer ${COINOS_TOKEN}`);
 
