@@ -20,7 +20,7 @@ const coinos = wretch().url(COINOS_URL).auth(`Bearer ${COINOS_TOKEN}`);
 
 const binance = wretch().url('https://api.binance.com/api/v3/ticker/price');
 
-const electrs = wretch().url('http://localhost:3012');
+const electrs = wretch().url(LIQUID_ELECTRS_URL);
 const hbp = wretch().url('http://localhost:3400');
 
 const userApi = (headers) => wretch().url('http://localhost:8080/v1/graphql').headers(headers);
