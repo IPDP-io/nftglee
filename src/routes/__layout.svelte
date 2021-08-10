@@ -157,7 +157,7 @@
 					<VolumeIconUp />
 				{/if}
 			</div>
-			{#if $fulll && !$ticket}
+			{#if $full && !$ticket}
 				<div id="ticket-warning">Ticket not found, deposit a ticket to continue watching</div>
 			{/if}
 			<div
