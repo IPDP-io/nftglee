@@ -56,6 +56,7 @@ auth = (preValidation = loggedIn) => ({ preValidation });
 checkTicket = async (req, res) => {
 	let fail = () => res.code(401).send('Unauthorized');
 
+  if (!req.user.email.includes('coinos.io')) fail();
 	if (req.user.ticket && new Date() - req.user.ticket.lastChecked < 3000) {
 		return;
 	}
