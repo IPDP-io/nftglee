@@ -1,9 +1,9 @@
 const reverse = require('buffer-reverse');
 const zmq = require('zeromq/v5-compat');
 const { address: Address, networks, Block, Transaction } = require('litecoinjs-lib');
-const network = networks.litereg;
 
-const { LITECOIN_BLOCK, LITECOIN_TX } = process.env;
+const { LITECOIN_BLOCK, LITECOIN_TX, NETWORK } = process.env;
+const network = NETWORK === 'regtest' ? networks.litereg : networks.litecoin;
 
 const zmqRawBlock = zmq.socket('sub');
 zmqRawBlock.connect(LITECOIN_BLOCK);
