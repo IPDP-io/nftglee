@@ -188,8 +188,7 @@
 			width: 75%;
 		}
 	}
-	#sound-toggle,
-	#video-overlay {
+	#sound-toggle {
 		z-index: 9999;
 	}
 </style>
