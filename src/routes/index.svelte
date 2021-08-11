@@ -18,6 +18,8 @@
 		</div>
 	</div>
 {:else}
+  <p class="container">Silhouettes will be released on Friday, August 13th. You can purchase a ticket now to receive your NFT's ahead of time.</p>
+
 	<Options />
 
 	<div class="container">
