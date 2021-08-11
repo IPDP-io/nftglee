@@ -28,6 +28,8 @@
   body {
     margin: 0;
   }
+
+
   
   /**
    * Render the `main` element consistently in IE.
@@ -490,7 +492,7 @@ p.container {
 
 form {
     width: 75%;
-    font-family: Helvetica;
+    font-family: 'Helvetica', 'Arial', sans-serif;
 }
 form.small-form {
     width: 33%;
@@ -521,7 +523,7 @@ input, textarea {
     background-color: transparent;
     border: 0;
     width: 100%;
-    font-family: Helvetica;
+    font-family: 'Helvetica', 'Arial', sans-serif;
     outline-color: white;
 }
 label, input, textarea{
@@ -569,7 +571,7 @@ button[type=submit]:hover {
     text-align: center;
 }
 footer {
-    font-family: Helvetica;
+    font-family: 'Helvetica', 'Arial', sans-serif;
     padding: 1rem;
 }
 .mb {

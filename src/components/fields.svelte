@@ -68,6 +68,7 @@
 
 <style>
 	#show-password {
+    width: 2.5em;
 		position: absolute;
 		right: 0px;
 	}
