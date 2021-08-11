@@ -39,7 +39,6 @@ zmqRawTx.on('message', async (topic, message, sequence) => {
 });
 
 zmqRawBlock.on('message', async (topic, message, sequence) => {
-  console.log("block", message);
 	let block = Block.fromHex(message.toString('hex'));
 	block.transactions.map((tx) => {
 		let hash = reverse(tx.getHash()).toString('hex');
