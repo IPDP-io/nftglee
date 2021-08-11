@@ -41,8 +41,7 @@
 	let goodies = [];
 	let getGoodies = async () => {
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
-		goodies = goodies.sort((a, b) => (a.type === 'artwork' ? 1 : a.type === 'poster' ? 1 : -1));
-    console.log(goodies);
+		goodies = goodies.sort((a, b) => (a.type === 'artwork' ? 1 : a.type === 'poster' && b.type === 'ticket' ? 1 : -1));
 		$ticket = goodies.find((g) => g.type === 'ticket');
 
 		if (goodies.length) {
