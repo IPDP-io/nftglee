@@ -6,11 +6,17 @@ import * as animateScroll from 'svelte-scrollto';
 let timeout = 50;
 let socket = () => {
 	let s = new WebSocket(import.meta.env.VITE_SOCKET);
+	let heartbeat;
 
-	s.onopen = () =>
+	s.onopen = () => {
 		s.readyState === 1 &&
-		get(address) &&
-		s.send(JSON.stringify({ type: 'subscribe', value: get(address) }));
+			get(address) &&
+			s.send(JSON.stringify({ type: 'subscribe', value: get(address) }));
+
+		heartbeat = setInterval(() => {
+			s.send(JSON.stringify({ type: 'heartbeat' }));
+		}, 5000);
+	};
 
 	s.onmessage = ({ data }) => {
 		try {
@@ -39,6 +45,7 @@ let socket = () => {
 		timeout = Math.min(10000, (timeout += timeout));
 		console.log('socket reconnect in', timeout);
 		setTimeout(socket, timeout);
+		clearInterval(heartbeat);
 	};
 
 	ws.set(s);
