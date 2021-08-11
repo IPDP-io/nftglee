@@ -83,7 +83,7 @@
 			</div>
 		{/if}
 
-		<div class="container">Send {$amount} {$unit} ($20) to:</div>
+		<div class="container">Send {$amount} {$unit} ($20 USD) to:</div>
 
 		<div id="payment-qr-code" class="container column">
 			<div class="container">

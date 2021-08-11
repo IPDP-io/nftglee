@@ -183,7 +183,7 @@
 						src="silhouettes.png"
 						on:click={reset}
 						alt="Silhouettes"
-						style="max-width: 80%"
+						style="max-width: 80%; cursor: pointer"
 					/>
 				</div>
 
@@ -291,4 +291,8 @@
 	.hidden {
 		visibility: hidden;
 	}
+
+  .pointer {
+    cursor: pointer;
+  } 
 </style>

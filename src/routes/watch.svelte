@@ -41,7 +41,9 @@
 	let goodies = [];
 	let getGoodies = async () => {
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
-		goodies = goodies.sort((a, b) => (a.type === 'artwork' ? 1 : a.type === 'poster' && b.type === 'ticket' ? 1 : -1));
+		goodies = goodies.sort((a, b) =>
+			a.type === 'artwork' ? 1 : a.type === 'poster' && b.type === 'ticket' ? 1 : -1
+		);
 		$ticket = goodies.find((g) => g.type === 'ticket');
 
 		if (goodies.length) {
@@ -56,9 +58,7 @@
 	};
 
 	let depositing;
-	let deposit = () => {
-		depositing = true;
-	};
+	let deposit = () => (depositing = !depositing);
 
 	let watch = async () => {
 		let { p2pml } = window;
@@ -125,17 +125,21 @@
 
 {#if pending}
 	<p class="container" style="max-width: 40em; margin: 2em auto">
-		Your transaction is pending. Could take up to 10 minutes.</p>
+		Your transaction is pending. Could take up to 10 minutes.
+	</p>
 {/if}
 
 <div class="container" style="max-width: 40em; margin: 0 auto">
-	{#if goodies.find((g) => g.type === 'ticket') || pending}
-		<button on:click={watch} style="flex-grow: 1" disabled={pending}>Watch Now</button>
-	{:else}
-		<button on:click={deposit} style="flex-grow: 1">Deposit a Ticket</button>
-	{/if}
-
+	<button
+		on:click={watch}
+		style="flex-grow: 1"
+		disabled={!goodies.find((g) => g.type === 'ticket') || pending}>Watch Now</button
+	>
 	<button on:click={logout} style="flex-grow: 1">Logout</button>
+</div>
+
+<div class="container">
+	<button on:click={deposit}>Liquid Deposit Address</button>
 </div>
 
 {#if depositing}

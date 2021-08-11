@@ -40,8 +40,6 @@
 
 {#if $session.user && $session.user.address}
 	<div class="container column">
-		<div class="container">Send to:</div>
-
 		<div id="payment-qr-code" class="container column">
 			<div class="container">
 				{@html qrCode}

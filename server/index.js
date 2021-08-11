@@ -2,7 +2,6 @@ const { electrs, userApi, hasura } = require('./api');
 const path = require('path');
 const WebSocket = require('ws');
 
-const { createIssuance, pay } = require('./wallet');
 const { Transform } = require('stream');
 const fs = require('fs');
 const persist = require('./persist');
@@ -91,21 +90,6 @@ let run = async () => {
 				if (type === 'subscribe') {
 					console.log('subscribing', value);
 					subscribers[value] = ws;
-				}
-
-				if (type === 'send') {
-					let txid = await pay(value, asset);
-					ws.send(JSON.stringify({ type: 'txid', value: txid }));
-				}
-
-				if (type === 'mint') {
-					asset = await createIssuance({
-						domain: 'silhouettesthemovie.com',
-						name: 'SIL',
-						ticker: 'TIER1'
-					});
-
-					ws.send(JSON.stringify({ type: 'asset', value: asset }));
 				}
 			} catch (e) {
 				console.log(e.message);
