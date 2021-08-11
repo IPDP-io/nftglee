@@ -22,7 +22,7 @@
 	import TwitterIcon from '$icons/twitter.svelte';
 	import About from '$components/about.svelte';
 	import Contact from '$components/contact.svelte';
-	import { err, go } from '$lib/utils';
+	import { err, go, fade } from '$lib/utils';
 	import socket from '$lib/socket';
 	import { createWallet, setup } from '$lib/wallet';
 	import { api } from '$lib/api';
@@ -81,7 +81,7 @@
 	const year = new Date().getFullYear();
 
 	onMount(async () => {
-    setTimeout(() => down = false, 8000);
+		setTimeout(() => fade('video-overlay'), 10000);
 		setupScrollFade();
 		await getToken();
 		trailer();

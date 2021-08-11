@@ -43,3 +43,17 @@ export const err = (e) => {
 export const focus = (el) => setTimeout(() => el.focus(), 50);
 
 export const go = (r, options = { noscroll: true }) => goto(r, options);
+
+export function fade(id) {
+	var fadeTarget = document.getElementById(id);
+	var fadeEffect = setInterval(function () {
+		if (!fadeTarget.style.opacity) {
+			fadeTarget.style.opacity = 1;
+		}
+		if (fadeTarget.style.opacity > 0) {
+			fadeTarget.style.opacity -= 0.1;
+		} else {
+			clearInterval(fadeEffect);
+		}
+	}, 30);
+}
