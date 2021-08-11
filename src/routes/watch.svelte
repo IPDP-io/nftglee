@@ -41,7 +41,8 @@
 	let goodies = [];
 	let getGoodies = async () => {
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
-		goodies.sort((a, b) => (a.type === 'ticket' ? -1 : a.type === 'poster' ? -1 : 1));
+		goodies = goodies.sort((a, b) => (a.type === 'artwork' ? 1 : a.type === 'poster' ? 1 : -1));
+    console.log(goodies);
 		$ticket = goodies.find((g) => g.type === 'ticket');
 
 		if (goodies.length) {
@@ -143,7 +144,7 @@
 {/if}
 
 {#each goodies as goodie (goodie.asset)}
-	<div class="container column goodie">
+	<div class="container column goodie" key={goodie.asset}>
 		<h3 class="nft-item">{nfts[goodie.type].name}</h3>
 		<div style="position: relative" class="goodie-video">
 			<div id="sound-toggle" style="cursor: pointer">
