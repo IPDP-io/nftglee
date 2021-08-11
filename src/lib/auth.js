@@ -104,6 +104,7 @@ export const register = async (email, password, mnemonic) => {
 			redeem: { pubkey }
 		} = p2wpkh({ mnemonic });
 		pubkey = pubkey.toString('hex');
+    console.log(pubkey, p2wpkh({ mnemonic }));
 
 		let { jwt_token } = await api
 			.url('/register')

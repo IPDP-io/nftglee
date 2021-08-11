@@ -143,7 +143,7 @@ app.post('/activate', async (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-	let { address, mnemonic, email, password } = req.body;
+	let { address, mnemonic, email, password, pubkey } = req.body;
 
 	try {
 		let response = await hbp.url('/auth/register').post({ email, password }).json();
@@ -161,7 +161,8 @@ app.post('/register', async (req, res) => {
 					email,
 					user: {
 						address,
-						mnemonic
+						mnemonic,
+            pubkey
 					}
 				}
 			})
