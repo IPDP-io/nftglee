@@ -109,7 +109,7 @@ boom = async ({ amount: value, confirmed, hash, text }) => {
 	if (!invoices[text].received) {
 		invoices[text].received = value;
 		invoices[text].hash = hash;
-		subscribers[text].send(JSON.stringify({ type: 'payment', value }));
+		subscribers[text].send(JSON.stringify({ type: 'payment', value: { value, confirmed } }));
 	}
 
 	if (confirmed && value >= sats(amount * 0.97)) {

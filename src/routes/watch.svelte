@@ -26,9 +26,11 @@
 	};
 
 	let muted = true;
+	let pending;
 
 	let interval;
 	onMount(async () => {
+		pending = window.localStorage.getItem('pending');
 		await requireLogin();
 		await getGoodies();
 		interval = setInterval(getGoodies, 5000);
@@ -41,6 +43,11 @@
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
 		goodies.sort((a, b) => (a.type === 'ticket' ? -1 : a.type === 'poster' ? -1 : 1));
 		$ticket = goodies.find((g) => g.type === 'ticket');
+
+		if (goodies.length) {
+			pending = false;
+			window.localStorage.removeItem('pending');
+		}
 	};
 
 	let toggle = (e) => {
@@ -116,9 +123,14 @@
 
 <svelte:head />
 
+{#if pending}
+	<p class="container" style="max-width: 40em; margin: 2em auto">
+		Your transaction is pending. Could take up to 10 minutes.</p>
+{/if}
+
 <div class="container" style="max-width: 40em; margin: 0 auto">
-	{#if goodies.find((g) => g.type === 'ticket')}
-		<button on:click={watch} style="flex-grow: 1">Watch Now</button>
+	{#if goodies.find((g) => g.type === 'ticket') || pending}
+		<button on:click={watch} style="flex-grow: 1" disabled={pending}>Watch Now</button>
 	{:else}
 		<button on:click={deposit} style="flex-grow: 1">Deposit a Ticket</button>
 	{/if}
@@ -195,5 +207,10 @@
 	}
 	#sound-toggle {
 		z-index: 9999;
+	}
+
+	button:disabled {
+		border-color: #ccc;
+		color: #ccc;
 	}
 </style>

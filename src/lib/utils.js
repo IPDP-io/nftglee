@@ -46,6 +46,8 @@ export const go = (r, options = { noscroll: true }) => goto(r, options);
 
 export function fade(id) {
 	var fadeTarget = document.getElementById(id);
+  if (!fadeTarget) return;
+
 	var fadeEffect = setInterval(function () {
 		if (!fadeTarget.style.opacity) {
 			fadeTarget.style.opacity = 1;

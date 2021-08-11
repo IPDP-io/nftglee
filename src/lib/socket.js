@@ -1,5 +1,5 @@
 import { go } from '$lib/utils';
-import { address, pending, received, ws } from '$lib/stores';
+import { address, received, ws } from '$lib/stores';
 import { get } from 'svelte/store';
 import * as animateScroll from 'svelte-scrollto';
 
@@ -23,7 +23,8 @@ let socket = () => {
 			let { type, value } = JSON.parse(data);
 
 			if (type === 'payment') {
-				received.set(value);
+        window.localStorage.setItem('pending', !value.confirmed);
+				received.set(value.value);
 				go('/received');
 				animateScroll.scrollTo({ element: '#logo' });
 			}

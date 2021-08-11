@@ -4,7 +4,6 @@ export const amount = writable();
 export const address = writable();
 export const full = writable();
 export const loading = writable();
-export const pending = writable(0);
 export const initialized = writable();
 export const player = writable();
 export const received = writable(0);
