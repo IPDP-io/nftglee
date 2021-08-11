@@ -25,7 +25,7 @@
 		}
 	};
 
-  let muted = true;
+	let muted = true;
 
 	let interval;
 	onMount(async () => {
@@ -40,7 +40,7 @@
 	let getGoodies = async () => {
 		goodies = await api.auth(`Bearer ${$token}`).url('/goodies').get().json();
 		goodies.sort((a, b) => (a.type === 'ticket' ? -1 : a.type === 'poster' ? -1 : 1));
-    $ticket = goodies.find((g) => g.type === 'ticket')
+		$ticket = goodies.find((g) => g.type === 'ticket');
 	};
 
 	let toggle = (e) => {
@@ -74,34 +74,40 @@
 			if (soundToggle) soundToggle.remove();
 			else return;
 
-			videoOverlay.remove();
+			let released =
+				new Date() >= new Date(Date.UTC(2021, 7, 13, 7, 0, 0)) ||
+				($session.user && $session.user.email && $session.user.email.includes('coinos.io'));
 
-			videoPlayer.style.width = '100%';
-			videoPlayer.style.height = '100vh';
+			if (released) {
+				videoOverlay.remove();
 
-			const playerDiv = document.getElementById('player');
-			playerDiv.style.height = '100vh';
+				videoPlayer.style.width = '100%';
+				videoPlayer.style.height = '100vh';
 
-			$player.destroy();
-			$player = new Clappr.Player({
-				parentId: '#player',
-				source: '/file/playlist.m3u8',
-				mute: false,
-				autoPlay: false,
-				width: '100%',
-				height: '100%',
-				playback: {
-					hlsjsConfig: {
-						liveSyncDurationCount: 7,
-						loader: engine.createLoaderClass()
+				const playerDiv = document.getElementById('player');
+				playerDiv.style.height = '100vh';
+
+				$player.destroy();
+				$player = new Clappr.Player({
+					parentId: '#player',
+					source: '/file/playlist.m3u8',
+					mute: false,
+					autoPlay: false,
+					width: '100%',
+					height: '100%',
+					playback: {
+						hlsjsConfig: {
+							liveSyncDurationCount: 7,
+							loader: engine.createLoaderClass()
+						}
 					}
-				}
-			});
+				});
 
-			const dataContainer = playerDiv.querySelector('[data-container]');
-			dataContainer.style.height = '100vh';
+				const dataContainer = playerDiv.querySelector('[data-container]');
+				dataContainer.style.height = '100vh';
 
-			p2pml.hlsjs.initClapprPlayer($player);
+				p2pml.hlsjs.initClapprPlayer($player);
+			}
 		} else {
 			setTimeout(loadVideo, 100);
 		}
@@ -127,29 +133,28 @@
 {#each goodies as goodie (goodie.asset)}
 	<div class="container column goodie">
 		<h3 class="nft-item">{nfts[goodie.type].name}</h3>
-    <div style="position: relative" class="goodie-video">
-      <div id="sound-toggle" style="cursor: pointer">
-        {#if muted}
-          <VolumeIconMute />
-        {:else}
-          <VolumeIconUp />
-        {/if}
-      </div>
-      <video
-        style="display: block; width: 100%"
-        muted
-        playsinline
-        autoplay
-        loop
-        type="video/mp4"
-        on:click={toggle}
-        key={goodie.asset}
-      >
-        <source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
-        Your browser does not support HTML5 video.
-      </video>
-
-  </div>
+		<div style="position: relative" class="goodie-video">
+			<div id="sound-toggle" style="cursor: pointer">
+				{#if muted}
+					<VolumeIconMute />
+				{:else}
+					<VolumeIconUp />
+				{/if}
+			</div>
+			<video
+				style="display: block; width: 100%"
+				muted
+				playsinline
+				autoplay
+				loop
+				type="video/mp4"
+				on:click={toggle}
+				key={goodie.asset}
+			>
+				<source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
+				Your browser does not support HTML5 video.
+			</video>
+		</div>
 
 		<Withdraw {goodie} bind:goodies />
 	</div>

@@ -10,7 +10,7 @@
 		mnemonic,
 		initialized,
 		player,
-    ticket,
+		ticket,
 		token,
 		ws
 	} from '$lib/stores';
@@ -133,6 +133,8 @@
 	let scrollDown = () => {
 		animateScroll.scrollTo({ element: '#watch-silhouettes', duration: 800 });
 	};
+
+  let released = new Date() >= new Date(Date.UTC(2021, 7, 13, 7, 0, 0)) || ($session.user && $session.user.email && $session.user.email.includes('coinos.io'));
 </script>
 
 <main>
@@ -145,13 +147,15 @@
 					<VolumeIconUp />
 				{/if}
 			</div>
-			{#if $full && !$session.user.email.includes("coinos.io")}
-				<div id="ticket-warning">Silhouettes is not available for viewing yet. The film will be released on Friday the 13th at 00:00am PT</div>
-        <!--
-        {#if !$ticket}
-				<div id="ticket-warning">Ticket not found, deposit a ticket to continue watching</div>
-        {/if}
-        -->
+			{#if $full}
+				{#if !released}
+					<div id="ticket-warning">
+						Silhouettes is not available for viewing yet. The film will be released on Friday the
+						13th at 00:00am PT
+					</div>
+				{:else if !$ticket}
+					<div id="ticket-warning">Ticket not found, deposit a ticket to continue watching</div>
+				{/if}
 			{/if}
 			<div
 				id="video-overlay"
