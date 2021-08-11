@@ -1,5 +1,5 @@
 <div class="container wwwwwh">
-	<h2 class="mb" style="line-height: 1em">WHO? WHAT? WHEN? WHERE? WHY? HOW?</h2>
+	<h2 class="mb">WHO? WHAT? WHEN? WHERE? WHY? HOW?</h2>
 
 	<h2 class="mb">WHO</h2>
 
@@ -85,6 +85,18 @@
 </div>
 
 <style>
+	.wwwwwh {
+		display: block;
+		max-width: 1024px;
+		margin: auto;
+		line-height: 1.5em;
+    padding: 0 2em;
+	}
+
+	.wwwwwh h3 {
+		margin-top: 2em;
+	}
+
 	h2 {
 		margin: 1em 0;
 	}

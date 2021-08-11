@@ -134,7 +134,9 @@
 		animateScroll.scrollTo({ element: '#watch-silhouettes', duration: 800 });
 	};
 
-  let released = new Date() >= new Date(Date.UTC(2021, 7, 13, 7, 0, 0)) || ($session.user && $session.user.email && $session.user.email.includes('coinos.io'));
+	let released =
+		new Date() >= new Date(Date.UTC(2021, 7, 13, 7, 0, 0)) ||
+		($session.user && $session.user.email && $session.user.email.includes('coinos.io'));
 </script>
 
 <main>
@@ -275,17 +277,6 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-	}
-
-	.wwwwwh {
-		display: block;
-		max-width: 1024px;
-		margin: auto;
-		line-height: 1.5em;
-	}
-
-	.wwwwwh h3 {
-		margin-top: 2em;
 	}
 
 	.hide {

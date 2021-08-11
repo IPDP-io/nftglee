@@ -417,6 +417,9 @@ section {
     width: 100%;
     color: var(--main-blue);
 }
+p.container {
+  padding: 0 2em;
+} 
 .container {
     display: flex;
     justify-content: center;
@@ -483,9 +486,6 @@ section {
 }
 .sound-icon {
     width: 1rem;
-}
-#payment-options {
-    margin-bottom: 2rem;
 }
 
 form {
