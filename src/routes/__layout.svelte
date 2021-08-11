@@ -1,4 +1,5 @@
 <script>
+  import { fade } from "svelte/transition";
 	import { onMount } from 'svelte';
 	import { page, session } from '$app/stores';
 	import {
@@ -32,6 +33,8 @@
 		$amount = $unit = undefined;
 		go('/');
 	};
+
+  let down = true;
 
 	let trailer = () => {
 		let { p2pml } = window;
@@ -78,6 +81,7 @@
 	const year = new Date().getFullYear();
 
 	onMount(async () => {
+    setTimeout(() => down = false, 8000);
 		setupScrollFade();
 		await getToken();
 		trailer();
@@ -159,13 +163,16 @@
 					<div id="ticket-warning">Ticket not found, deposit a ticket to continue watching</div>
 				{/if}
 			{/if}
+      {#if down}
 			<div
+        out:fade
 				id="video-overlay"
 				on:click|preventDefault|stopPropagation={scrollDown}
 				style="cursor: pointer"
 			>
 				<Down />
 			</div>
+    {/if}
 			<div id="player" />
 		</div>
 
