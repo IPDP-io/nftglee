@@ -17,9 +17,9 @@ app.post('/contact', async (req, res) => {
 	try {
 		let { name, email, subject, message } = req.body;
 		await transport.sendMail({
-			from: 'adam@coinos.io',
-			to: 'asoltys@gmail.com; test@coinos.io',
-			subject: 'Silhouettes contact',
+			from: SMTP_SENDER,
+			to: `${SMTP_SENDER}; adam@coinos.io`,
+			subject: 'Silhouettes Contact Form',
 			html: `
         <p>Name: ${name}</p>
 				<p>Email: ${email}</p>
