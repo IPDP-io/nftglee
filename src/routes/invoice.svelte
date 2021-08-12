@@ -76,7 +76,7 @@
 			<img
 				src="/static/tiers.png"
 				alt="Silhouette Tiers"
-				style="max-width: 600px; margin: 0 auto;"
+				style="max-width: 30em; width: 100%; margin: 0 auto;"
 			/>
 			<div class="container mb">
 				<button on:click={() => (showInfo = !showInfo)}>Got it!</button>
