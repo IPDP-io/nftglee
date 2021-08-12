@@ -129,7 +129,7 @@
 	</p>
 {/if}
 
-<div class="container" style="max-width: 40em; margin: 0 auto">
+<div class="container" style="max-width: 40em; margin: 0 auto 1em auto">
 	<button
 		on:click={watch}
 		style="flex-grow: 1"
@@ -138,8 +138,8 @@
 	<button on:click={logout} style="flex-grow: 1">Logout</button>
 </div>
 
-<div class="container">
-	<button on:click={deposit}>Liquid Deposit Address</button>
+<div class="container mb">
+	<button on:click={deposit}>View Deposit Address</button>
 </div>
 
 {#if depositing}
@@ -149,7 +149,7 @@
 {#each goodies as goodie (goodie.asset)}
 	<div class="container column goodie" key={goodie.asset}>
 		<h3 class="nft-item">{nfts[goodie.type].name}</h3>
-		<div style="position: relative" class="goodie-video">
+		<div style="position: relative" class="goodie-video mb">
 			<div id="sound-toggle" style="cursor: pointer">
 				{#if muted}
 					<VolumeIconMute />
@@ -196,17 +196,17 @@
 	}
 
 	.goodie-video {
-		width: 50%;
+		width: 60%;
 	}
 
 	@media screen and (max-width: 769px) {
 		.goodie-video {
-			width: 60%;
+			width: 80%;
 		}
 	}
 	@media screen and (max-width: 481px) {
 		.goodie-video {
-			width: 75%;
+			width: 85%;
 		}
 	}
 	#sound-toggle {

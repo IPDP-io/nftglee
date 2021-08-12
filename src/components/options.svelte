@@ -36,7 +36,7 @@
 <div id="payment-options" class="container">
 	<div class="container column">
 		{#if $unit}
-			<h3>Other payment options:</h3>
+			<h3 class="mb">Other payment options:</h3>
 
 			<div class="container space-evenly">
 				{#if $unit !== 'BTC'}
@@ -58,7 +58,7 @@
 				{/if}
 			</div>
 		{:else}
-			<h3>Choose a payment option:</h3>
+			<h3 class="mb">Choose a payment option:</h3>
 			<div class="container space-evenly mb">
 				<button on:click={() => getInvoice('BTC')} class:active={$unit && $unit.includes('BTC')}>
 					Bitcoin

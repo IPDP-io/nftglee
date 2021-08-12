@@ -24,7 +24,7 @@
 		BTC: 'bitcoin',
 		LTC: 'litecoin',
 		LBTC: 'liquidnetwork',
-    LNBTC: ''
+		LNBTC: 'lightning'
 	}[$unit];
 
 	const paymentLabel = 'Silhouettes';
@@ -34,12 +34,15 @@
 		ticketNumber = await api.url('/ticket').get().json();
 	});
 
-	$: updateQr($address, $amount);
-	let updateQr = () => {
+	$: url =
+		$unit === 'LNBTC'
+			? `${prefix}:${$address}`
+			: `${prefix}:${$address}?amount=${$amount}&label=Silhouettes&message=Movie%20ticket`;
+
+	$: updateQr(url);
+	let updateQr = (url) => {
 		QRCode.toString(
-			$unit === 'LNBTC'
-				? $address
-				: `${prefix}:${$address}?amount=${$amount}&label=Silhouettes&message=Movie%20ticket`,
+			url,
 			{
 				errorCorrectionLevel: 'H',
 				type: 'svg',
@@ -68,7 +71,7 @@
 			Purchasing ticket #{ticketNumber} - Tier {tier}
 		</div>
 
-		<div class="container">
+		<div class="container mb">
 			<button on:click={() => (showInfo = !showInfo)}>What Are The Tiers?</button>
 		</div>
 
@@ -83,32 +86,34 @@
 			</div>
 		{/if}
 
-		<div class="container">Send {$amount} {$unit} ($20 USD) to:</div>
+		<div class="page-block">
+      <div class="container">Please send <b style="margin: 0 0.3em">{$amount} {$unit}</b> ($20 USD) to:</div>
 
-		<div id="payment-qr-code" class="container column">
-			<div class="container">
-				<a href={qrData} target="_blank">
-					{@html qrCode}
-				</a>
-			</div>
-			<div class="container column">
-				<a href={qrData} target="_blank">
-					<p
-						id="payment-url"
-						style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;"
-					>
-						{$address}
-					</p>
-				</a>
-			</div>
-			<div class="container mb">
-				<button on:click={copy}>
-					{#if copied}
-						Copied!
-					{:else}
-						Copy
-					{/if}
-				</button>
+			<div id="payment-qr-code" class="container column">
+				<div class="container">
+					<a href={url} target="_blank">
+						{@html qrCode}
+					</a>
+				</div>
+				<div class="container column mb">
+					<a href={url} target="_blank">
+						<p
+							id="payment-url"
+							style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;"
+						>
+							{$address}
+						</p>
+					</a>
+				</div>
+				<div class="container mb">
+					<button on:click={copy}>
+						{#if copied}
+							Copied!
+						{:else}
+							Copy
+						{/if}
+					</button>
+				</div>
 			</div>
 		</div>
 	{/if}

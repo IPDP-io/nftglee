@@ -40,11 +40,12 @@
 
 {#if $session.user && $session.user.address}
 	<div class="container column">
+    <h3 class="container">Use this address to deposit tickets or NFT goodies into your account</h3>
 		<div id="payment-qr-code" class="container column">
 			<div class="container">
 				{@html qrCode}
 			</div>
-			<div class="container column">
+			<div class="container column mb">
 				<p
 					id="payment-url"
 					style="word-wrap: break-word; max-width: 600px; padding: 0 15px; margin: 0 auto; line-height: 1.5em;"

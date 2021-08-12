@@ -18,15 +18,16 @@
 		</div>
 	</div>
 {:else}
-  <p class="container">Silhouettes will be released on Friday, August 13th. You can purchase a ticket now to receive your NFT's ahead of time.</p>
+	<p class="container page-block" style="text-align: center">
+		Silhouettes will be released on Friday, August 13th. You can purchase a ticket now to receive
+		your NFT's ahead of time.
+	</p>
 
 	<Options />
 
-	<div class="container">
-		<h3>Or..</h3>
-	</div>
+	<h4 class="container mb">Or..</h4>
 
-	<div class="container mb">
+	<div class="container">
 		<button on:click={() => goto('/login')}>I already have a ticket</button>
 	</div>
 {/if}

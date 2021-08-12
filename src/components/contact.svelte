@@ -58,11 +58,9 @@
 						<textarea id="message" placeholder="Type your message here..." bind:value={message} />
 					</div>
 				</div>
-				<div class="form-field">
-					<div>
-						<button id="submit" type="submit"> Submit </button>
-					</div>
-				</div>
+        <div>
+          <button id="submit" type="submit"> Submit </button>
+        </div>
 			{/if}
 		</form>
 	</div>

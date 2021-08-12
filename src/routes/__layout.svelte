@@ -193,17 +193,15 @@
 					{/if}
 
 					{#if $session.user.email}
-						<div class="page-block">
-							<div class="container">
-								Signed in as {$session.user.email}
-							</div>
+            <div class="container mb">
+              Signed in as {$session.user.email}
+            </div>
 
-							{#if $page.path !== '/watch'}
-								<div class="container">
-									<button on:click={() => go('/watch')}>Account Home</button>
-								</div>
-							{/if}
-						</div>
+            {#if $page.path !== '/watch'}
+              <div class="container">
+                <button on:click={() => go('/watch')}>View Account</button>
+              </div>
+            {/if}
 					{/if}
 
 					<slot />

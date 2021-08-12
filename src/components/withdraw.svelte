@@ -30,23 +30,22 @@
 			<a href="https://coinos.io" class="coinos" target="_blank"> Coinos </a>
 		</p>
 		{#if goodie.type === 'ticket'}
-			<p>
+			<p class="container" style="padding: 0 2em">
 				CAUTION: If you withdraw this ticket, you won't be able to continue watching the film until
 				you re-deposit it into your account or buy a new one
 			</p>
 		{/if}
 		<form on:submit|preventDefault={submit}>
 			<div id="withdraw-form" class="container">
-				<div class="container column">
-					<div class="grow">
-						<input
-							class="withdraw"
-							type="text"
-							bind:value={to}
-							placeholder="Withdraw Address"
-							style="min-width: 36em"
-						/>
-					</div>
+				<div class="container column" style="width: 100%">
+          <textarea
+            class="withdraw"
+            type="text"
+            bind:value={to}
+            rows="5"
+            placeholder="Withdraw Address"
+            style="width: 100%; height: 6em"
+          />
 					<div>
 						<button class="withdraw" type="submit" style="margin: 0 auto">Withdraw</button>
 					</div>
