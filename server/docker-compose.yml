@@ -15,6 +15,7 @@ services:
     restart: on-failure
     environment:
       WEBHOOK_URL: '${WEBHOOK_URL}'
+      WEBHOOK_SECRET: '${WEBHOOK_SECRET}'
       HASURA_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
       COINOS_URL: '${COINOS_URL}'
       COINOS_TOKEN: '${COINOS_TOKEN}'

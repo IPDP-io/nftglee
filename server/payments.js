@@ -1,7 +1,7 @@
 const { binance, coinos, electrs, ltc, hasura } = require('./api');
 
 const ticketPrice = 20;
-const { WEBHOOK_URL: webhook } = process.env;
+const { WEBHOOK_URL: webhook, WEBHOOK_SECRET: secret } = process.env;
 const sats = (n) => Math.round(n * 100000000);
 
 const getTicket = async () => {
@@ -135,6 +135,9 @@ boom = async ({ amount: value, confirmed, hash, text }) => {
 
 app.post('/boom', async (req, res) => {
 	try {
+		if (req.headers['x-webhook'] !== secret)
+			return res.code(401).send('Unauthorized webhook invocation');
+
 		await boom(req.body);
 		res.send(req.body);
 	} catch (e) {
