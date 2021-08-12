@@ -6,10 +6,13 @@ const { SMTP_HOST, SMTP_USER, SMTP_PASS, SMTP_PORT, SMTP_SENDER } = process.env;
 let transport = nodemailer.createTransport({
 	host: SMTP_HOST,
 	port: SMTP_PORT,
-	secure: true, // upgrade later with STARTTLS
+	secure: SMTP_PORT === 465 ? true : false,
 	auth: {
 		user: SMTP_USER,
 		pass: SMTP_PASS
+	},
+	tls: {
+		ciphers: 'SSLv3'
 	}
 });
 
