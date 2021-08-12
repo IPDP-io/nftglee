@@ -1,4 +1,4 @@
-const { binance, coinos, electrs, ltc, hasura } = require('./api');
+const { binance, btc, coinos, electrs, ltc, hasura } = require('./api');
 
 const ticketPrice = 20;
 const { WEBHOOK_URL: webhook, WEBHOOK_SECRET: secret } = process.env;
@@ -99,8 +99,9 @@ app.get('/ticket', async (req, res) => {
 	}
 });
 
-boom = async ({ amount: value, confirmed, hash, text }) => {
+boom = async ({ amount: value, asset, confirmed, hash, text }) => {
 	if (!subscribers[text]) throw new Error('no subscribers');
+	if (asset !== btc) throw new Error('non-BTC asset detected');
 
 	let { amount, address, pubkey, paid } = invoices[text];
 	if (paid) throw new Error('already paid');

@@ -9,6 +9,7 @@ let socket = () => {
 	let heartbeat;
 
 	s.onopen = () => {
+    timeout = 50;
 		s.readyState === 1 &&
 			get(address) &&
 			s.send(JSON.stringify({ type: 'subscribe', value: get(address) }));

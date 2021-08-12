@@ -3,7 +3,15 @@ const fetch = require('node-fetch');
 wretch().polyfills({ fetch });
 const Core = require('@asoltys/bitcoin-core');
 
-const { COINOS_URL, COINOS_TOKEN, HASURA_SECRET, LIQUID_ELECTRS_URL, LITECOIN_TX, LITECOIN_BLOCK, NETWORK } = process.env;
+const {
+	COINOS_URL,
+	COINOS_TOKEN,
+	HASURA_SECRET,
+	LIQUID_ELECTRS_URL,
+	LITECOIN_TX,
+	LITECOIN_BLOCK,
+	NETWORK
+} = process.env;
 
 const ltc = new Core({
 	host: '127.0.0.1',
@@ -15,6 +23,11 @@ const ltc = new Core({
 	zmqrawblock: 'tcp://127.0.0.1:18506',
 	zmqrawtx: 'tcp://127.0.0.1:18507'
 });
+
+const btc =
+	NETWORK === 'regtest'
+		? '5ac9f65c0efcc4775e0baec4ec03abdde22473cd3cf33c0419ca290e0751b225'
+		: '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d';
 
 const coinos = wretch().url(COINOS_URL).auth(`Bearer ${COINOS_TOKEN}`);
 
@@ -29,4 +42,4 @@ const hasura = wretch()
 	.url('http://localhost:8080/v1/graphql')
 	.headers({ 'x-hasura-admin-secret': HASURA_SECRET });
 
-module.exports = { binance, coinos, electrs, hbp, hasura, ltc, userApi };
+module.exports = { binance, btc, coinos, electrs, hbp, hasura, ltc, userApi };
