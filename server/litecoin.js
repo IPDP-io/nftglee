@@ -1,4 +1,4 @@
-const { btc } = require("./api");
+const { btc } = require('./api');
 const reverse = require('buffer-reverse');
 const zmq = require('zeromq/v5-compat');
 const { address: Address, networks, Block, Transaction } = require('litecoinjs-lib');
@@ -40,13 +40,17 @@ zmqRawTx.on('message', async (topic, message, sequence) => {
 });
 
 zmqRawBlock.on('message', async (topic, message, sequence) => {
-	let block = Block.fromHex(message.toString('hex'));
-	block.transactions.map((tx) => {
-		let hash = reverse(tx.getHash()).toString('hex');
-		let address = Object.keys(invoices).find((address) => invoices[address].hash === hash);
-		if (address) {
-			let amount = Math.round(invoices[address].amount * 100000000);
-			boom({ amount, confirmed: 1, hash, text: address });
-		}
-	});
+	try {
+		let block = Block.fromHex(message.toString('hex'));
+		block.transactions.map(async (tx) => {
+			let hash = reverse(tx.getHash()).toString('hex');
+			let address = Object.keys(invoices).find((address) => invoices[address].hash === hash);
+			if (address) {
+				let amount = Math.round(invoices[address].amount * 100000000);
+				await boom({ amount, asset: btc, confirmed: 1, hash, text: address });
+			}
+		});
+	} catch (e) {
+		console.log(e);
+	}
 });

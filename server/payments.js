@@ -103,6 +103,7 @@ boom = async ({ amount: value, asset, confirmed, hash, text }) => {
 	if (!subscribers[text]) throw new Error('no subscribers');
 	if (asset !== btc) throw new Error('non-BTC asset detected');
 
+  console.log("boom", value, asset, confirmed, hash, text, invoices[text]);
 	let { amount, address, pubkey, paid } = invoices[text];
 	if (paid) throw new Error('already paid');
 
@@ -211,7 +212,7 @@ app.post('/LBTC', async (req, res) => {
 				unconfidential,
 				network,
 				text: confidentialAddress,
-				amount,
+				amount: sats(amount),
 				webhook
 			}
 		})
@@ -238,7 +239,7 @@ app.post('/LNBTC', async (req, res) => {
 			invoice: {
 				network,
 				text,
-				amount,
+				amount: sats(amount),
 				webhook
 			}
 		})
