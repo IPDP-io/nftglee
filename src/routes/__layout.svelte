@@ -33,7 +33,8 @@
 		go('/');
 	};
 
-  let down = true;
+	let down = true;
+	let retries = 0;
 
 	let trailer = () => {
 		let { p2pml } = window;
@@ -63,7 +64,7 @@
 
 			p2pml.hlsjs.initClapprPlayer($player);
 		} else {
-			setTimeout(loadVideo, 100);
+			setTimeout(loadVideo, 200);
 		}
 	};
 
@@ -162,16 +163,16 @@
 					<div id="ticket-warning">Ticket not found, deposit a ticket to continue watching</div>
 				{/if}
 			{/if}
-      {#if down}
-			<div
-        out:fade
-				id="video-overlay"
-				on:click|preventDefault|stopPropagation={scrollDown}
-				style="cursor: pointer"
-			>
-				<Down />
-			</div>
-    {/if}
+			{#if down}
+				<div
+					out:fade
+					id="video-overlay"
+					on:click|preventDefault|stopPropagation={scrollDown}
+					style="cursor: pointer"
+				>
+					<Down />
+				</div>
+			{/if}
 			<div id="player" />
 		</div>
 
@@ -193,15 +194,15 @@
 					{/if}
 
 					{#if $session.user.email}
-            <div class="container mb">
-              Signed in as {$session.user.email}
-            </div>
+						<div class="container mb">
+							Signed in as {$session.user.email}
+						</div>
 
-            {#if $page.path !== '/watch'}
-              <div class="container">
-                <button on:click={() => go('/watch')}>View Account</button>
-              </div>
-            {/if}
+						{#if $page.path !== '/watch'}
+							<div class="container">
+								<button on:click={() => go('/watch')}>View Account</button>
+							</div>
+						{/if}
 					{/if}
 
 					<slot />
@@ -290,7 +291,7 @@
 		visibility: hidden;
 	}
 
-  .pointer {
-    cursor: pointer;
-  } 
+	.pointer {
+		cursor: pointer;
+	}
 </style>

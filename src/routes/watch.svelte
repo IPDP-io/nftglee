@@ -66,14 +66,6 @@
 
 		animateScroll.scrollToTop({ duration: 2000 });
 
-		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
-			var engine = new p2pml.hlsjs.Engine({
-				loader: {
-					xhrSetup: (xhr) => {
-						xhr.setRequestHeader('Authorization', `Bearer ${$token}`);
-					}
-				}
-			});
 			const videoPlayer = document.getElementById('player');
 			const soundToggle = document.getElementById('sound-toggle');
 			const videoOverlay = document.getElementById('video-overlay');
@@ -81,11 +73,7 @@
 			if (soundToggle) soundToggle.remove();
 			else return;
 
-			let released =
-				new Date() >= new Date(Date.UTC(2021, 7, 13, 7, 0, 0)) ||
-				($session.user && $session.user.email && $session.user.email.includes('coinos.io'));
 
-			if (released) {
 				videoOverlay.remove();
 
 				videoPlayer.style.width = '100%';
@@ -93,8 +81,22 @@
 
 				const playerDiv = document.getElementById('player');
 				playerDiv.style.height = '100vh';
-
+				playerDiv.querySelector('[data-container]').style.height = '100vh'; 
 				$player.destroy();
+
+    let loader;
+		if (!ios() && p2pml && p2pml.hlsjs.Engine.isSupported()) {
+			var engine = new p2pml.hlsjs.Engine({
+				loader: {
+					xhrSetup: (xhr) => {
+						xhr.setRequestHeader('Authorization', `Bearer ${$token}`);
+					}
+				}
+			});
+
+      loader = engine.createLoaderClass();
+    }
+
 				$player = new Clappr.Player({
 					parentId: '#player',
 					source: '/file/playlist.m3u8',
@@ -105,19 +107,14 @@
 					playback: {
 						hlsjsConfig: {
 							liveSyncDurationCount: 7,
-							loader: engine.createLoaderClass()
+              loader,
 						}
 					}
 				});
 
-				const dataContainer = playerDiv.querySelector('[data-container]');
-				dataContainer.style.height = '100vh';
-
+    if (loader) {
 				p2pml.hlsjs.initClapprPlayer($player);
 			}
-		} else {
-			setTimeout(loadVideo, 100);
-		}
 	};
 </script>
 
