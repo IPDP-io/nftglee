@@ -14,6 +14,30 @@ app = require('fastify')({
 	logger: true
 });
 
+
+app.register(require('fastify-cookie'), {
+  secret: "my-secret", // for cookies signature
+  parseOptions: {}     // options for parsing cookies
+})
+
+app.get('/cookie', (req, reply) => {
+  console.log(req.unsignCookie(req.cookies.bar));
+  // const aCookieValue = req.cookies.cookieName
+  // `reply.unsignCookie()` is also available
+  reply
+    .setCookie('foo', 'foo', {
+      domain: 'example.com',
+      path: '/'
+    })
+    .cookie('baz', 'baz') // alias for setCookie
+    .setCookie('bar', 'bar', {
+      path: '/',
+      signed: true,
+      httpOnly: true,
+    })
+    .send({ hello: 'world' })
+})
+
 require('./auth');
 require('./mail');
 require('./payments');

@@ -9,6 +9,7 @@
 	import VolumeIconMute from '$icons/volume-mute.svelte';
 	import Deposit from '$components/deposit.svelte';
 	import Withdraw from '$components/withdraw.svelte';
+	import { ios } from '$lib/utils';
 
 	let nfts = {
 		ticket: {
@@ -66,26 +67,22 @@
 
 		animateScroll.scrollToTop({ duration: 2000 });
 
-			const videoPlayer = document.getElementById('player');
-			const soundToggle = document.getElementById('sound-toggle');
-			const videoOverlay = document.getElementById('video-overlay');
+		const videoPlayer = document.getElementById('player');
+		const soundToggle = document.getElementById('sound-toggle');
+		const videoOverlay = document.getElementById('video-overlay');
 
-			if (soundToggle) soundToggle.remove();
-			else return;
+		if (soundToggle) soundToggle.remove();
+		else return;
 
+		videoOverlay.remove();
 
-				videoOverlay.remove();
+		videoPlayer.style.width = '100%';
+		videoPlayer.style.height = '100vh';
+		videoPlayer.querySelector('[data-container]').style.height = '100vh';
+		$player.destroy();
 
-				videoPlayer.style.width = '100%';
-				videoPlayer.style.height = '100vh';
-
-				const playerDiv = document.getElementById('player');
-				playerDiv.style.height = '100vh';
-				playerDiv.querySelector('[data-container]').style.height = '100vh'; 
-				$player.destroy();
-
-    let loader;
-		if (!ios() && p2pml && p2pml.hlsjs.Engine.isSupported()) {
+		let loader;
+		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine({
 				loader: {
 					xhrSetup: (xhr) => {
@@ -94,27 +91,34 @@
 				}
 			});
 
-      loader = engine.createLoaderClass();
-    }
+			loader = engine.createLoaderClass();
 
-				$player = new Clappr.Player({
-					parentId: '#player',
-					source: '/file/playlist.m3u8',
-					mute: false,
-					autoPlay: false,
-					width: '100%',
-					height: '100%',
-					playback: {
-						hlsjsConfig: {
-							liveSyncDurationCount: 7,
-              loader,
-						}
+			$player = new Clappr.Player({
+				parentId: '#player',
+				source: '/file/playlist.m3u8',
+				mute: false,
+				autoPlay: false,
+				width: '100%',
+				height: '100%',
+				playback: {
+					hlsjsConfig: {
+						liveSyncDurationCount: 7,
+						loader
 					}
-				});
+				}
+			});
 
-    if (loader) {
-				p2pml.hlsjs.initClapprPlayer($player);
-			}
+			p2pml.hlsjs.initClapprPlayer($player);
+		} else {
+			$player = document.createElement('video');
+			videoPlayer.append($player);
+			$player.setAttribute('type', 'application/vnd.apple.mpegurl');
+			$player.setAttribute('width', '100%');
+			$player.setAttribute('height', '100%');
+			$player.src = '/file/playlist.m3u8';
+			$player.load();
+			$player.play();
+		}
 	};
 </script>
 

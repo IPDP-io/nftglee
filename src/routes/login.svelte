@@ -29,10 +29,9 @@
 		<Fields bind:email bind:password />
 		<div class="container form-submit-controls">
 			<div class="container column">
-				<button type="submit">Sign in</button>
-				<div class="mb">
-					<a href="/register" style="text-decoration: underline">Register an account</a>
-				</div>
+				<button class="mb" type="submit">Sign in</button>
+        <p class="container">Or</p>
+        <a href="/register"><button class="mb">Register</button></a>
 			</div>
 		</div>
 	</form>

@@ -11,7 +11,7 @@ export const expired = (t) => !t || decode(t).exp * 1000 < Date.now();
 
 export const getToken = async () => {
 	try {
-		let result = await auth.url('/token/refresh').get().json();
+		let result = await api.url('/refresh').get().json();
 		let { jwt_token } = result;
 		token.set(jwt_token);
 		await tick();

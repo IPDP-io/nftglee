@@ -84,7 +84,8 @@
 		setTimeout(() => fade('video-overlay'), 10000);
 		setupScrollFade();
 		await getToken();
-		trailer();
+    setInterval(getToken, 60000);
+    trailer();
 		socket();
 		setup();
 		if (!$session.user) {

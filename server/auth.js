@@ -3,15 +3,6 @@ const { electrs, userApi, hasura, hbp } = require('./api');
 const { HASURA_JWT } = process.env;
 const fs = require('fs');
 
-const parseCookie = (str) =>
-	str
-		.split(';')
-		.map((v) => v.split('='))
-		.reduce((acc, v) => {
-			acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
-			return acc;
-		}, {});
-
 let users = {};
 
 loggedIn = async (req, res) => {
@@ -20,7 +11,15 @@ loggedIn = async (req, res) => {
 	let token;
 
 	if (authorization) token = authorization.split(' ')[1];
-	else fail();
+	else {
+		try {
+			token = req.unsignCookie(req.cookies.token).value;
+			req.headers.authorization = `Bearer ${token}`;
+		} catch (e) {
+			console.log(e);
+			fail();
+		}
+	}
 
 	let { key } = JSON.parse(HASURA_JWT);
 
@@ -55,22 +54,34 @@ auth = (preValidation = loggedIn) => ({ preValidation });
 
 checkTicket = async (req, res) => {
 	let fail = () => res.code(401).send('Unauthorized');
+	try {
+		if (req.user.ticket && new Date() - req.user.ticket.lastChecked < 3000) {
+			return;
+		}
 
-	if (
-		new Date() < new Date(Date.UTC(2021, 7, 13, 7, 0, 0)) &&
-		!req.user.email.includes('coinos.io')
-	)
+		let utxos = await electrs.url(`/address/${req.user.address}/utxo`).get().json();
+		let tickets = nfts.map((t) => t.type === 'ticket' && t.asset).filter((t) => t);
+		let assets = utxos.map((tx) => tx.asset);
+
+		if (!assets.find((a) => tickets.includes(a))) fail();
+	} catch (e) {
+		console.log(e);
 		fail();
-
-	if (req.user.ticket && new Date() - req.user.ticket.lastChecked < 3000) {
-		return;
 	}
-
-	let utxos = await electrs.url(`/address/${req.user.address}/utxo`).get().json();
-	let tickets = nfts.map((t) => t.type === 'ticket' && t.asset).filter((t) => t);
-	let assets = utxos.map((tx) => tx.asset);
-	if (!assets.find((a) => tickets.includes(a))) fail();
 };
+
+app.get('/refresh', async (req, res) => {
+	let response = await hbp.headers(req.headers).url('/auth/token/refresh').get().res();
+	Array.from(response.headers.entries()).forEach(([k, v]) => res.header(k, v));
+  let json = await response.json();
+		return res
+			.setCookie('token', json.jwt_token, {
+				path: '/',
+				signed: true,
+				httpOnly: true
+			})
+			.send(json);
+});
 
 const login = async (req, res) => {
 	let { email, password } = req.body;
@@ -99,8 +110,15 @@ const login = async (req, res) => {
 		Array.from(response.headers.entries()).forEach(([k, v]) => res.header(k, v));
 
 		let json = { ...(await response.json()), ...user };
+		console.log(json);
 
-		return res.send(json);
+		return res
+			.setCookie('token', json.jwt_token, {
+				path: '/',
+				signed: true,
+				httpOnly: true
+			})
+			.send(json);
 	} catch (e) {
 		console.log(e);
 		let msg = 'Login failed';
@@ -162,7 +180,7 @@ app.post('/register', async (req, res) => {
 					user: {
 						address,
 						mnemonic,
-            pubkey
+						pubkey
 					}
 				}
 			})
