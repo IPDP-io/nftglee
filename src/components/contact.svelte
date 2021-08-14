@@ -24,7 +24,7 @@
 
 <div id="lets-chat" class="container column page-block">
 	<div class="container">
-		<form on:submit|preventDefault={submit}>
+		<form on:submit|preventDefault={submit} class="mb">
 			{#if done}
 				<h1 class="container mb">Thank you!</h1>
 				<p class="container">We'll be in touch soon</p>
@@ -36,7 +36,7 @@
 				</div>
 			{:else}
 				<div class="container">
-					<h2>Let's chat</h2>
+					<h2 style="margin-top: 1em">Let's chat</h2>
 				</div>
 				<div class="form-field">
 					<div>

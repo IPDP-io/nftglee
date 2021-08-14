@@ -147,35 +147,37 @@
 	<Deposit />
 {/if}
 
-{#each goodies as goodie (goodie.asset)}
-	<div class="container column goodie" key={goodie.asset}>
-		<h3 class="nft-item">{nfts[goodie.type].name}</h3>
-		<div style="position: relative" class="goodie-video mb">
-			<div id="sound-toggle" style="cursor: pointer">
-				{#if muted}
-					<VolumeIconMute />
-				{:else}
-					<VolumeIconUp />
-				{/if}
+<div class="page-block">
+	{#each goodies as goodie (goodie.asset)}
+		<div class="container column goodie" key={goodie.asset}>
+			<h3 class="nft-item">{nfts[goodie.type].name}</h3>
+			<div style="position: relative" class="goodie-video mb">
+				<div id="sound-toggle" style="cursor: pointer">
+					{#if muted}
+						<VolumeIconMute />
+					{:else}
+						<VolumeIconUp />
+					{/if}
+				</div>
+				<video
+					style="display: block; width: 100%"
+					muted
+					playsinline
+					autoplay
+					loop
+					type="video/mp4"
+					on:click={toggle}
+					key={goodie.asset}
+				>
+					<source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
+					Your browser does not support HTML5 video.
+				</video>
 			</div>
-			<video
-				style="display: block; width: 100%"
-				muted
-				playsinline
-				autoplay
-				loop
-				type="video/mp4"
-				on:click={toggle}
-				key={goodie.asset}
-			>
-				<source src={`/static/${nfts[goodie.type].filename}.mp4`} type="video/mp4" />
-				Your browser does not support HTML5 video.
-			</video>
-		</div>
 
-		<Withdraw {goodie} bind:goodies />
-	</div>
-{/each}
+			<Withdraw {goodie} bind:goodies />
+		</div>
+	{/each}
+</div>
 
 <style>
 	.goodie {

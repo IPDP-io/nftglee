@@ -39,6 +39,7 @@
 	let trailer = () => {
 		let { p2pml } = window;
 
+		let retries = 0;
 		if (p2pml && p2pml.hlsjs.Engine.isSupported()) {
 			var engine = new p2pml.hlsjs.Engine();
 
@@ -64,7 +65,20 @@
 
 			p2pml.hlsjs.initClapprPlayer($player);
 		} else {
-			setTimeout(loadVideo, 200);
+			retries++;
+
+			if (retries > 5) {
+				$player = document.createElement('video');
+				videoPlayer.append($player);
+				$player.setAttribute('type', 'application/vnd.apple.mpegurl');
+				$player.setAttribute('width', '100%');
+				$player.setAttribute('height', '100%');
+				$player.src = '/trailer/playlist.m3u8';
+				$player.load();
+				$player.play();
+			} else {
+				setTimeout(loadVideo, 100 * retries);
+			}
 		}
 	};
 
@@ -84,8 +98,8 @@
 		setTimeout(() => fade('video-overlay'), 10000);
 		setupScrollFade();
 		await getToken();
-    setInterval(getToken, 60000);
-    trailer();
+		setInterval(getToken, 60000);
+		trailer();
 		socket();
 		setup();
 		if (!$session.user) {
@@ -195,15 +209,17 @@
 					{/if}
 
 					{#if $session.user.email}
-            <div class="container mb">
-              Signed in as {$session.user.email}
-            </div>
+            <div class="page-block">
+						<div class="container mb">
+							Signed in as {$session.user.email}
+						</div>
 
-            {#if $page.path !== '/watch'}
-              <div class="container mb">
-                <button on:click={() => go('/watch')}>View Account</button>
-              </div>
-            {/if}
+						{#if $page.path !== '/watch'}
+							<div class="container mb">
+								<button on:click={() => go('/watch')}>View Account</button>
+							</div>
+						{/if}
+          </div>
 					{/if}
 
 					<slot />

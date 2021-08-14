@@ -29,7 +29,7 @@
 		<Fields bind:email bind:password />
 		<div class="container form-submit-controls">
 			<div class="container column">
-				<button class="mb" type="submit">Sign in</button>
+				<button type="submit">Sign in</button>
         <p class="container">Or</p>
         <a href="/register"><button class="mb">Register</button></a>
 			</div>
