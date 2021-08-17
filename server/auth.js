@@ -73,14 +73,14 @@ checkTicket = async (req, res) => {
 app.get('/refresh', async (req, res) => {
 	let response = await hbp.headers(req.headers).url('/auth/token/refresh').get().res();
 	Array.from(response.headers.entries()).forEach(([k, v]) => res.header(k, v));
-  let json = await response.json();
-		return res
-			.setCookie('token', json.jwt_token, {
-				path: '/',
-				signed: true,
-				httpOnly: true
-			})
-			.send(json);
+	let json = await response.json();
+	return res
+		.setCookie('token', json.jwt_token, {
+			path: '/',
+			signed: true,
+			httpOnly: true
+		})
+		.send(json);
 });
 
 const login = async (req, res) => {

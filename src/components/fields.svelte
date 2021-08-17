@@ -1,9 +1,8 @@
 <script>
 	import { focus } from '$lib/utils';
+  import Password from "$components/password.svelte";
 	import { onMount } from 'svelte';
-	import Eye from '../icons/eye.svelte';
 	export let email, password;
-	let show;
 
 	onMount(async () => {
 		const loginFields = document.getElementById('login-fields');
@@ -24,7 +23,6 @@
 	<div class="form-field">
 		<div class="container">
 			<input
-				id="first_name"
 				bind:value={email}
 				placeholder="Email"
 				autocapitalize="off"
@@ -33,37 +31,7 @@
 			/>
 		</div>
 	</div>
-	<div class="form-field">
-		<div>
-			<div id="password" class="container">
-				{#if show}
-					<input
-						id="password-input"
-						bind:value={password}
-						placeholder="Password"
-						autocapitalize="off"
-						class="grow"
-					/>
-				{:else}
-					<input
-						id="password-input"
-						type="password"
-						placeholder="Password"
-						bind:value={password}
-						autocapitalize="off"
-						class="grow"
-					/>
-				{/if}
-				<div
-					id="show-password"
-					on:click|preventDefault|stopPropagation={() => (show = !show)}
-					style="height: 100%"
-				>
-					<Eye size={'100%'} />
-				</div>
-			</div>
-		</div>
-	</div>
+  <Password bind:password />
 </div>
 
 <style>

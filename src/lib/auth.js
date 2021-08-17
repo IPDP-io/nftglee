@@ -71,6 +71,7 @@ export const login = async (email, password) => {
 
 		if (!user) return err('Login failed');
 		user.token = user.jwt_token;
+		user.email = user.display_name;
 		session.set({ user });
 		token.set(user.token);
 		go('/watch');
@@ -86,7 +87,7 @@ export const logout = async () => {
 	try {
 		await auth.url('/logout').post().res();
 		session.set('user', undefined);
-    window.localStorage.removeItem('address');
+		window.localStorage.removeItem('address');
 		window.localStorage.removeItem('user');
 		go('/');
 		window.location.reload();
@@ -104,7 +105,7 @@ export const register = async (email, password, mnemonic) => {
 			redeem: { pubkey }
 		} = p2wpkh({ mnemonic });
 		pubkey = pubkey.toString('hex');
-    console.log(pubkey, p2wpkh({ mnemonic }));
+		console.log(pubkey, p2wpkh({ mnemonic }));
 
 		let { jwt_token } = await api
 			.url('/register')

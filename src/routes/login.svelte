@@ -27,12 +27,15 @@
 
 	<form on:submit|preventDefault={submit} class="small-form white-form" autocomplete="off">
 		<Fields bind:email bind:password />
+		<div class="container mb">
+			<button type="submit">Sign in</button>
+		</div>
+
+    <div class="container mb">Or..</div>
+
 		<div class="container form-submit-controls">
-			<div class="container column">
-				<button type="submit">Sign in</button>
-        <p class="container">Or</p>
-        <a href="/register"><button class="mb">Register</button></a>
-			</div>
+			<a href="/register"><button class="mb">Register</button></a>
+			<a href="/forgot"><button class="mb">Forgot Password</button></a>
 		</div>
 	</form>
 </div>

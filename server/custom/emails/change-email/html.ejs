@@ -1,22 +1,106 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <style>
-      body {
-        margin: 0;
-        font-family: sans-serif;
-      }
-    </style>
-  </head>
+	<head>
+		<meta charset="utf-8" />
+		<style>
+      @import url('https://fonts.googleapis.com/css2?family=Jockey+One&family=Oswald&family=Roboto:wght@100;300&family=Abril+Fatface&family=Zen+Tokyo+Zoo&display=swap');
 
-  <body>
-    <h2>Hello.</h2>
-    <p>Someone requested to change the email for your account.</p>
-    <p>If this was not you, please disregard this message.</p>
-    <hr />
-    <p>Proceed the email change by using the following code:</p>
-    <p><%= ticket %></p>
-    <p>Thanks,<br />The Team</p>
-  </body>
+			body {
+				margin: 0;
+        font-family: "Jockey One", sans-serif;
+        font-size: 12px;
+        font-size: 1.5vw;
+        line-height: 1;
+				color: #1f4e6c;
+			}
+      a {
+				color: #1f4e6c;
+          text-decoration: none;
+      }
+			p {
+				line-height: 1.7;
+			}
+			.container {
+				width: 600px;
+				margin: 0 auto;
+				background: white;
+				padding-top: 60px;
+			}
+			.logo {
+				width: 100%;
+				margin: 0 auto;
+				text-align: center;
+			}
+			.logo img {
+				height: 40px;
+				margin: 0 auto;
+			}
+			.link {
+				display: block;
+				margin-top: 30px;
+				color: #0f828a;
+				text-decoration: none;
+			}
+			hr {
+				border-color: whitesmoke;
+				margin-bottom: 30px;
+			}
+			.confirm-container {
+				display: flex;
+				justify-content: flex-end;
+			}
+			.confirm {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 120px;
+				margin: 40px 0;
+				text-decoration: none;
+				border-radius: 30px;
+				padding: 0.8rem 1.5rem !important;
+				color: #444444;
+				font-weight: bold;
+				background: rgb(143, 238, 245);
+				background: linear-gradient(
+					90deg,
+					rgba(143, 238, 245, 1) 0%,
+					rgba(127, 228, 235, 1) 50%,
+					rgba(110, 216, 224, 1) 100%
+				);
+				border: 0px solid white;
+			}
+			.footer p {
+				font-size: 13px;
+			}
+			.footer .social {
+				display: flex;
+				justify-content: flex-start;
+				margin-bottom: 30px;
+			}
+			.footer .social a {
+				margin-right: 20px;
+			}
+      .code {
+        font-size: 26px;
+        margin-bottom: 30px;
+      } 
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="logo"><img src="https://silhouettesthemovie.com/silhouettes.png" style="width: 385px; height: 219px" /></div>
+			<p>Hello,</p>
+			<p>
+				Your password reset code is:
+			</p>
+
+      <div class="code">
+        <%= ticket %>
+      </div>
+
+			<div class="footer">
+				<a href="<%= url %>">silhouettesthemovie.com</a>
+			</div>
+		</div>
+	</body>
 </html>
