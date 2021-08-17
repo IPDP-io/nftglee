@@ -42,4 +42,6 @@ const hasura = wretch()
 	.url('http://localhost:8080/v1/graphql')
 	.headers({ 'x-hasura-admin-secret': HASURA_SECRET });
 
-module.exports = { binance, btc, coinos, electrs, hbp, hasura, ltc, userApi };
+const registry = wretch().url("https://assets.blockstream.info/");
+
+module.exports = { binance, btc, coinos, electrs, hbp, hasura, ltc, registry, userApi };

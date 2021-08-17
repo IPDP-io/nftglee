@@ -31,7 +31,7 @@ const getTicket = async () => {
 	return ++ticket;
 };
 
-let nfts = {
+let artworks = {
 	ticket: {
 		filename: 'QmSmQduTPXamJBQLTxVs2nZAkVYdRWk7K1gqtQyqsBmNo8',
 		name: 'Silhouettes Ticket Stub'
@@ -48,7 +48,7 @@ let nfts = {
 
 let createNft = async (type, { address, pubkey, ticket }) => {
 	let domain = 'silhouettesthemovie.com';
-	let { filename, name } = nfts[type];
+	let { filename, name } = artworks[type];
 
 	let result = await coinos
 		.url('/assets')
