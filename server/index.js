@@ -139,11 +139,13 @@ register = async (asset) => {
 	let { users } = result.data;
 
 	let { ticket, type } = nfts.find((n) => n.asset === asset);
+  let { name, filename } = artworks[type];
 
 	const contract = {
 		entity: { domain: 'silhouettesthemovie.com' },
+    filename,
 		issuer_pubkey: users[0].pubkey,
-		name: artworks[type].name,
+		name,
 		precision: 0,
 		ticker: type[0].toUpperCase() + ticket,
 		version: 0
@@ -152,7 +154,7 @@ register = async (asset) => {
 	result = await registry
 		.post({
 			asset_id: asset,
-			contract: JSON.parse(contract)
+			contract,
 		})
 		.json();
 
