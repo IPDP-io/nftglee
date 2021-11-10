@@ -51,20 +51,12 @@
 						>Lightning</button
 					>
 				{/if}
-				{#if $unit !== 'LTC'}
-					<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}>
-						Litecoin
-					</button>
-				{/if}
 			</div>
 		{:else}
 			<h3 class="mb">Choose a payment option:</h3>
 			<div class="container space-evenly mb">
 				<button on:click={() => getInvoice('BTC')} class:active={$unit && $unit.includes('BTC')}>
 					Bitcoin
-				</button>
-				<button on:click={() => getInvoice('LTC')} class:active={$unit === 'LTC'}>
-					Litecoin
 				</button>
 			</div>
 		{/if}

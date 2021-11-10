@@ -3,21 +3,18 @@
 
 	<h2 class="mb">WHO</h2>
 
-	<h3>SAMSON MOW</h3>
+	<h3>YOU</h3>
 	<p>
-		Samson Mow is CSO of Blockstream and CEO of Pixelmatic. Blockstream is the leading provider of
-		blockchain technologies, on the forefront of work in cryptography and distributed systems.
-		Samson founded Pixelmatic in 2011 to create engaging games that are truly social and encourage
-		new connections to be made.
+		Imagine this is your bio here, as this would be your website. You can share how awesome you are and 
+		what the website visitors here should know about you.
 	</p>
 
-	<h3>MATT HARTLEY</h3>
+	<h3>KRIS CONSTABLE</h3>
 
 	<p>
-		Matt Hartley is a film director and producer; who has made numerous films and worked with
-		studios to independent production companies. He is also founder of Castle in the Sky
-		Productions, which has produced three feature films to date and are currently available on
-		Amazon Prime, iTunes, Hulu, Netflix and more.
+		Kris Constable is the CEO and Co-founder of bitcointokenmarketplaces.com. With a 
+		passion for privacy and security, Kris works to provide bleeding edge services to big brands and well 
+		as entrepreneurs and wannapreneurs. 
 	</p>
 
 	<h3>ADAM SOLTYS</h3>
@@ -28,20 +25,11 @@
 		Bitcoin and the Liquid Network.
 	</p>
 
-	<h3>SHIV RAJAGOPAL</h3>
-
-	<p>
-		Shiv Rajagopal is a producer and filmmaker from Hong Kong. Having studied in Southern
-		California, he now works in Hong Kong as a content writer and producer.
-	</p>
-
 	<h2>WHAT</h2>
 
 	<p>
-		<b>SILHOUETTES</b> is a sci-fi feature film about an astronaut named Katherine Barnes, who is
-		visited by an extra-terrestrial that takes her on a tour of the universe- past, present, and
-		future. <b>SILHOUETTES</b>
-		will be the first feature film to sell tickets and access via NFTs. Upon purchase, viewers will also
+		<b>YOUR SITE NAME</b> is a video or live stream website where you can expect to see YOUR CONTENT. <b>YOUR SITE NAME</b>
+		is a video platform that uniquely sells tickets and access via NFTs. Upon purchase, viewers will also
 		unlock exclusive digital assets along with access to the film. These NFTs will be released in three
 		separate tiers:
 	</p>
@@ -59,11 +47,11 @@
 
 	<h2>WHEN</h2>
 
-	<p><b>SILHOUETTES</b> will be released on August 13th, 2021.</p>
+	<p><b>YOUR NEW SITE</b> will be released on January 01, 2022.</p>
 
 	<h2>WHERE</h2>
 
-	<p><b>SILHOUETTES</b> can be accessed worldwide upon release on silhouettesthemovie.com</p>
+	<p><b>YOUR NEW SITE</b> can be accessed worldwide upon release on example.com</p>
 
 	<h2>WHY</h2>
 
@@ -80,7 +68,7 @@
 	<p>
 		A wallet is needed to purchase a token, which represents a movie ticket (aka access) to our
 		film. Without a token, access to experience the movie will not be permitted. Tokens can be
-		purchased using BTC, BTC Liquid, Lightning and Litecoin.
+		purchased using BTC, BTC Liquid, and Lightning Network.
 	</p>
 </div>
 
