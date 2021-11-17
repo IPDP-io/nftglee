@@ -9,7 +9,6 @@ services:
   app:
     depends_on:
       - hbp
-      - litecoin
     container_name: silapp
     image: asoltys/silhouettes-server
     restart: always
@@ -83,7 +82,7 @@ services:
     volumes:
       - ./custom:/app/custom
   postgres:
-    container_name: postgres
+    container_name: silpg
     image: "nhost/postgres:12-v0.0.6"
     restart: always
     volumes:
@@ -91,13 +90,13 @@ services:
     environment:
       POSTGRES_PASSWORD: pgpassword
       POSTGRES_DB: postgres
-  litecoin:
-    image: asoltys/litecoin:latest
-    container_name: litecoin 
-    volumes:
-      - ./litecoin:/config
-    restart: unless-stopped
-    ports:
-      - '19443:19443'
-      - '19506:18506'
-      - '19507:18507'
+        #   litecoin:
+        #     image: asoltys/litecoin:latest
+        #     container_name: litecoin 
+        #     volumes:
+        #       - ./litecoin:/config
+        #     restart: unless-stopped
+        #     ports:
+        #       - '19443:19443'
+        #       - '19506:18506'
+        #       - '19507:18507'
