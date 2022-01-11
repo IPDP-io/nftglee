@@ -1,12 +1,12 @@
 version: '3.6'
 services:
   # ui:
-  #   container_name: ui
-  #   image: asoltys/silhouettes
+  #   container_name: silui
+  #   image: silhouettes-ui
   #   restart: on-failure
   #   ports:
   #     - '3000:3000'
-  app:
+  silapp:
     depends_on:
       - hbp
     container_name: silapp
@@ -15,7 +15,7 @@ services:
     environment:
       WEBHOOK_URL: '${WEBHOOK_URL}'
       WEBHOOK_SECRET: '${WEBHOOK_SECRET}'
-      HASURA_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
+      HASURA_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       COINOS_URL: '${COINOS_URL}'
       COINOS_TOKEN: '${COINOS_TOKEN}'
       HASURA_JWT: '${HASURA_GRAPHQL_JWT_SECRET}'
@@ -31,7 +31,10 @@ services:
       SMTP_SECURE: "true"
     volumes:
       - ./:/app
-    network_mode: host
+    # network_mode: host
+    ports:
+      - 8091:8091
+      - 9090:9090
   hasura:
     container_name: silhasura
     image: hasura/graphql-engine:v2.0.4.cli-migrations-v3
@@ -45,7 +48,7 @@ services:
       - ./metadata:/hasura-metadata
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:pgpassword@postgres:5432/postgres
-      HASURA_GRAPHQL_ADMIN_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       HASURA_GRAPHQL_JWT_SECRET: '${HASURA_GRAPHQL_JWT_SECRET}'
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_UNAUTHORIZED_ROLE: "anonymous"
@@ -60,7 +63,7 @@ services:
       HOST: 0.0.0.0
       PORT: 3000
       HASURA_ENDPOINT: '${HASURA_ENDPOINT}'
-      HASURA_GRAPHQL_ADMIN_SECRET:  '${HASURA_GRAPHQL_ADMIN_SECRET}'
+      HASURA_GRAPHQL_ADMIN_SECRET: '${HASURA_GRAPHQL_ADMIN_SECRET}'
       JWT_ALGORITHM: '${JWT_ALGORITHM}'
       JWT_KEY: '${JWT_KEY}'
       AUTO_MIGRATE: "true"
@@ -90,13 +93,17 @@ services:
     environment:
       POSTGRES_PASSWORD: pgpassword
       POSTGRES_DB: postgres
-        #   litecoin:
-        #     image: asoltys/litecoin:latest
-        #     container_name: litecoin 
-        #     volumes:
-        #       - ./litecoin:/config
-        #     restart: unless-stopped
-        #     ports:
-        #       - '19443:19443'
-        #       - '19506:18506'
-        #       - '19507:18507'
+  # litecoin:
+  #   image: asoltys/litecoin:latest
+  #   container_name: litecoin
+  #   volumes:
+  #     - ./litecoin:/config
+  #   restart: unless-stopped
+  #   ports:
+  #     - '19443:19443'
+  #     - '19506:18506'
+  #     - '19507:18507'
+networks:
+  default:
+    external:
+      name: net
