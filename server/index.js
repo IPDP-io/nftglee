@@ -55,7 +55,7 @@ app.get('/cookie', (req, reply) => {
 require('./auth');
 require('./mail');
 require('./payments');
-require('./litecoin');
+// require('./litecoin');
 
 nfts = [];
 last = undefined;
