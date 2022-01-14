@@ -224,12 +224,13 @@
 
 					<slot />
 
-					<div class="page-block">
-						<Contact />
-					</div>
 
 					<div class="page-block">
 						<About />
+					</div>
+					
+				    <div class="page-block">
+					    <Contact />
 					</div>
 				{/if}
 			</div>
@@ -240,12 +241,12 @@
 <footer>
 	<div class="container column page-block">
 		<div id="social-media" class="container">
-			<a href="https://twitter.com/silhouettesnft">
+			<a href="https://twitter.com/tokenocean">
 				<TwitterIcon />
 			</a>
 		</div>
 		<div class="container">
-			<p>© {year} Silhouettes Movie</p>
+			<p>© {year} Your content creator brand name here</p>
 		</div>
 	</div>
 </footer>

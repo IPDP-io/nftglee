@@ -5,14 +5,15 @@
 
 	<h3>YOU</h3>
 	<p>
-		Imagine this is your bio here, as this would be your website. You can share how awesome you are and 
-		what the website visitors here should know about you.
+		Imagine this is the explanation of your censorship resistant creative content platform here, as this would be your website. You can share how awesome you are and 
+		what the website visitors here should know about you. As long as your content isn't illegal, we'll keep your website up and running for you. We don't hold stigma or judgement
+		This could be your censorship resistent, privacy centric and blockchain protected personal version of Instagram, OnlyFans, TikTok, Twitch, Substack, YouTube or Udemy.
 	</p>
 
 	<h3>KRIS CONSTABLE</h3>
 
 	<p>
-		Kris Constable is the CEO and Co-founder of bitcointokenmarketplaces.com. With a 
+		Kris Constable is the CEO and Co-founder of IDVPN.ca, coinos.io, and tokenocean.io. With a 
 		passion for privacy and security, Kris works to provide bleeding edge services to big brands and well 
 		as entrepreneurs and wannapreneurs. 
 	</p>
@@ -20,17 +21,17 @@
 	<h3>ADAM SOLTYS</h3>
 
 	<p>
-		Adam Soltys is the CTO of Coinos, an open source bitcoin web wallet and exchange platform. He is
-		also the creator of Raretoshi, an art marketplace for digital patronage that brings NFTs to
-		Bitcoin and the Liquid Network.
+		Adam Soltys is the CTO and Co-founder of Coinos.io and tokenocean.io, a 10 year old open source bitcoin web wallet and exchange platform. He is
+		also the creator of Raretoshi, an art marketplace for digital patronage that brings NFTs to Bitcoin and the Liquid Network.
 	</p>
 
 	<h2>WHAT</h2>
 
 	<p>
-		<b>YOUR SITE NAME</b> is a video or live stream website where you can expect to see YOUR CONTENT. <b>YOUR SITE NAME</b>
-		is a video platform that uniquely sells tickets and access via NFTs. Upon purchase, viewers will also
-		unlock exclusive digital assets along with access to the film. These NFTs will be released in three
+		<b>YOUR SITE NAME</b> is your creator video, image, copy and/or live stream website where you can expect to see YOUR CONTENT. 
+		<b>YOUR SITE NAME</b> is a video platform that uniquely sells tickets and access via NFTs. Upon purchase, viewers will also
+		unlock exclusive digital assets along with access to the film.  
+		These NFTs will be released in three
 		separate tiers:
 	</p>
 
@@ -47,11 +48,11 @@
 
 	<h2>WHEN</h2>
 
-	<p><b>YOUR NEW SITE</b> will be released on January 01, 2022.</p>
+	<p><b>YOUR NEW SITE</b> will be released in less than 3 months from today if you act now.</p>
 
 	<h2>WHERE</h2>
 
-	<p><b>YOUR NEW SITE</b> can be accessed worldwide upon release on example.com</p>
+	<p><b>YOUR NEW SITE</b> can be accessed worldwide upon release on your own personal domain name</p>
 
 	<h2>WHY</h2>
 
