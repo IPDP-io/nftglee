@@ -1,11 +1,11 @@
 version: '3.6'
 services:
-  # ui:
-  #   container_name: silui
-  #   image: silhouettes-ui
-  #   restart: on-failure
-  #   ports:
-  #     - '3000:3000'
+  ui:
+    container_name: silui
+    build: ../ 
+    restart: on-failure
+    ports:
+      - '3000:3000'
   silapp:
     depends_on:
       - hbp
