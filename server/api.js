@@ -34,12 +34,12 @@ const coinos = wretch().url(COINOS_URL).auth(`Bearer ${COINOS_TOKEN}`);
 const binance = wretch().url('https://api.binance.com/api/v3/ticker/price');
 
 const electrs = wretch().url(LIQUID_ELECTRS_URL);
-const hbp = wretch().url('http://localhost:3400');
+const hbp = wretch().url('http://silhbp:3000');
 
-const userApi = (headers) => wretch().url('http://localhost:8080/v1/graphql').headers(headers);
+const userApi = (headers) => wretch().url('http://silhasura:8080/v1/graphql').headers(headers);
 
 const hasura = wretch()
-	.url('http://localhost:8080/v1/graphql')
+	.url('http://silhasura:8080/v1/graphql')
 	.headers({ 'x-hasura-admin-secret': HASURA_SECRET });
 
 const registry = wretch().url("https://assets.blockstream.info/");
