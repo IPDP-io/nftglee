@@ -27,6 +27,8 @@
 	import { api } from '$lib/api';
 	import { getToken } from '$lib/auth';
 	import * as animateScroll from 'svelte-scrollto';
+	import Fa from 'svelte-fa';
+	import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 	let reset = () => {
 		$amount = $unit = undefined;
@@ -156,6 +158,9 @@
 	let released =
 		new Date() >= new Date(Date.UTC(2021, 7, 13, 7, 0, 0)) ||
 		($session.user && $session.user.email && $session.user.email.includes('coinos.io'));
+
+	let showAbout = false;
+	let showContact = false;
 </script>
 
 <main>
@@ -209,28 +214,69 @@
 					{/if}
 
 					{#if $session.user.email}
-            <div class="page-block">
-						<div class="container mb">
-							Signed in as {$session.user.email}
-						</div>
-
-						{#if $page.path !== '/watch'}
+						<div class="page-block">
 							<div class="container mb">
-								<button on:click={() => go('/watch')}>View Account</button>
+								Signed in as {$session.user.email}
 							</div>
-						{/if}
-          </div>
+
+							{#if $page.path !== '/watch'}
+								<div class="container mb">
+									<button on:click={() => go('/watch')}>View Account</button>
+								</div>
+							{/if}
+						</div>
 					{/if}
 
 					<slot />
 
-
-					<div class="page-block">
-						<About />
+					<div class="container my">
+						<div>
+							<h3 class="center mb">FAQ:</h3>
+							<button
+								type="button"
+								name="button"
+								on:click={() => {
+									showAbout = !showAbout;
+								}}>About Us</button
+							>
+						</div>
+						{#if showAbout}
+							<div
+								class:showAbout
+								class="popup cursor-default"
+								on:click={() => (showAbout = !showAbout)}
+							>
+								<span class="closeButton" on:click={() => (showAbout = !showAbout)}
+									><Fa icon={faTimes} /></span
+								>
+								<About />
+							</div>
+						{/if}
 					</div>
-					
-				    <div class="page-block">
-					    <Contact />
+
+					<div class="container my">
+						<div>
+							<h3 class="center mb">Contact Us:</h3>
+							<button
+								type="button"
+								name="button"
+								on:click={() => {
+									showContact = !showContact;
+								}}>Let's Talk!</button
+							>
+						</div>
+						{#if showContact}
+							<div
+								class:showContact
+								class="popup cursor-default"
+								on:click={() => (showContact = !showContact)}
+							>
+								<span class="closeButton" on:click={() => (showContact = !showContact)}
+									><Fa icon={faTimes} /></span
+								>
+								<Contact />
+							</div>
+						{/if}
 					</div>
 				{/if}
 			</div>
@@ -253,6 +299,14 @@
 
 <style global>
 	@import '../app.css';
+
+	.center {
+		text-align: center;
+	}
+
+	.my {
+		margin: 50px 0;
+	}
 
 	input,
 	label {
@@ -311,5 +365,54 @@
 
 	.pointer {
 		cursor: pointer;
+	}
+
+	.popup {
+		overflow: auto;
+		position: fixed;
+		z-index: 100000;
+		width: 95%;
+		height: 100vh;
+		padding: 5px;
+		text-align: center;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background: white;
+		margin: 0 auto;
+	}
+
+	.showAbout,
+	.showContact {
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+		animation: zoom 0.2s ease forwards;
+	}
+
+	.closeButton {
+		position: absolute;
+		top: 50px;
+		right: 50px;
+		width: 40px;
+		height: 40px;
+		border-radius: 100%;
+		background: whitesmoke;
+		padding: 9px 13px;
+		cursor: pointer;
+	}
+
+	.popup :global(div) {
+		width: 100%;
+		height: auto;
+	}
+
+	@media only screen and (max-width: 1023px) {
+		.closeButton {
+			top: 20px;
+			right: 20px;
+			padding: 12px;
+		}
 	}
 </style>
