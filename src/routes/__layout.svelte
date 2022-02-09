@@ -241,11 +241,7 @@
 							>
 						</div>
 						{#if showAbout}
-							<div
-								class:showAbout
-								class="popup cursor-default"
-								on:click={() => (showAbout = !showAbout)}
-							>
+							<div class:showAbout class="popup cursor-default">
 								<span class="closeButton" on:click={() => (showAbout = !showAbout)}
 									><Fa icon={faTimes} /></span
 								>
@@ -266,11 +262,7 @@
 							>
 						</div>
 						{#if showContact}
-							<div
-								class:showContact
-								class="popup cursor-default"
-								on:click={() => (showContact = !showContact)}
-							>
+							<div class:showContact class="popup cursor-default">
 								<span class="closeButton" on:click={() => (showContact = !showContact)}
 									><Fa icon={faTimes} /></span
 								>
@@ -392,7 +384,7 @@
 	}
 
 	.closeButton {
-		position: absolute;
+		position: fixed;
 		top: 50px;
 		right: 50px;
 		width: 40px;
@@ -401,6 +393,7 @@
 		background: whitesmoke;
 		padding: 9px 13px;
 		cursor: pointer;
+		margin-right: 50px;
 	}
 
 	.popup :global(div) {
@@ -413,6 +406,7 @@
 			top: 20px;
 			right: 20px;
 			padding: 12px;
+			margin-right: 10px;
 		}
 	}
 </style>
