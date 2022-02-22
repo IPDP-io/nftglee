@@ -16,3 +16,11 @@ Run the backend containers:
     cp .env.sample .env
     edit the .env variable COINOS_TOKEN and set it to your JWT token from the pre-requisites step
     docker-compose up -d
+    
+Setup pre-commit git hooks:
+    
+   We have a pre-commit git hook for running prettier on all files to keep the formatting consistent.
+    
+   `git config core.hooksPath "./git_hooks"` - This will set the git config path to use this directory for hooks.
+    
+   `chmod +x ./git_hooks/pre-commit` - This will give the hook the necessary permissions to run.
