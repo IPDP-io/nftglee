@@ -27,8 +27,6 @@
 	import { api } from '$lib/api';
 	import { getToken } from '$lib/auth';
 	import * as animateScroll from 'svelte-scrollto';
-	import Fa from 'svelte-fa';
-	import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 	let reset = () => {
 		$amount = $unit = undefined;
@@ -242,9 +240,7 @@
 						</div>
 						{#if showAbout}
 							<div class:showAbout class="popup cursor-default">
-								<span class="closeButton" on:click={() => (showAbout = !showAbout)}
-									><Fa icon={faTimes} /></span
-								>
+								<span class="closeButton" on:click={() => (showAbout = !showAbout)}>X</span>
 								<About />
 							</div>
 						{/if}
@@ -263,9 +259,7 @@
 						</div>
 						{#if showContact}
 							<div class:showContact class="popup cursor-default">
-								<span class="closeButton" on:click={() => (showContact = !showContact)}
-									><Fa icon={faTimes} /></span
-								>
+								<span class="closeButton" on:click={() => (showContact = !showContact)}>X</span>
 								<Contact />
 							</div>
 						{/if}
